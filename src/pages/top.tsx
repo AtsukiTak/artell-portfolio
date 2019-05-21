@@ -1,15 +1,19 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 import Header from '../components/header';
 import Footer from '../components/footer';
-import Artist from '../models/artist';
+import Sumbnail from '../components/sumbnail';
+import { Artist } from '../models/artist';
+import { getArtists } from '../api';
 
 const TopPage = () => {
   const [artists, setArtists] = useState<Array<Artist>>([]);
 
   useEffect(() => {
-    setArtists([artistAtsuki, artistYuzuka]);
+    getArtists()
+      .then(artists => setArtists(artists));
   }, []);
 
 
@@ -47,15 +51,7 @@ interface ArtistItemProps {
   artist: Artist,
 }
 
-const ArtistItem = (props: ArtistItemProps) => {
-  const artist = props.artist;
-  const [containerWidth, setContainerWidth] = useState(0);
-
-  const containerRef = useCallback(node=> {
-    if (node !== null) {
-      setContainerWidth(node.getBoundingClientRect().width);
-    }
-  }, []);
+const ArtistItem: FC<ArtistItemProps> = ({artist}) => {
 
   const Container = styled.div`
     width: calc(100% * 6 / 13);
@@ -67,14 +63,8 @@ const ArtistItem = (props: ArtistItemProps) => {
     }
   `;
 
-  const Sumbnail = styled("div")<{height: number, src: string}>`
-    display: inline-block;
+  const StyledSumbnail = styled(Sumbnail)`
     width: 100%;
-    height: ${props => props.height}px;
-    background-image: url(${props => props.src});
-    background-size: cover;
-    background-position: center;
-    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.5);
   `;
 
   const Name = styled.p`
@@ -114,25 +104,13 @@ const ArtistItem = (props: ArtistItemProps) => {
   `;
 
   return (
-    <Container ref={containerRef}>
-      <Sumbnail
-        src={artist.image_url}
-        height={containerWidth}>
-      </Sumbnail>
+    <Container>
+      <Link to={"/artist/" + artist.id}>
+        <StyledSumbnail src={artist.image_url} />
+      </Link>
       <Name>{artist.name}</Name>
       <Comment>{artist.comment}</Comment>
     </Container>
   );
 
 }
-
-const artistAtsuki = {
-  name: "Atsuki Takahashi",
-  comment: "私を表現するのは色",
-  image_url: "https://firebasestorage.googleapis.com/v0/b/artell-gallery.appspot.com/o/artists%2Fartist1.png?alt=media&token=10ccc042-974a-4379-8e45-3caec7ab9720",
-};
-const artistYuzuka = {
-  name: "Yuzuka Nakata",
-  comment: "12人の友達",
-  image_url: "https://firebasestorage.googleapis.com/v0/b/artell-gallery.appspot.com/o/artists%2Fartist2.png?alt=media&token=64247e52-acac-4c94-abb6-cedd1ef2643f",
-};
