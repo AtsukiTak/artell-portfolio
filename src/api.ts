@@ -20,6 +20,15 @@ export function getArtist(id: string): Promise<Artist> {
     .then(snapshot => snapshot.data() as Artist);
 }
 
+export function getArt(id: string): Promise<Art> {
+  return firebase
+    .firestore()
+    .collection("arts")
+    .doc(id)
+    .get()
+    .then(snapshot => snapshot.data() as Art);
+}
+
 export function getArtsOf(artistId: string): Promise<Art[]> {
   return firebase
     .firestore()

@@ -1,28 +1,26 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, {FC, useState, useEffect} from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 import Header from '../components/header';
 import Footer from '../components/footer';
 import Sumbnail from '../components/sumbnail';
-import { Artist } from '../models/artist';
-import { getArtists } from '../api';
+import {Artist} from '../models/artist';
+import {getArtists} from '../api';
 
 const TopPage = () => {
   const [artists, setArtists] = useState<Array<Artist>>([]);
 
   useEffect(() => {
-    getArtists()
-      .then(artists => setArtists(artists));
+    getArtists().then(artists => setArtists(artists));
   }, []);
-
 
   const Items = styled.div`
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
     flex-wrap: wrap;
     width: calc(100% * 13 / 15);
-    max-width: 680px;
+    max-width: 990px;
     min-height: calc(100vh - 56px + 30px - 200px);
     margin: 0 auto;
     margin-top: -30px;
@@ -34,28 +32,28 @@ const TopPage = () => {
 
   return (
     <>
-    <Header title="Artist notes" />
-    <Items>
-    {
-      artists.map(artist => <ArtistItem artist={artist} key={artist.name}/>)
-    }
-    </Items>
-    <Footer />
+      <Header title="Artists" />
+      <Items>
+        {artists.map(artist => (
+          <ArtistItem artist={artist} key={artist.name} />
+        ))}
+      </Items>
+      <Footer />
     </>
   );
-}
+};
 
 export default TopPage;
 
 interface ArtistItemProps {
-  artist: Artist,
+  artist: Artist;
 }
 
 const ArtistItem: FC<ArtistItemProps> = ({artist}) => {
-
   const Container = styled.div`
-    width: calc(100% * 6 / 13);
-    max-width: 240px;
+    width: 300px;
+    max-width: 100%;
+    margin: 0 15px;
     margin-top: 70px;
 
     @media (min-width: 700px) {
@@ -94,7 +92,7 @@ const ArtistItem: FC<ArtistItemProps> = ({artist}) => {
     line-height: 17px;
     font-family: NotoSansCJKjp-Regular;
     font-size: 11px;
-    color: #A5A5A5;
+    color: #a5a5a5;
 
     @media (min-width: 700px) {
       height: 20px;
@@ -105,12 +103,11 @@ const ArtistItem: FC<ArtistItemProps> = ({artist}) => {
 
   return (
     <Container>
-      <Link to={"/artist/" + artist.id}>
+      <Link to={'/' + artist.id + '/'}>
         <StyledSumbnail src={artist.image_url} />
       </Link>
       <Name>{artist.name}</Name>
       <Comment>{artist.comment}</Comment>
     </Container>
   );
-
-}
+};

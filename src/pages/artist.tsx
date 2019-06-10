@@ -1,31 +1,25 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, {FC, useState, useEffect} from 'react';
 import styled from 'styled-components';
+import {Link} from 'react-router-dom';
 
 import Header from '../components/header';
 import Sumbnail from '../components/sumbnail';
 import * as logo from '../components/logo';
-import { Artist } from '../models/artist';
-import { Art } from '../models/art';
-import { getArtist, getArtsOf } from '../api';
+import {Artist} from '../models/artist';
+import {Art} from '../models/art';
+import {getArtist, getArtsOf} from '../api';
 
 interface ArtistPageProps {
-  match: {
-    params: {
-      id: string,
-    },
-  },
+  id: string;
 }
 
-const ArtistPage: FC<ArtistPageProps> = (props) => {
-  const id = props.match.params.id;
+const ArtistPage: FC<ArtistPageProps> = ({id}) => {
   const [artist, setArtist] = useState<Artist | null>(null);
   const [arts, setArts] = useState<Art[]>([]);
 
   useEffect(() => {
-    getArtist(id)
-      .then(artist => setArtist(artist));
-    getArtsOf(id)
-      .then(arts => setArts(arts));
+    getArtist(id).then(artist => setArtist(artist));
+    getArtsOf(id).then(arts => setArts(arts));
   }, [id]);
 
   const Contents = styled.div`
@@ -33,21 +27,21 @@ const ArtistPage: FC<ArtistPageProps> = (props) => {
     max-width: 780px;
     margin: 50px auto;
 
-    @media (min-width: 700px) {
+    @media (min-width: 970px) {
       margin-top: 90px;
     }
   `;
 
   return (
     <>
-    <Header title={artist != null ? artist.name : "-"} />
-    <Contents>
-      { artist != null ? <Profile artist={artist} /> : null }
-      <Arts arts={arts} />
-    </Contents>
+      <Header title={artist != null ? artist.name : ''} />
+      <Contents>
+        {artist != null ? <Profile artist={artist} /> : null}
+        <Arts arts={arts} />
+      </Contents>
     </>
   );
-}
+};
 
 export default ArtistPage;
 
@@ -82,7 +76,6 @@ const Profile: FC<{artist: Artist}> = ({artist}) => {
   `;
 
   const Name = styled.div`
-    display: inline-block;
     width: 100%;
     font-family: NotoSansCJKjp-Light;
     color: 000000;
@@ -91,7 +84,6 @@ const Profile: FC<{artist: Artist}> = ({artist}) => {
   `;
 
   const Sns = styled.div`
-    display: inline-block;
     width: 100%;
     text-align: right;
     margin-top: 10px;
@@ -111,8 +103,7 @@ const Profile: FC<{artist: Artist}> = ({artist}) => {
     font-size: 16px;
     line-height: 32px;
 
-    @media (min-width: 700px) {
-      margin-top: 35px;
+    @media (min-width: 970px) {
       font-size: 14px;
       line-height: 28px;
     }
@@ -123,7 +114,7 @@ const Profile: FC<{artist: Artist}> = ({artist}) => {
     margin-top: 65px;
     border: 0.5px solid #979797;
 
-    @media (min-width: 700px) {
+    @media (min-width: 970px) {
       margin-top: 90px;
     }
   `;
@@ -138,14 +129,12 @@ const Profile: FC<{artist: Artist}> = ({artist}) => {
           <logo.Twitter />
           <logo.Instagram />
         </Sns>
-        <Description>
-          {artist.description}
-        </Description>
+        <Description>{artist.description}</Description>
       </TextContent>
       <HR />
     </Container>
   );
-}
+};
 
 const Arts: FC<{arts: Art[]}> = ({arts}) => {
   const Container = styled.div`
@@ -180,14 +169,14 @@ const Arts: FC<{arts: Art[]}> = ({arts}) => {
 
   return (
     <Container>
-    {
-      arts.map(art => 
+      {arts.map(art => (
         <Art key={art.title}>
-          <StyledSumbnail src={art.image_url} />
+          <Link to={`/${art.artist}/${art.id}/`}>
+            <StyledSumbnail src={art.image_url} />
+          </Link>
           <Title>{art.title}</Title>
         </Art>
-      )
-    }
+      ))}
     </Container>
   );
-}
+};
