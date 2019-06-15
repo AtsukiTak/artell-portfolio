@@ -1,28 +1,140 @@
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
+
 export interface Artist {
-  id: string,
-  name: string,
-  comment: string,
-  image_url: string,
-  description: string,
+  uid: string;
+  displayId: string;
+  name: string;
+  comment: string;
+  sumbnailUrl: string;
+  description: string;
 }
 
-export function isArtist(obj: object): obj is Artist {
-  return ('id' in obj) && ('name' in obj) && ('comment' in obj)
-    && ('image_url' in obj) && ('description' in obj);
+export interface Art {
+  id: string;
+  title: string;
+  artistUid: string;
+  sumbnailUrl: string;
+  description: string;
 }
 
-export const artistAtsuki = {
-  id: "atsuki_takahashi",
-  name: "Atsuki Takahashi",
-  comment: "アートのようなコード。コードになれないアート。",
-  image_url: "https://firebasestorage.googleapis.com/v0/b/artell-gallery.appspot.com/o/artists%2Fmyself.jpg?alt=media&token=86f76b38-3f9c-40c5-ad4a-36cd0fe29c6c",
-  description: "東京工業大学卒業失敗野郎。Rustacean。",
-};
+interface StoredArtist {
+  displayId: string;
+  name: string;
+  comment: string;
+  description: string;
+}
 
-export const artistYuzuka = {
-  id: "yuzuka_nakata",
-  name: "Yuzuka Nakata",
-  comment: "12人の友達",
-  image_url: "https://firebasestorage.googleapis.com/v0/b/artell-gallery.appspot.com/o/artists%2Fartist1.png?alt=media&token=10ccc042-974a-4379-8e45-3caec7ab9720",
-  description: "木曾路はすべて山の中である。あるところは岨づたいに行く崖の道であり、あるところは数十間の深さに臨む木曾川の岸であり、あるところは山の尾をめぐる谷の入り口である。一筋の街道はこの深い森林地帯を貫いていた。東ざかいの桜沢から、西の十曲峠まで、木曾十一宿はこの街道に添うて、二十二里余にわたる長い谿谷の間に散在していた。道路の位置も幾たびか改まったもので、古道はいつのまにか深い山間に埋もれた。名高い桟も"
-};
+export interface StoredArt {
+  title: string;
+  description: string;
+}
+
+// TODO : Pagenation
+export function fetchArtists(): Promise<Artist[]> {
+  return firebase
+    .firestore()
+    .collection('artists')
+    .get()
+    .then(snapshot => snapshot.docs.map(doc => constructArtist(doc)));
+}
+
+export function fetchArtist(displayId: string): Promise<Artist> {
+  return firebase
+    .firestore()
+    .collection('artists')
+    .where('displayId', '==', displayId)
+    .limit(1)
+    .get()
+    .then(snapshot => {
+      if (snapshot.docs.length == 1) {
+        return constructArtist(snapshot.docs[0]);
+      } else {
+        throw 'Artist not found';
+      }
+    });
+}
+
+function constructArtist(doc: QueryDocumentSnapshot): Promise<Artist> {
+  if (doc.exists) {
+    const artist = doc.data() as StoredArtist;
+    const id = doc.id;
+    return fetchSumbnailUrlOfArtist(id).then(url => ({
+      uid: id,
+      sumbnailUrl: url,
+      ...artist,
+    }));
+  } else {
+    throw 'Artist not found';
+  }
+}
+
+function fetchSumbnailUrlOfArtist(artistUid: string): Promise<string> {
+  return firebase
+    .storage()
+    .ref(`artists/${artistUid}/sumbnail.jpg`)
+    .getDownloadURL()
+    .then(maybeURL => {
+      if (typeof maybeURL === 'string') {
+        return maybeURL;
+      } else {
+        throw `error : ${maybeURL}`;
+      }
+    });
+}
+
+export function fetchArtsOfArtist(artistUid: string): Promise<Art[]> {
+  return firebase
+    .firestore()
+    .collection('artists')
+    .doc(artistUid)
+    .collection('arts')
+    .get()
+    .then(snapshot => snapshot.docs.map(doc => constructArt(artistUid, doc)));
+}
+
+export function fetchArt(artistUid: string, id: string): Promise<Art> {
+  return firebase
+    .firestore()
+    .collection('artists')
+    .doc(artistUid)
+    .collection('arts')
+    .doc(id)
+    .get()
+    .then(doc => constructArt(artistUid, doc));
+}
+
+function constructArt(
+  artistUid: string,
+  doc: QueryDocumentSnapshot,
+): Promise<Art> {
+  if (doc.exists) {
+    const art = doc.data() as StoredArt;
+    const id = doc.id;
+    return fetchSumbnailUrlOfArt(artistUid, id).then(url => ({
+      id: id,
+      artistUid: artistUid,
+      sumbnailUrl: url,
+      ...art,
+    }));
+  } else {
+    throw 'Art not found';
+  }
+}
+
+function fetchSumbnailUrlOfArt(
+  artistUid: string,
+  artId: string,
+): Promise<string> {
+  return firebase
+    .storage()
+    .ref(`arts/${artistUid}/arts/${artId}/sumbnail.jpg`)
+    .getDownloadURL()
+    .then(maybeURL => {
+      if (typeof maybeURL === 'string') {
+        return maybeURL;
+      } else {
+        throw `error : ${maybeURL}`;
+      }
+    });
+}
