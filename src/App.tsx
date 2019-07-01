@@ -30,14 +30,14 @@ const App: React.FC = () => {
           <Route
             path="/:id/"
             exact
-            render={({match}) => <ArtistPage id={match.params.id} />}
+            render={({match}) => <ArtistPage displayId={match.params.id} />}
           />
           <Route
             path="/:artistId/:artId/"
             exact
             render={({match}) => (
               <ArtPage
-                artistId={match.params.artistId}
+                artistDisplayId={match.params.artistId}
                 artId={match.params.artId}
               />
             )}

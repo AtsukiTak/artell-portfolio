@@ -5,14 +5,13 @@ import {Link} from 'react-router-dom';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import Sumbnail from '../components/sumbnail';
-import {Artist} from '../models/artist';
-import {getArtists} from '../api';
+import {Artist, fetchArtists} from '../models/artist';
 
 const TopPage = () => {
   const [artists, setArtists] = useState<Array<Artist>>([]);
 
   useEffect(() => {
-    getArtists().then(artists => setArtists(artists));
+    fetchArtists().then(artists => setArtists(artists));
   }, []);
 
   const Items = styled.div`
@@ -103,8 +102,8 @@ const ArtistItem: FC<ArtistItemProps> = ({artist}) => {
 
   return (
     <Container>
-      <Link to={'/' + artist.id + '/'}>
-        <StyledSumbnail src={artist.image_url} />
+      <Link to={'/' + artist.displayId + '/'}>
+        <StyledSumbnail src={artist.sumbnailUrl} />
       </Link>
       <Name>{artist.name}</Name>
       <Comment>{artist.comment}</Comment>

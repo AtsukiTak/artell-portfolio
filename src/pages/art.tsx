@@ -2,30 +2,26 @@ import React, {FC, useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 
-import Sumbnail from '../components/sumbnail';
-import * as logo from '../components/logo';
-import {MobileContent, PcContent} from '../components/responsive';
-import {Artist} from '../models/artist';
-import {Art} from '../models/art';
-import {getArtist, getArt} from '../api';
+import {MobileContent, PcContent} from 'components/responsive';
+import {Art, fetchArtist, fetchArt, Artist} from 'models/artist';
 
 interface ArtPageProps {
-  artistId: string;
+  artistDisplayId: string;
   artId: string;
 }
 
-const ArtPage: FC<ArtPageProps> = ({artistId, artId}) => {
+const ArtPage: FC<ArtPageProps> = ({artistDisplayId, artId}) => {
   const [art, setArt] = useState<Art | null>(null);
   const [artist, setArtist] = useState<Artist | null>(null);
 
   useEffect(() => {
-    getArt(artId).then(art => {
-      setArt(art);
-    });
-    getArtist(artistId).then(artist => {
-      setArtist(artist);
-    });
-  }, [artistId, artId]);
+    fetchArtist(artistDisplayId)
+      .then(artist => {
+        setArtist(artist);
+        return fetchArt(artist.uid, artId);
+      })
+      .then(art => setArt(art));
+  }, [artistDisplayId, artId]);
 
   const CloseButton = styled(Link)`
     position: absolute;
@@ -58,7 +54,7 @@ const ArtPage: FC<ArtPageProps> = ({artistId, artId}) => {
 
   return (
     <>
-      <CloseButton to={`/${artistId}/`} />
+      <CloseButton to={`/${artistDisplayId}/`} />
       {art != null && artist != null ? (
         <>
           <MobileContent>
@@ -110,7 +106,7 @@ const Mobile: FC<{art: Art; artist: Artist}> = ({art, artist}) => {
 
   return (
     <>
-      <ArtContaier src={art.image_url} />
+      <ArtContaier src={art.sumbnailUrl} />
       <CaptionContainer>
         <ArtistName>{artist.name}</ArtistName>
         <Info>{`${art.title}, 2018hoge`}</Info>
@@ -155,7 +151,7 @@ const Pc: FC<{art: Art; artist: Artist}> = ({art, artist}) => {
 
   return (
     <>
-      <ArtContainer src={art.image_url} />
+      <ArtContainer src={art.sumbnailUrl} />
       <CaptionContainer>
         <ArtistName>{artist.name}</ArtistName>
         <Info>{`${art.title}, 2018`}</Info>

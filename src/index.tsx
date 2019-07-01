@@ -1,18 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import * as firebase from 'firebase/app';
+import firebase from 'firebase';
 import App from './App';
 
+const firebaseApiKey = process.env.REACT_APP_FIREBASE_API_KEY;
+
 const firebaseConfig = {
-  apiKey: "AIzaSyDDpmvxyAd3-1DdUuiQLZQqst7W-i2bGfQ",
-  authDomain: "artell-gallery.firebaseapp.com",
-  databaseURL: "https://artell-gallery.firebaseio.com",
-  projectId: "artell-gallery",
-  storageBucket: "artell-gallery.appspot.com",
-  messagingSenderId: "339826582586",
-  appId: "1:339826582586:web:cee1affa1f8ab0bf"
+  apiKey: firebaseApiKey,
+  authDomain: 'artell-portfolio.firebaseapp.com',
+  databaseURL: 'https://artell-portfolio.firebaseio.com',
+  projectId: 'artell-portfolio',
+  storageBucket: 'artell-portfolio.appspot.com',
+  messagingSenderId: '1342542049',
+  appId: '1:1342542049:web:9860ef00a863452a',
 };
 firebase.initializeApp(firebaseConfig);
-
 
 ReactDOM.render(<App />, document.getElementById('root'));

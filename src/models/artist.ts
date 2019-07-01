@@ -36,7 +36,9 @@ export function fetchArtists(): Promise<Artist[]> {
     .firestore()
     .collection('artists')
     .get()
-    .then(snapshot => snapshot.docs.map(doc => constructArtist(doc)));
+    .then(snapshot =>
+      Promise.all(snapshot.docs.map(doc => constructArtist(doc))),
+    );
 }
 
 export function fetchArtist(displayId: string): Promise<Artist> {
@@ -47,7 +49,7 @@ export function fetchArtist(displayId: string): Promise<Artist> {
     .limit(1)
     .get()
     .then(snapshot => {
-      if (snapshot.docs.length == 1) {
+      if (snapshot.docs.length === 1) {
         return constructArtist(snapshot.docs[0]);
       } else {
         throw 'Artist not found';
@@ -55,7 +57,9 @@ export function fetchArtist(displayId: string): Promise<Artist> {
     });
 }
 
-function constructArtist(doc: QueryDocumentSnapshot): Promise<Artist> {
+function constructArtist(
+  doc: firebase.firestore.DocumentSnapshot,
+): Promise<Artist> {
   if (doc.exists) {
     const artist = doc.data() as StoredArtist;
     const id = doc.id;
@@ -90,7 +94,9 @@ export function fetchArtsOfArtist(artistUid: string): Promise<Art[]> {
     .doc(artistUid)
     .collection('arts')
     .get()
-    .then(snapshot => snapshot.docs.map(doc => constructArt(artistUid, doc)));
+    .then(snapshot =>
+      Promise.all(snapshot.docs.map(doc => constructArt(artistUid, doc))),
+    );
 }
 
 export function fetchArt(artistUid: string, id: string): Promise<Art> {
@@ -106,10 +112,11 @@ export function fetchArt(artistUid: string, id: string): Promise<Art> {
 
 function constructArt(
   artistUid: string,
-  doc: QueryDocumentSnapshot,
+  doc: firebase.firestore.DocumentSnapshot,
 ): Promise<Art> {
   if (doc.exists) {
     const art = doc.data() as StoredArt;
+    console.log(art);
     const id = doc.id;
     return fetchSumbnailUrlOfArt(artistUid, id).then(url => ({
       id: id,
@@ -128,7 +135,7 @@ function fetchSumbnailUrlOfArt(
 ): Promise<string> {
   return firebase
     .storage()
-    .ref(`arts/${artistUid}/arts/${artId}/sumbnail.jpg`)
+    .ref(`artists/${artistUid}/arts/${artId}/sumbnail.jpg`)
     .getDownloadURL()
     .then(maybeURL => {
       if (typeof maybeURL === 'string') {

@@ -5,22 +5,24 @@ import {Link} from 'react-router-dom';
 import Header from '../components/header';
 import Sumbnail from '../components/sumbnail';
 import * as logo from '../components/logo';
-import {Artist} from '../models/artist';
-import {Art} from '../models/art';
-import {getArtist, getArtsOf} from '../api';
+import {Art, Artist, fetchArtist, fetchArtsOfArtist} from 'models/artist';
 
 interface ArtistPageProps {
-  id: string;
+  displayId: string;
 }
 
-const ArtistPage: FC<ArtistPageProps> = ({id}) => {
+const ArtistPage: FC<ArtistPageProps> = ({displayId}) => {
   const [artist, setArtist] = useState<Artist | null>(null);
   const [arts, setArts] = useState<Art[]>([]);
 
   useEffect(() => {
-    getArtist(id).then(artist => setArtist(artist));
-    getArtsOf(id).then(arts => setArts(arts));
-  }, [id]);
+    fetchArtist(displayId)
+      .then(artist => {
+        setArtist(artist);
+        return fetchArtsOfArtist(artist.uid);
+      })
+      .then(arts => setArts(arts));
+  }, [displayId]);
 
   const Contents = styled.div`
     width: 80%;
@@ -36,8 +38,12 @@ const ArtistPage: FC<ArtistPageProps> = ({id}) => {
     <>
       <Header title={artist != null ? artist.name : ''} />
       <Contents>
-        {artist != null ? <Profile artist={artist} /> : null}
-        <Arts arts={arts} />
+        {artist != null ? (
+          <>
+            <Profile artist={artist} />
+            <Arts artist={artist} arts={arts} />
+          </>
+        ) : null}
       </Contents>
     </>
   );
@@ -121,7 +127,7 @@ const Profile: FC<{artist: Artist}> = ({artist}) => {
 
   return (
     <Container>
-      <StyledSumbnail src={artist.image_url} />
+      <StyledSumbnail src={artist.sumbnailUrl} />
       <TextContent>
         <Name>{artist.name}</Name>
         <Sns>
@@ -136,7 +142,7 @@ const Profile: FC<{artist: Artist}> = ({artist}) => {
   );
 };
 
-const Arts: FC<{arts: Art[]}> = ({arts}) => {
+const Arts: FC<{artist: Artist; arts: Art[]}> = ({artist, arts}) => {
   const Container = styled.div`
     width: 100%;
     display: flex;
@@ -171,8 +177,8 @@ const Arts: FC<{arts: Art[]}> = ({arts}) => {
     <Container>
       {arts.map(art => (
         <Art key={art.title}>
-          <Link to={`/${art.artist}/${art.id}/`}>
-            <StyledSumbnail src={art.image_url} />
+          <Link to={`/${artist.displayId}/${art.id}/`}>
+            <StyledSumbnail src={art.sumbnailUrl} />
           </Link>
           <Title>{art.title}</Title>
         </Art>
