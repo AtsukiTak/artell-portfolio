@@ -5,7 +5,12 @@ import {Link} from 'react-router-dom';
 import Header from '../components/header';
 import Sumbnail from '../components/sumbnail';
 import * as logo from '../components/logo';
-import {Art, Artist, fetchArtist, fetchArtsOfArtist} from 'models/artist';
+import {
+  Art,
+  Artist,
+  fetchArtistByDisplayId,
+  fetchArtsOfArtist,
+} from 'models/artist';
 
 interface ArtistPageProps {
   displayId: string;
@@ -16,12 +21,14 @@ const ArtistPage: FC<ArtistPageProps> = ({displayId}) => {
   const [arts, setArts] = useState<Art[]>([]);
 
   useEffect(() => {
-    fetchArtist(displayId)
-      .then(artist => {
+    fetchArtistByDisplayId(displayId).then(artist => {
+      if (artist === null) {
+        alert('指定のアーティストが見つかりません');
+      } else {
         setArtist(artist);
-        return fetchArtsOfArtist(artist.uid);
-      })
-      .then(arts => setArts(arts));
+        fetchArtsOfArtist(artist.uid).then(arts => setArts(arts));
+      }
+    });
   }, [displayId]);
 
   const Contents = styled.div`

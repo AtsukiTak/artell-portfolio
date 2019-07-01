@@ -37,11 +37,27 @@ export function fetchArtists(): Promise<Artist[]> {
     .collection('artists')
     .get()
     .then(snapshot =>
-      Promise.all(snapshot.docs.map(doc => constructArtist(doc))),
+      Promise.all(
+        snapshot.docs.map(doc =>
+          // この場合はconstructArtistは常にPromise<Artist>を返す
+          constructArtist(doc).then(artist => artist as Artist),
+        ),
+      ),
     );
 }
 
-export function fetchArtist(displayId: string): Promise<Artist> {
+export function fetchArtist(uid: string): Promise<Artist | null> {
+  return firebase
+    .firestore()
+    .collection('artists')
+    .doc(uid)
+    .get()
+    .then(doc => constructArtist(doc));
+}
+
+export function fetchArtistByDisplayId(
+  displayId: string,
+): Promise<Artist | null> {
   return firebase
     .firestore()
     .collection('artists')
@@ -59,7 +75,7 @@ export function fetchArtist(displayId: string): Promise<Artist> {
 
 function constructArtist(
   doc: firebase.firestore.DocumentSnapshot,
-): Promise<Artist> {
+): Promise<Artist | null> {
   if (doc.exists) {
     const artist = doc.data() as StoredArtist;
     const id = doc.id;
@@ -69,7 +85,7 @@ function constructArtist(
       ...artist,
     }));
   } else {
-    throw 'Artist not found';
+    return Promise.resolve(null);
   }
 }
 
@@ -116,7 +132,6 @@ function constructArt(
 ): Promise<Art> {
   if (doc.exists) {
     const art = doc.data() as StoredArt;
-    console.log(art);
     const id = doc.id;
     return fetchSumbnailUrlOfArt(artistUid, id).then(url => ({
       id: id,

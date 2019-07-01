@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 
 import {MobileContent, PcContent} from 'components/responsive';
-import {Art, fetchArtist, fetchArt, Artist} from 'models/artist';
+import {Art, fetchArtistByDisplayId, fetchArt, Artist} from 'models/artist';
 
 interface ArtPageProps {
   artistDisplayId: string;
@@ -15,12 +15,20 @@ const ArtPage: FC<ArtPageProps> = ({artistDisplayId, artId}) => {
   const [artist, setArtist] = useState<Artist | null>(null);
 
   useEffect(() => {
-    fetchArtist(artistDisplayId)
-      .then(artist => {
+    fetchArtistByDisplayId(artistDisplayId).then(artist => {
+      if (artist === null) {
+        alert('アーティストが見つかりません');
+      } else {
         setArtist(artist);
-        return fetchArt(artist.uid, artId);
-      })
-      .then(art => setArt(art));
+        fetchArt(artist.uid, artId).then(art => {
+          if (art === null) {
+            alert('指定の作品が見つかりません');
+          } else {
+            setArt(art);
+          }
+        });
+      }
+    });
   }, [artistDisplayId, artId]);
 
   const CloseButton = styled(Link)`
