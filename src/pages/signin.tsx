@@ -2,12 +2,33 @@ import React, {FC} from 'react';
 import styled from 'styled-components';
 import firebase from 'firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import {History} from 'history';
 
 import Header from 'components/header';
+import {fetchArtist, createArtist} from 'models/artist';
 
-const SigninPage: FC<{}> = () => {
+const SigninPage: FC<{history: History}> = ({history}) => {
+  if (firebase.auth().currentUser) {
+    history.push('/settings/profile');
+  }
+
   const uiConfig = {
-    signInSuccessUrl: '/account/',
+    callbacks: {
+      signInSuccessWithAuthResult: (args: {user: firebase.User}) => {
+        const fbuser = args.user;
+        fetchArtist(fbuser.uid)
+          .then(artist => {
+            if (artist === null) {
+              // 新規登録
+              return createArtist(fbuser);
+            } else {
+              return artist.displayId;
+            }
+          })
+          .then(displayId => history.push(`/settings/profile`));
+        return false;
+      },
+    },
     signInOptions: [
       {
         provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
@@ -17,7 +38,7 @@ const SigninPage: FC<{}> = () => {
 
   return (
     <>
-      <Header title="ログイン" />
+      <Header title="ログイン / 新規登録" displaySigninLink={false} />
       <Container>
         <StyledFirebaseAuth
           uiConfig={uiConfig}

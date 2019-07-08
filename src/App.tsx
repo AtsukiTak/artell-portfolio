@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {createGlobalStyle} from 'styled-components';
+import * as firebase from 'firebase';
 import {
   BrowserRouter as Router,
   Route,
@@ -9,8 +10,7 @@ import {
 
 import TopPage from 'pages/top';
 import SigninPage from 'pages/signin';
-import AccountPage from 'pages/account';
-import RegisterPage from 'pages/account/register';
+import ProfileSettingPage from 'pages/settings_profile';
 import ArtistPage from 'pages/artist';
 import ArtPage from 'pages/art';
 
@@ -24,34 +24,41 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const App: React.FC = () => {
+  const [fbUser, setFbUser] = useState<firebase.User | null>(null);
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(setFbUser);
+  }, []);
+
   return (
     <>
       <GlobalStyle />
       <Router>
         <Switch>
           <Route path="/" exact render={() => <TopPage />} />
-          <Route path="/signin/" exact render={() => <SigninPage />} />
           <Route
-            path="/account/"
+            path="/settings/profile"
             exact
-            render={({history}) => <AccountPage history={history} />}
+            render={() => <ProfileSettingPage fbUser={fbUser} />}
           />
           <Route
-            path="/account/register/"
+            path="/signin"
             exact
-            render={({history}) => <RegisterPage history={history} />}
+            render={({history}) => <SigninPage history={history} />}
           />
           <Route
-            path="/:id/"
+            path="/:artistDisplayId"
             exact
-            render={({match}) => <ArtistPage displayId={match.params.id} />}
+            render={({match}) => (
+              <ArtistPage displayId={match.params.artistDisplayId} />
+            )}
           />
           <Route
-            path="/:artistId/:artId/"
+            path="/:artistDisplayId/:artId"
             exact
             render={({match}) => (
               <ArtPage
-                artistDisplayId={match.params.artistId}
+                artistDisplayId={match.params.artistDisplayId}
                 artId={match.params.artId}
               />
             )}

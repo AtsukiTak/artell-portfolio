@@ -1,16 +1,19 @@
-import React from 'react';
+import React, {FC} from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 
 interface HeaderProps {
   title: string;
+  displaySigninLink?: boolean;
 }
 
-const Header = (props: HeaderProps) => {
+const Header: FC<HeaderProps> = ({title, displaySigninLink}) => {
   return (
     <Container>
-      <Title>{props.title}</Title>
-      <TopLink to="/">Artists</TopLink>
+      <Title>{title}</Title>
+      {displaySigninLink !== false ? (
+        <HeaderLink to="/signin">ログイン</HeaderLink>
+      ) : null}
     </Container>
   );
 };
@@ -48,7 +51,7 @@ const Title = styled.div`
   }
 `;
 
-const TopLink = styled(Link)`
+const HeaderLink = styled(Link)`
   position: absolute;
   height: 100%;
   right: 5vw;

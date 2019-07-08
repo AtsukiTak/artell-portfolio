@@ -1,13 +1,18 @@
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
+import * as D from '@mojotech/json-type-validation';
 
 export interface Artist {
   uid: string;
   displayId: string;
   name: string;
-  comment: string;
+  email: string;
   sumbnailUrl: string;
+  comment: string;
   description: string;
+  twitter: string;
+  facebook: string;
+  instagram: string;
 }
 
 export interface Art {
@@ -15,20 +20,38 @@ export interface Art {
   title: string;
   artistUid: string;
   sumbnailUrl: string;
+  width_mm: number;
+  height_mm: number;
   description: string;
+  materials: string;
+  price_yen: number;
 }
 
 interface StoredArtist {
   displayId: string;
   name: string;
+  email: string;
   comment: string;
   description: string;
+  twitter: string;
+  facebook: string;
+  instagram: string;
 }
 
 export interface StoredArt {
   title: string;
+  width_mm: number;
+  height_mm: number;
   description: string;
+  materials: string;
+  price_yen: number;
 }
+
+/*
+ * =====================
+ * Artist
+ * ====================
+ */
 
 // TODO : Pagenation
 export function fetchArtists(): Promise<Artist[]> {
@@ -76,32 +99,89 @@ export function fetchArtistByDisplayId(
 function constructArtist(
   doc: firebase.firestore.DocumentSnapshot,
 ): Promise<Artist | null> {
-  if (doc.exists) {
-    const artist = doc.data() as StoredArtist;
-    const id = doc.id;
-    return fetchSumbnailUrlOfArtist(id).then(url => ({
-      uid: id,
-      sumbnailUrl: url,
-      ...artist,
-    }));
-  } else {
+  const data = doc.data();
+  if (data === undefined) {
     return Promise.resolve(null);
   }
+  const artist = StoredArtistDecoder.runWithException(data);
+  const id = doc.id;
+  return fetchSumbnailUrlOfArtist(id).then(url => ({
+    uid: id,
+    sumbnailUrl: url,
+    ...artist,
+  }));
 }
+
+const StoredArtistDecoder: D.Decoder<StoredArtist> = D.object({
+  displayId: D.string(),
+  name: D.string(),
+  email: D.string(),
+  comment: D.string(),
+  description: D.string(),
+  twitter: D.string(),
+  facebook: D.string(),
+  instagram: D.string(),
+});
 
 function fetchSumbnailUrlOfArtist(artistUid: string): Promise<string> {
   return firebase
     .storage()
     .ref(`artists/${artistUid}/sumbnail.jpg`)
     .getDownloadURL()
-    .then(maybeURL => {
-      if (typeof maybeURL === 'string') {
-        return maybeURL;
-      } else {
-        throw `error : ${maybeURL}`;
-      }
-    });
+    .then(url => url as string, fetchDefaultSumbnailUrlOfArtist);
 }
+
+function fetchDefaultSumbnailUrlOfArtist(): Promise<string> {
+  return firebase
+    .storage()
+    .ref(`artists/default/sumbnail.jpg`)
+    .getDownloadURL()
+    .then(url => url as string);
+}
+
+export function createArtist(fbuser: firebase.User): Promise<string> {
+  const name = fbuser.displayName;
+  const email = fbuser.email;
+  if (name === null || email === null) {
+    return Promise.reject(new Error('name or email is missing'));
+  }
+  return firebase
+    .firestore()
+    .collection('artists')
+    .doc(fbuser.uid)
+    .set({
+      name: name,
+      email: email,
+      displayId: toDisplayId(name),
+      comment: '',
+      description: '',
+      twitter: '',
+      facebook: '',
+      instagram: '',
+    })
+    .then(() => toDisplayId(name));
+}
+
+function toDisplayId(name: string): string {
+  return encodeURIComponent(name.split(' ').join('_'));
+}
+
+export function updateArtist(
+  fbuser: firebase.User,
+  artist: StoredArtist,
+): Promise<void> {
+  return firebase
+    .firestore()
+    .collection('artists')
+    .doc(fbuser.uid)
+    .set(artist);
+}
+
+/*
+ * =====================
+ * Art
+ * ====================
+ */
 
 export function fetchArtsOfArtist(artistUid: string): Promise<Art[]> {
   return firebase
@@ -111,11 +191,16 @@ export function fetchArtsOfArtist(artistUid: string): Promise<Art[]> {
     .collection('arts')
     .get()
     .then(snapshot =>
-      Promise.all(snapshot.docs.map(doc => constructArt(artistUid, doc))),
+      Promise.all(
+        snapshot.docs.map(doc =>
+          // この場合はconstructArtは常にPromise<Art>を返す
+          constructArt(artistUid, doc).then(art => art as Art),
+        ),
+      ),
     );
 }
 
-export function fetchArt(artistUid: string, id: string): Promise<Art> {
+export function fetchArt(artistUid: string, id: string): Promise<Art | null> {
   return firebase
     .firestore()
     .collection('artists')
@@ -129,20 +214,29 @@ export function fetchArt(artistUid: string, id: string): Promise<Art> {
 function constructArt(
   artistUid: string,
   doc: firebase.firestore.DocumentSnapshot,
-): Promise<Art> {
-  if (doc.exists) {
-    const art = doc.data() as StoredArt;
-    const id = doc.id;
-    return fetchSumbnailUrlOfArt(artistUid, id).then(url => ({
-      id: id,
-      artistUid: artistUid,
-      sumbnailUrl: url,
-      ...art,
-    }));
-  } else {
-    throw 'Art not found';
+): Promise<Art | null> {
+  const data = doc.data();
+  if (data === undefined) {
+    return Promise.resolve(null);
   }
+  const art = StoredArtDecoder.runWithException(data);
+  const id = doc.id;
+  return fetchSumbnailUrlOfArt(artistUid, id).then(url => ({
+    id: id,
+    artistUid: artistUid,
+    sumbnailUrl: url,
+    ...art,
+  }));
 }
+
+const StoredArtDecoder = D.object({
+  title: D.string(),
+  width_mm: D.number(),
+  height_mm: D.number(),
+  description: D.string(),
+  materials: D.string(),
+  price_yen: D.number(),
+});
 
 function fetchSumbnailUrlOfArt(
   artistUid: string,

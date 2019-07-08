@@ -1,6 +1,12 @@
 import React, {FC} from 'react';
 import styled from 'styled-components';
 
+export function onPc(css: string): string {
+  return `@media (min-width: 980px) {
+    ${css}
+  }`;
+}
+
 export const MobileContent: FC<{}> = ({children}) => {
   const Container = styled.div`
     @media (min-width: 700px) {
