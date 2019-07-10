@@ -10,7 +10,8 @@ import {
 
 import TopPage from 'pages/top';
 import SigninPage from 'pages/signin';
-import ProfileSettingPage from 'pages/settings_profile';
+import SettingProfilePage from 'pages/settings/profile';
+import SettingAddArtPage from 'pages/settings/add_art';
 import ArtistPage from 'pages/artist';
 import ArtPage from 'pages/art';
 
@@ -39,7 +40,14 @@ const App: React.FC = () => {
           <Route
             path="/settings/profile"
             exact
-            render={() => <ProfileSettingPage fbUser={fbUser} />}
+            render={() => <SettingProfilePage fbUser={fbUser} />}
+          />
+          <Route
+            path="/settings/add_art"
+            exact
+            render={({history}) => (
+              <SettingAddArtPage fbUser={fbUser} history={history} />
+            )}
           />
           <Route
             path="/signin"

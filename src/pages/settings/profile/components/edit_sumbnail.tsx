@@ -5,7 +5,7 @@ import Jimp from 'jimp';
 
 import {onPc} from 'components/responsive';
 import Sumbnail from 'components/sumbnail';
-import {Artist} from 'models/artist';
+import {Artist, updateArtistSumbnail} from 'models/artist';
 
 interface Props {
   fbUser: firebase.User;
@@ -48,11 +48,12 @@ const EditSumbnailComponent: FC<Props> = ({fbUser, artist}) => {
               <Sumbnail src={sumbnailDataURI} />
               <Buttons>
                 <OkButton
-                  onClick={() =>
-                    uploadArtistSumbnail(fbUser, sumbnailDataURI).then(() => {
+                  onClick={() => {
+                    const base64 = extractBase64FromDataURI(sumbnailDataURI);
+                    return updateArtistSumbnail(fbUser, base64).then(() => {
                       window.location.reload();
-                    })
-                  }>
+                    });
+                  }}>
                   Ok
                 </OkButton>
                 <CancelButton onClick={() => setSumbnailDataURI(null)}>
@@ -68,18 +69,6 @@ const EditSumbnailComponent: FC<Props> = ({fbUser, artist}) => {
 };
 
 export default EditSumbnailComponent;
-
-function uploadArtistSumbnail(
-  user: firebase.User,
-  dataURI: string,
-): Promise<void> {
-  const base64 = extractBase64FromDataURI(dataURI);
-  return firebase
-    .storage()
-    .ref(`/artists/${user.uid}/sumbnail.jpg`)
-    .putString(base64, 'base64', {contentType: 'image/jpeg'})
-    .then();
-}
 
 function extractBase64FromDataURI(dataURI: string): string {
   const re = /base64,(.*)/;

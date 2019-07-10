@@ -20,11 +20,11 @@ export interface Art {
   title: string;
   artistUid: string;
   sumbnailUrl: string;
-  width_mm: number;
-  height_mm: number;
+  widthMM: number;
+  heightMM: number;
   description: string;
   materials: string;
-  price_yen: number;
+  priceYen: number;
 }
 
 interface StoredArtist {
@@ -40,11 +40,11 @@ interface StoredArtist {
 
 export interface StoredArt {
   title: string;
-  width_mm: number;
-  height_mm: number;
+  widthMM: number;
+  heightMM: number;
   description: string;
   materials: string;
-  price_yen: number;
+  priceYen: number;
 }
 
 /*
@@ -177,6 +177,17 @@ export function updateArtist(
     .set(artist);
 }
 
+export function updateArtistSumbnail(
+  fbUser: firebase.User,
+  base64: string,
+): Promise<void> {
+  return firebase
+    .storage()
+    .ref(`/artists/${fbUser.uid}/sumbnail.jpg`)
+    .putString(base64, 'base64', {contentType: 'image/jpeg'})
+    .then();
+}
+
 /*
  * =====================
  * Art
@@ -231,11 +242,11 @@ function constructArt(
 
 const StoredArtDecoder = D.object({
   title: D.string(),
-  width_mm: D.number(),
-  height_mm: D.number(),
+  widthMM: D.number(),
+  heightMM: D.number(),
   description: D.string(),
   materials: D.string(),
-  price_yen: D.number(),
+  priceYen: D.number(),
 });
 
 function fetchSumbnailUrlOfArt(
@@ -253,4 +264,30 @@ function fetchSumbnailUrlOfArt(
         throw `error : ${maybeURL}`;
       }
     });
+}
+
+export function updateArt(
+  fbuser: firebase.User,
+  artId: string,
+  art: StoredArt,
+): Promise<void> {
+  return firebase
+    .firestore()
+    .collection('artists')
+    .doc(fbuser.uid)
+    .collection('arts')
+    .doc(artId)
+    .set(art);
+}
+
+export function updateArtSumbnail(
+  fbUser: firebase.User,
+  artId: string,
+  base64: string,
+): Promise<void> {
+  return firebase
+    .storage()
+    .ref(`/artists/${fbUser.uid}/arts/${artId}/sumbnail.jpg`)
+    .putString(base64, 'base64', {contentType: 'image/jpeg'})
+    .then();
 }

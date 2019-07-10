@@ -91,8 +91,7 @@ const Mobile: FC<{art: Art; artist: Artist}> = ({art, artist}) => {
   `;
 
   const CaptionContainer = styled.div`
-    width: calc(100vw - 112px);
-    height: 20vh;
+    min-height: 20vh;
     border-top: solid 1px #d8d8d8;
     padding: 25px 56px;
   `;
