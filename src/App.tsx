@@ -11,7 +11,9 @@ import {
 import TopPage from 'pages/top';
 import SigninPage from 'pages/signin';
 import SettingProfilePage from 'pages/settings/profile';
-import SettingAddArtPage from 'pages/settings/add_art';
+import SettingArtsPage from 'pages/settings/arts';
+import SettingArtsAddPage from 'pages/settings/arts/add';
+import SettingArtsEditPage from 'pages/settings/arts/edit';
 import ArtistPage from 'pages/artist';
 import ArtPage from 'pages/art';
 
@@ -43,10 +45,26 @@ const App: React.FC = () => {
             render={() => <SettingProfilePage fbUser={fbUser} />}
           />
           <Route
-            path="/settings/add_art"
+            path="/settings/arts"
+            exact
+            render={() => <SettingArtsPage fbUser={fbUser} />}
+          />
+          <Route
+            path="/settings/arts/add"
             exact
             render={({history}) => (
-              <SettingAddArtPage fbUser={fbUser} history={history} />
+              <SettingArtsAddPage fbUser={fbUser} history={history} />
+            )}
+          />
+          <Route
+            path="/settings/arts/edit/:artTitle"
+            exact
+            render={({history, match}) => (
+              <SettingArtsEditPage
+                fbUser={fbUser}
+                history={history}
+                artTitle={match.params.artTitle}
+              />
             )}
           />
           <Route
@@ -55,19 +73,19 @@ const App: React.FC = () => {
             render={({history}) => <SigninPage history={history} />}
           />
           <Route
-            path="/:artistDisplayId"
+            path="/:artistName"
             exact
             render={({match}) => (
-              <ArtistPage displayId={match.params.artistDisplayId} />
+              <ArtistPage artistName={match.params.artistName} />
             )}
           />
           <Route
-            path="/:artistDisplayId/:artId"
+            path="/:artistName/:artTitle"
             exact
             render={({match}) => (
               <ArtPage
-                artistDisplayId={match.params.artistDisplayId}
-                artId={match.params.artId}
+                artistName={match.params.artistName}
+                artTitle={match.params.artTitle}
               />
             )}
           />

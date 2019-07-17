@@ -1,4 +1,4 @@
-import React, {FC, useState, useEffect} from 'react';
+import React, {FC, useState} from 'react';
 import styled from 'styled-components';
 import * as firebase from 'firebase';
 import {Link} from 'react-router-dom';
@@ -6,10 +6,10 @@ import {History} from 'history';
 
 import {onPc} from 'components/responsive';
 import Header from 'components/header';
-import {StoredArt, updateArtSumbnail, updateArt} from 'models/artist';
+import {StoredArt, createArt, updateArtSumbnail} from 'models/artist';
 
-import SumbnailComponent from './add_art/components/sumbnail';
-import AttributesComponent from './add_art/components/attributes';
+import SumbnailComponent from './add/components/sumbnail';
+import AttributesComponent from './add/components/attributes';
 
 interface Props {
   fbUser: firebase.User | null;
@@ -47,13 +47,12 @@ const AddArtPage: FC<AddArtPageProps> = ({fbUser, history}) => {
     } else if (attrs === null) {
       alert('入力されていない項目があります。');
     } else {
-      Promise.all([
-        // updateArtSumbnail(fbUser, attrs.title, sumbnailBase64),
-        updateArt(fbUser, attrs.title, attrs),
-      ]).then(() => {
-        alert('新しいアートを追加しました！');
-        history.push('/settings/profile');
-      });
+      createArt(fbUser, attrs)
+        .then(artId => updateArtSumbnail(fbUser, artId, sumbnailBase64))
+        .then(() => {
+          alert('新しいアートを追加しました！');
+          history.push('/settings/profile');
+        });
     }
   };
 

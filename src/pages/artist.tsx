@@ -3,26 +3,21 @@ import styled from 'styled-components';
 
 import Header from '../components/header';
 import {onPc} from 'components/responsive';
-import {
-  Art,
-  Artist,
-  fetchArtistByDisplayId,
-  fetchArtsOfArtist,
-} from 'models/artist';
+import {Art, Artist, fetchArtistByName, fetchArtsOfArtist} from 'models/artist';
 
 import ProfileComponent from './artist/components/profile';
 import ArtsComponent from './artist/components/arts';
 
 interface ArtistPageProps {
-  displayId: string;
+  artistName: string;
 }
 
-const ArtistPage: FC<ArtistPageProps> = ({displayId}) => {
+const ArtistPage: FC<ArtistPageProps> = ({artistName}) => {
   const [artist, setArtist] = useState<Artist | null>(null);
   const [arts, setArts] = useState<Art[]>([]);
 
   useEffect(() => {
-    fetchArtistByDisplayId(displayId).then(artist => {
+    fetchArtistByName(artistName).then(artist => {
       if (artist === null) {
         alert('指定のアーティストが見つかりません');
       } else {
@@ -30,11 +25,11 @@ const ArtistPage: FC<ArtistPageProps> = ({displayId}) => {
         fetchArtsOfArtist(artist.uid).then(arts => setArts(arts));
       }
     });
-  }, [displayId]);
+  }, [artistName]);
 
   return (
     <>
-      <Header title={artist != null ? artist.name : ''} />
+      <Header title={artistName} />
       <Contents>
         {artist != null ? (
           <>

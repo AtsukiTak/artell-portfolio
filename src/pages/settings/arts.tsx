@@ -5,10 +5,9 @@ import {Link} from 'react-router-dom';
 
 import {onPc} from 'components/responsive';
 import Header from 'components/header';
-import {Artist, fetchArtist} from 'models/artist';
+import {Artist, Art, fetchArtist, fetchArtsOfArtist} from 'models/artist';
 
-import EditSumbnailComponent from './profile/components/edit_sumbnail';
-import EditAttributesComponent from './profile/components/edit_attributes';
+import ArtsComponent from './arts/components/arts';
 
 interface Props {
   fbUser: firebase.User | null;
@@ -48,12 +47,17 @@ interface ProfileSettingPageProps {
 }
 
 const ProfileSettingPage: FC<ProfileSettingPageProps> = ({fbUser, artist}) => {
+  const [arts, setArts] = useState<Art[]>([]);
+
+  useEffect(() => {
+    fetchArtsOfArtist(artist.uid).then(setArts);
+  }, [artist]);
+
   return (
     <>
       <Header title="Settings" displaySigninLink={false} />
       <Container>
-        <EditSumbnailComponent artist={artist} fbUser={fbUser} />
-        <EditAttributesComponent artist={artist} fbUser={fbUser} />
+        <ArtsComponent arts={arts} />
       </Container>
     </>
   );

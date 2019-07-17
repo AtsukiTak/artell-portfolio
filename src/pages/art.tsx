@@ -3,24 +3,24 @@ import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 
 import {MobileContent, PcContent} from 'components/responsive';
-import {Art, fetchArtistByDisplayId, fetchArt, Artist} from 'models/artist';
+import {Art, fetchArtistByName, fetchArtByTitle, Artist} from 'models/artist';
 
 interface ArtPageProps {
-  artistDisplayId: string;
-  artId: string;
+  artistName: string;
+  artTitle: string;
 }
 
-const ArtPage: FC<ArtPageProps> = ({artistDisplayId, artId}) => {
+const ArtPage: FC<ArtPageProps> = ({artistName, artTitle}) => {
   const [art, setArt] = useState<Art | null>(null);
   const [artist, setArtist] = useState<Artist | null>(null);
 
   useEffect(() => {
-    fetchArtistByDisplayId(artistDisplayId).then(artist => {
+    fetchArtistByName(artistName).then(artist => {
       if (artist === null) {
         alert('アーティストが見つかりません');
       } else {
         setArtist(artist);
-        fetchArt(artist.uid, artId).then(art => {
+        fetchArtByTitle(artist.uid, artTitle).then(art => {
           if (art === null) {
             alert('指定の作品が見つかりません');
           } else {
@@ -29,7 +29,7 @@ const ArtPage: FC<ArtPageProps> = ({artistDisplayId, artId}) => {
         });
       }
     });
-  }, [artistDisplayId, artId]);
+  }, [artistName, artTitle]);
 
   const CloseButton = styled(Link)`
     position: absolute;
@@ -62,7 +62,7 @@ const ArtPage: FC<ArtPageProps> = ({artistDisplayId, artId}) => {
 
   return (
     <>
-      <CloseButton to={`/${artistDisplayId}/`} />
+      <CloseButton to={`/${artistName}/`} />
       {art != null && artist != null ? (
         <>
           <MobileContent>

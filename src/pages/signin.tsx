@@ -21,11 +21,9 @@ const SigninPage: FC<{history: History}> = ({history}) => {
             if (artist === null) {
               // 新規登録
               return createArtist(fbuser);
-            } else {
-              return artist.displayId;
             }
           })
-          .then(displayId => history.push(`/settings/profile`));
+          .then(() => history.push(`/settings/profile`));
         return false;
       },
     },

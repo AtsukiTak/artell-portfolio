@@ -14,20 +14,20 @@ interface Props {
 const ArtsComponent: FC<Props> = ({arts}) => {
   return (
     <Container>
+      <ArtContainer key="new">
+        <Link to={`/settings/arts/add`}>
+          <AddArtSumbnail />
+        </Link>
+        <ArtTitle>アートを追加する</ArtTitle>
+      </ArtContainer>
       {arts.map(art => (
         <ArtContainer key={art.id}>
-          <Link to={`/settings/edit_art/${art.id}`}>
+          <Link to={`/settings/arts/edit/${art.title}`}>
             <Sumbnail src={art.sumbnailUrl} />
           </Link>
           <ArtTitle>{art.title}</ArtTitle>
         </ArtContainer>
       ))}
-      <ArtContainer key="new">
-        <Link to={`/settings/add_art`}>
-          <AddArtSumbnail />
-        </Link>
-        <ArtTitle>アートを追加する</ArtTitle>
-      </ArtContainer>
     </Container>
   );
 };
@@ -37,12 +37,13 @@ export default ArtsComponent;
 const Container = styled.div`
   display: flex;
   width: 100%;
-  padding: 50px 0;
+  padding-bottom: 50px;
   justify-content: center;
   flex-wrap: wrap;
 
   ${onPc(`
     justify-content: start;
+    padding-top: 50px;
   `)}
 `;
 

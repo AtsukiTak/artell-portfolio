@@ -102,7 +102,7 @@ const ArtistItem: FC<ArtistItemProps> = ({artist}) => {
 
   return (
     <Container>
-      <Link to={'/' + artist.displayId + '/'}>
+      <Link to={'/' + artist.name + '/'}>
         <StyledSumbnail src={artist.sumbnailUrl} />
       </Link>
       <Name>{artist.name}</Name>

@@ -4,7 +4,6 @@ import * as D from '@mojotech/json-type-validation';
 
 export interface Artist {
   uid: string;
-  displayId: string;
   name: string;
   email: string;
   sumbnailUrl: string;
@@ -28,7 +27,6 @@ export interface Art {
 }
 
 interface StoredArtist {
-  displayId: string;
   name: string;
   email: string;
   comment: string;
@@ -78,20 +76,18 @@ export function fetchArtist(uid: string): Promise<Artist | null> {
     .then(doc => constructArtist(doc));
 }
 
-export function fetchArtistByDisplayId(
-  displayId: string,
-): Promise<Artist | null> {
+export function fetchArtistByName(name: string): Promise<Artist | null> {
   return firebase
     .firestore()
     .collection('artists')
-    .where('displayId', '==', displayId)
+    .where('name', '==', name)
     .limit(1)
     .get()
     .then(snapshot => {
       if (snapshot.docs.length === 1) {
         return constructArtist(snapshot.docs[0]);
       } else {
-        throw 'Artist not found';
+        throw new Error('Artist not found');
       }
     });
 }
@@ -113,7 +109,6 @@ function constructArtist(
 }
 
 const StoredArtistDecoder: D.Decoder<StoredArtist> = D.object({
-  displayId: D.string(),
   name: D.string(),
   email: D.string(),
   comment: D.string(),
@@ -139,7 +134,7 @@ function fetchDefaultSumbnailUrlOfArtist(): Promise<string> {
     .then(url => url as string);
 }
 
-export function createArtist(fbuser: firebase.User): Promise<string> {
+export function createArtist(fbuser: firebase.User): Promise<void> {
   const name = fbuser.displayName;
   const email = fbuser.email;
   if (name === null || email === null) {
@@ -152,18 +147,12 @@ export function createArtist(fbuser: firebase.User): Promise<string> {
     .set({
       name: name,
       email: email,
-      displayId: toDisplayId(name),
       comment: '',
       description: '',
       twitter: '',
       facebook: '',
       instagram: '',
-    })
-    .then(() => toDisplayId(name));
-}
-
-function toDisplayId(name: string): string {
-  return encodeURIComponent(name.split(' ').join('_'));
+    });
 }
 
 export function updateArtist(
@@ -211,15 +200,25 @@ export function fetchArtsOfArtist(artistUid: string): Promise<Art[]> {
     );
 }
 
-export function fetchArt(artistUid: string, id: string): Promise<Art | null> {
+export function fetchArtByTitle(
+  artistUid: string,
+  title: string,
+): Promise<Art | null> {
   return firebase
     .firestore()
     .collection('artists')
     .doc(artistUid)
     .collection('arts')
-    .doc(id)
+    .where('title', '==', title)
+    .limit(1)
     .get()
-    .then(doc => constructArt(artistUid, doc));
+    .then(snapshot => {
+      if (snapshot.docs.length === 1) {
+        return constructArt(artistUid, snapshot.docs[0]);
+      } else {
+        throw new Error('Art not found');
+      }
+    });
 }
 
 function constructArt(
@@ -261,9 +260,22 @@ function fetchSumbnailUrlOfArt(
       if (typeof maybeURL === 'string') {
         return maybeURL;
       } else {
-        throw `error : ${maybeURL}`;
+        throw new Error(`error : ${maybeURL}`);
       }
     });
+}
+
+export function createArt(
+  fbuser: firebase.User,
+  art: StoredArt,
+): Promise<string> {
+  return firebase
+    .firestore()
+    .collection('artists')
+    .doc(fbuser.uid)
+    .collection('arts')
+    .add(art)
+    .then(doc => doc.id);
 }
 
 export function updateArt(

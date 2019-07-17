@@ -2,30 +2,29 @@ import React, {FC, useState} from 'react';
 import styled from 'styled-components';
 import * as firebase from 'firebase';
 
-import {Artist, updateArtist} from 'models/artist';
+import {Art, updateArt} from 'models/artist';
 
 interface Props {
   fbUser: firebase.User;
-  artist: Artist;
+  art: Art;
 }
 
-const EditAttributesComponent: FC<Props> = ({fbUser, artist}) => {
-  const [name, setName] = useState(artist.name);
-  const [comment, setComment] = useState(artist.comment);
-  const [description, setDescription] = useState(artist.description);
-  const [twitter, setTwitter] = useState(artist.twitter);
-  const [facebook, setFacebook] = useState(artist.facebook);
-  const [instagram, setInstagram] = useState(artist.instagram);
+const EditAttributesComponent: FC<Props> = ({fbUser, art}) => {
+  const [title, setTitle] = useState(art.title);
+  const [widthMM, setWidthMM] = useState<number>(art.widthMM);
+  const [heightMM, setHeightMM] = useState<number>(art.heightMM);
+  const [desc, setDesc] = useState(art.description);
+  const [materials, setMaterials] = useState(art.materials);
+  const [priceYen, setPriceYen] = useState<number>(art.priceYen);
 
   const onUpdateRequested = () => {
-    updateArtist(fbUser, {
-      email: artist.email,
-      name: name,
-      comment: comment,
-      description: description,
-      twitter: twitter,
-      facebook: facebook,
-      instagram: instagram,
+    updateArt(fbUser, art.id, {
+      title: title,
+      widthMM: widthMM,
+      heightMM: heightMM,
+      description: desc,
+      materials: materials,
+      priceYen: priceYen,
     }).then(() => {
       window.location.reload();
     });
@@ -34,58 +33,64 @@ const EditAttributesComponent: FC<Props> = ({fbUser, artist}) => {
   return (
     <Container>
       <EditAttributeElement>
-        <AttributeName>Name</AttributeName>
+        <AttributeName>Title</AttributeName>
         <InputField
           type="text"
-          value={name}
-          onChange={e => setName(e.target.value)}
+          value={title}
+          onChange={e => setTitle(e.target.value)}
         />
       </EditAttributeElement>
       <EditAttributeElement>
-        <AttributeName>Comment</AttributeName>
+        <AttributeName>Width (mm)</AttributeName>
         <InputField
-          type="text"
-          value={comment}
-          onChange={e => setComment(e.target.value)}
+          type="tel"
+          value={widthMM || ''}
+          onChange={e => setWidthMM(validateNum(e.target.value))}
+        />
+      </EditAttributeElement>
+      <EditAttributeElement>
+        <AttributeName>Height (mm)</AttributeName>
+        <InputField
+          type="tel"
+          value={heightMM || ''}
+          onChange={e => setHeightMM(validateNum(e.target.value))}
         />
       </EditAttributeElement>
       <EditAttributeElement>
         <AttributeName>Description</AttributeName>
-        <TextField
-          value={description}
-          onChange={e => setDescription(e.target.value)}
+        <TextField value={desc} onChange={e => setDesc(e.target.value)} />
+      </EditAttributeElement>
+      <EditAttributeElement>
+        <AttributeName>素材</AttributeName>
+        <InputField
+          type="text"
+          placeholder="Acrylic, transfers, colored pencil, charcoal, and pastel on paper"
+          value={materials}
+          onChange={e => setMaterials(e.target.value)}
         />
       </EditAttributeElement>
       <EditAttributeElement>
-        <AttributeName>Twitter</AttributeName>
+        <AttributeName>Price (Yen)</AttributeName>
         <InputField
-          type="text"
-          value={'@' + twitter}
-          onChange={e => setTwitter(e.target.value.slice(1))}
-        />
-      </EditAttributeElement>
-      <EditAttributeElement>
-        <AttributeName>Facebook</AttributeName>
-        <InputField
-          type="text"
-          placeholder="artell.life.42"
-          value={facebook}
-          onChange={e => setFacebook(e.target.value)}
-        />
-      </EditAttributeElement>
-      <EditAttributeElement>
-        <AttributeName>Instagram</AttributeName>
-        <InputField
-          type="text"
-          placeholder="artell.gallery"
-          value={instagram}
-          onChange={e => setInstagram(e.target.value)}
+          type="tel"
+          value={priceYen || ''}
+          onChange={e => setPriceYen(validateNum(e.target.value))}
         />
       </EditAttributeElement>
       <SubmitButton onClick={onUpdateRequested}>Update</SubmitButton>
     </Container>
   );
 };
+
+function validateNum(s: string): number {
+  const n = Number(s);
+  if (Number.isNaN(n)) {
+    alert('数字を入力してください');
+    return 0;
+  } else {
+    return n;
+  }
+}
 
 const Container = styled.div`
   width: 100%;
