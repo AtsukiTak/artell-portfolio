@@ -13,9 +13,27 @@ const ProfileComponent: FC<{artist: Artist}> = ({artist}) => {
       <TextContent>
         <Name>{artist.name}</Name>
         <Sns>
-          <logo.Facebook />
-          <logo.Twitter />
-          <logo.Instagram />
+          {artist.facebook !== '' ? (
+            <SnsLink
+              href={`https://www.facebook.com/${artist.facebook}`}
+              target="_blank">
+              <logo.Facebook />
+            </SnsLink>
+          ) : null}
+          {artist.twitter !== '' ? (
+            <SnsLink
+              href={`https://twitter.com/${artist.twitter}`}
+              target="_blank">
+              <logo.Twitter />
+            </SnsLink>
+          ) : null}
+          {artist.instagram !== '' ? (
+            <SnsLink
+              href={`https://www.instagram.com/${artist.instagram}/`}
+              target="_blank">
+              <logo.Instagram />
+            </SnsLink>
+          ) : null}
         </Sns>
         <Description>{artist.description}</Description>
       </TextContent>
@@ -67,11 +85,14 @@ const Sns = styled.div`
   width: 100%;
   text-align: right;
   margin-top: 10px;
+`;
 
-  & > svg {
+const SnsLink = styled.a`
+  margin-left: 15px;
+
+  & svg {
     width: 18px;
     height: 18px;
-    margin-left: 15px;
   }
 `;
 
