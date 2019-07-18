@@ -20,6 +20,7 @@ import ArtPage from 'pages/art';
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
+    font-family: Robot-Light;
   }
   * {
     box-sizing: border-box;

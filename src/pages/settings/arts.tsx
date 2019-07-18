@@ -7,6 +7,7 @@ import {onPc} from 'components/responsive';
 import Header from 'components/header';
 import {Artist, Art, fetchArtist, fetchArtsOfArtist} from 'models/artist';
 
+import SettingTab from './components/tab';
 import ArtsComponent from './arts/components/arts';
 
 interface Props {
@@ -56,6 +57,7 @@ const ProfileSettingPage: FC<ProfileSettingPageProps> = ({fbUser, artist}) => {
   return (
     <>
       <Header title="Settings" displaySigninLink={false} />
+      <SettingTab selected='tab2' />
       <Container>
         <ArtsComponent arts={arts} />
       </Container>

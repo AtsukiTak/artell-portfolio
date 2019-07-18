@@ -10,7 +10,7 @@ interface HeaderProps {
 const Header: FC<HeaderProps> = ({title, displaySigninLink}) => {
   return (
     <Container>
-      <Title>{title}</Title>
+      <Title to="/">ARTELL</Title>
       {displaySigninLink !== false ? (
         <HeaderLink to="/signin">ログイン</HeaderLink>
       ) : null}
@@ -34,7 +34,7 @@ const Container = styled.header`
   }
 `;
 
-const Title = styled.div`
+const Title = styled(Link)`
   display: inline-block;
   position: absolute;
   width: 40vw;
@@ -44,6 +44,7 @@ const Title = styled.div`
   line-height: 53px;
   color: #6f6f6f;
   text-align: center;
+  text-decoration: none;
 
   @media (min-width: 700px) {
     font-size: 24px;

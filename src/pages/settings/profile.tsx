@@ -7,6 +7,7 @@ import {onPc} from 'components/responsive';
 import Header from 'components/header';
 import {Artist, fetchArtist} from 'models/artist';
 
+import SettingTab from './components/tab';
 import EditSumbnailComponent from './profile/components/edit_sumbnail';
 import EditAttributesComponent from './profile/components/edit_attributes';
 
@@ -51,6 +52,7 @@ const ProfileSettingPage: FC<ProfileSettingPageProps> = ({fbUser, artist}) => {
   return (
     <>
       <Header title="Settings" displaySigninLink={false} />
+      <SettingTab selected="tab1" />
       <Container>
         <EditSumbnailComponent artist={artist} fbUser={fbUser} />
         <EditAttributesComponent artist={artist} fbUser={fbUser} />
