@@ -103,6 +103,7 @@ const Description = styled.div`
   color: #505050;
   font-size: 16px;
   line-height: 32px;
+  word-break: break-all;
 
   ${pc(`
     font-size: 14px;
