@@ -2,6 +2,7 @@ import React, {FC} from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 
+import {pc} from 'components/responsive';
 import Sumbnail from 'components/sumbnail';
 import {Art, Artist} from 'models/artist';
 
@@ -24,18 +25,21 @@ export default ArtsComponent;
 
 const Container = styled.div`
   width: 100%;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-
-  @media (min-width: 450px) {
-    justify-content: space-between;
-  }
 `;
 
 const ArtComponent = styled.div`
   width: 180px;
+  margin: 0 auto;
   margin-top: 80px;
+
+  ${pc(`
+    display: inline-block;
+    margin-left: 50px;
+
+    &:first-child {
+      margin-left: 0px;
+    }
+  `)}
 `;
 
 const StyledSumbnail = styled(Sumbnail)`
