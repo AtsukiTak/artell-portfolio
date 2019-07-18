@@ -36,7 +36,7 @@ const SigninPage: FC<{history: History}> = ({history}) => {
 
   return (
     <>
-      <Header title="ログイン / 新規登録" displaySigninLink={false} />
+      <Header title="ログイン / 新規登録" hideSigninLink />
       <Container>
         <StyledFirebaseAuth
           uiConfig={uiConfig}

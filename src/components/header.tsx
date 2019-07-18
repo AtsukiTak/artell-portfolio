@@ -1,19 +1,23 @@
 import React, {FC} from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
+import * as firebase from 'firebase';
 
 interface HeaderProps {
   title: string;
-  displaySigninLink?: boolean;
+  hideSigninLink?: boolean;
 }
 
-const Header: FC<HeaderProps> = ({title, displaySigninLink}) => {
+const Header: FC<HeaderProps> = ({title, hideSigninLink}) => {
+  const isLoggedIn = firebase.auth().currentUser !== null;
   return (
     <Container>
       <Title to="/">ARTELL</Title>
-      {displaySigninLink !== false ? (
+      {hideSigninLink ? null : isLoggedIn ? (
+        <HeaderLink to="/settings/profile">アカウント</HeaderLink>
+      ) : (
         <HeaderLink to="/signin">ログイン</HeaderLink>
-      ) : null}
+      )}
     </Container>
   );
 };

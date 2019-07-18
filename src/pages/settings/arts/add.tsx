@@ -58,7 +58,7 @@ const AddArtPage: FC<AddArtPageProps> = ({fbUser, history}) => {
 
   return (
     <>
-      <Header title="アート追加" displaySigninLink={false} />
+      <Header title="アート追加" hideSigninLink />
       <Container>
         <SumbnailComponent
           fbUser={fbUser}

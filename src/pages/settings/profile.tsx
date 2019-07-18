@@ -51,7 +51,7 @@ interface ProfileSettingPageProps {
 const ProfileSettingPage: FC<ProfileSettingPageProps> = ({fbUser, artist}) => {
   return (
     <>
-      <Header title="Settings" displaySigninLink={false} />
+      <Header title="Settings" hideSigninLink />
       <SettingTab selected="tab1" />
       <Container>
         <EditSumbnailComponent artist={artist} fbUser={fbUser} />
