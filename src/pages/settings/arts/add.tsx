@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useState, useMemo} from 'react';
 import styled from 'styled-components';
 import * as firebase from 'firebase';
 import {Link} from 'react-router-dom';
@@ -41,6 +41,21 @@ const AddArtPage: FC<AddArtPageProps> = ({fbUser, history}) => {
   const [sumbnailBase64, setSumbnailBase64] = useState<string | null>(null);
   const [attrs, setAttrs] = useState<StoredArt | null>(null);
 
+  const sumbnailInput = useMemo(
+    () => (
+      <SumbnailComponent
+        fbUser={fbUser}
+        onSumbnailSelected={setSumbnailBase64}
+      />
+    ),
+    [fbUser, setSumbnailBase64],
+  );
+
+  const attributesInput = useMemo(
+    () => <AttributesComponent fbUser={fbUser} onAttributeChange={setAttrs} />,
+    [fbUser, setAttrs],
+  );
+
   const onSubmitClick = () => {
     if (sumbnailBase64 === null) {
       alert('アートの画像が選択されていません。');
@@ -60,11 +75,8 @@ const AddArtPage: FC<AddArtPageProps> = ({fbUser, history}) => {
     <>
       <Header title="アート追加" hideSigninLink />
       <Container>
-        <SumbnailComponent
-          fbUser={fbUser}
-          onSumbnailSelected={setSumbnailBase64}
-        />
-        <AttributesComponent fbUser={fbUser} onAttributeChange={setAttrs} />
+        {sumbnailInput}
+        {attributesInput}
         <SubmitButton onClick={onSubmitClick}>追加</SubmitButton>
       </Container>
     </>
