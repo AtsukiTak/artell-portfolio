@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import Sumbnail from 'components/sumbnail';
 import * as logo from 'components/logo';
-import {onPc} from 'components/responsive';
+import {pc} from 'components/responsive';
 import {Artist} from 'models/artist';
 
 const ProfileComponent: FC<{artist: Artist}> = ({artist}) => {
@@ -36,7 +36,7 @@ const StyledSumbnail = styled(Sumbnail)`
   max-width: 400px;
   margin: 0 auto;
 
-  ${onPc(`
+  ${pc(`
     display: inline-block;
     width: 400px;
   `)}
@@ -48,7 +48,7 @@ const TextContent = styled.div`
   width: 100%;
   margin-top: 18px;
 
-  ${onPc(`
+  ${pc(`
     width: 266px;
     margin-top: 0;
     padding-left: 110px;
@@ -83,7 +83,7 @@ const Description = styled.div`
   font-size: 16px;
   line-height: 32px;
 
-  ${onPc(`
+  ${pc(`
     font-size: 14px;
     line-height: 28px;
   `)}
@@ -94,7 +94,7 @@ const HR = styled.hr`
   margin-top: 65px;
   border: 0.5px solid #979797;
 
-  ${onPc(`
+  ${pc(`
     margin-top: 90px;
   `)}
 `;

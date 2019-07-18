@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import styled from 'styled-components';
 
-export function onPc(css: string): string {
+export function pc(css: string): string {
   return `@media (min-width: 980px) {
     ${css}
   }`;

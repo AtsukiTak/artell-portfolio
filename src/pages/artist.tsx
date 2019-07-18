@@ -2,7 +2,7 @@ import React, {FC, useState, useEffect} from 'react';
 import styled from 'styled-components';
 
 import Header from '../components/header';
-import {onPc} from 'components/responsive';
+import {pc} from 'components/responsive';
 import {Art, Artist, fetchArtistByName, fetchArtsOfArtist} from 'models/artist';
 
 import ProfileComponent from './artist/components/profile';
@@ -47,7 +47,7 @@ const Contents = styled.div`
   max-width: 780px;
   margin: 50px auto;
 
-  ${onPc(`
+  ${pc(`
     margin-top: 90px;
   `)}
 `;

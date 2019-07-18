@@ -4,7 +4,7 @@ import * as firebase from 'firebase';
 import {Link} from 'react-router-dom';
 import {History} from 'history';
 
-import {onPc} from 'components/responsive';
+import {pc} from 'components/responsive';
 import Header from 'components/header';
 import {StoredArt, createArt, updateArtSumbnail} from 'models/artist';
 
@@ -76,7 +76,7 @@ const Container = styled.div`
   margin: 0px auto;
   margin-top: 50px;
 
-  ${onPc(`
+  ${pc(`
     margin-top: 90px;
   `)}
 `;

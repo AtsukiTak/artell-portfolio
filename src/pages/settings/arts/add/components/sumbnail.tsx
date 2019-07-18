@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import * as firebase from 'firebase';
 import Jimp from 'jimp';
 
-import {onPc} from 'components/responsive';
+import {pc} from 'components/responsive';
 import Sumbnail from 'components/sumbnail';
 import {SquareBasedWidth} from 'components/square';
 
@@ -75,7 +75,7 @@ const Container = styled.label`
   max-width: 400px;
   margin: 0 auto;
 
-  ${onPc(`
+  ${pc(`
     display: inline-block;
     width: 400px;
   `)}

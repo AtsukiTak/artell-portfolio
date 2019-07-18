@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 
-import {onPc} from 'components/responsive';
+import {pc} from 'components/responsive';
 import Sumbnail from 'components/sumbnail';
 import {SquareBasedWidth} from 'components/square';
 import {Art} from 'models/artist';
@@ -41,7 +41,7 @@ const Container = styled.div`
   justify-content: center;
   flex-wrap: wrap;
 
-  ${onPc(`
+  ${pc(`
     justify-content: start;
     padding-top: 50px;
   `)}
@@ -56,7 +56,7 @@ const ArtContainer = styled.div`
     margin-left: 0px;
   }
 
-  ${onPc(`
+  ${pc(`
     width: 280px;
     margin-left: 70px;
   `)}
@@ -72,7 +72,7 @@ const AddArtSumbnail = styled(SquareBasedWidth)`
   width: 50vw;
   background-color: lightgray;
 
-  ${onPc(`
+  ${pc(`
     width: 280px;
   `)}
 `;
