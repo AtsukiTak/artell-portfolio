@@ -22,7 +22,7 @@ const EditSumbnailComponent: FC<Props> = ({fbUser, artist}) => {
       reader.onload = () => {
         const buf = new Buffer(reader.result as ArrayBuffer);
         Jimp.read(buf)
-          .then(lenna => lenna.cover(256, 256).getBase64Async(Jimp.MIME_JPEG))
+          .then(lenna => lenna.cover(512, 512).getBase64Async(Jimp.MIME_JPEG))
           .then(dataURI => setSumbnailDataURI(dataURI));
       };
       reader.readAsArrayBuffer(file);
