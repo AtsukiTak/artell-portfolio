@@ -20,7 +20,7 @@ const ArtPage: FC<ArtPageProps> = ({artistName, artTitle}) => {
         alert('アーティストが見つかりません');
       } else {
         setArtist(artist);
-        fetchArtByTitle(artist.uid, artTitle).then(art => {
+        fetchArtByTitle(artist, artTitle).then(art => {
           if (art === null) {
             alert('指定の作品が見つかりません');
           } else {

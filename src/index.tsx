@@ -15,5 +15,6 @@ const firebaseConfig = {
   appId: '1:1342542049:web:9860ef00a863452a',
 };
 firebase.initializeApp(firebaseConfig);
+firebase.firestore().enablePersistence();
 
 ReactDOM.render(<App />, document.getElementById('root'));

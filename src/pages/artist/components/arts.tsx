@@ -34,10 +34,10 @@ const ArtComponent = styled.div`
 
   ${pc(`
     display: inline-block;
-    margin-left: 50px;
+    margin-right: 50px;
 
-    &:first-child {
-      margin-left: 0px;
+    &:nth-of-type(3n) {
+      margin-right: 0px;
     }
   `)}
 `;

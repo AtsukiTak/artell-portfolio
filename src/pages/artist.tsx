@@ -22,7 +22,7 @@ const ArtistPage: FC<ArtistPageProps> = ({artistName}) => {
         alert('指定のアーティストが見つかりません');
       } else {
         setArtist(artist);
-        fetchArtsOfArtist(artist.uid).then(arts => setArts(arts));
+        fetchArtsOfArtist(artist).then(arts => setArts(arts));
       }
     });
   }, [artistName]);

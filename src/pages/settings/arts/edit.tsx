@@ -6,7 +6,7 @@ import {History} from 'history';
 
 import {pc} from 'components/responsive';
 import Header from 'components/header';
-import {Art, fetchArtByTitle} from 'models/artist';
+import {Art, fetchArtist, fetchArtByTitle} from 'models/artist';
 
 import EditSumbnailComponent from './edit/components/edit_sumbnail';
 import EditAttributesComponent from './edit/components/edit_attributes';
@@ -22,9 +22,15 @@ const ProfileSettingPageWrapper: FC<Props> = ({fbUser, history, artTitle}) => {
 
   useEffect(() => {
     if (fbUser) {
-      fetchArtByTitle(fbUser.uid, artTitle)
-        .then(setArt)
-        .catch(() => history.push('/settings/arts'));
+      fetchArtist(fbUser.uid).then(artist => {
+        if (artist === null) {
+          throw new Error(`Artist ${fbUser.uid} not found`);
+        } else {
+          fetchArtByTitle(artist, artTitle)
+            .then(setArt)
+            .catch(() => history.push('/settings/arts'));
+        }
+      });
     }
   }, [fbUser, artTitle]);
 

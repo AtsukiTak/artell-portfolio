@@ -51,7 +51,7 @@ const ProfileSettingPage: FC<ProfileSettingPageProps> = ({fbUser, artist}) => {
   const [arts, setArts] = useState<Art[]>([]);
 
   useEffect(() => {
-    fetchArtsOfArtist(artist.uid).then(setArts);
+    fetchArtsOfArtist(artist).then(setArts);
   }, [artist]);
 
   return (
