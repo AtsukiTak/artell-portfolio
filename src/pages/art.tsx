@@ -92,8 +92,9 @@ const ArtContainer = styled('div')<{src: string}>`
   ${pc(`
     display: inline-block;
     width: calc(100vw - 385px);
-    height: 100vh;
+    height: 94vh;
     margin: 0;
+    margin-top: 3vh;
   `)}
 `;
 
