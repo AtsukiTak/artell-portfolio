@@ -3,7 +3,13 @@ import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 
 import {pc} from 'components/responsive';
-import {Art, fetchArtistByName, fetchArtByTitle, Artist} from 'models/artist';
+import {
+  Art,
+  Artist,
+  fetchArtistByName,
+  fetchArtByTitle,
+  buyArt,
+} from 'models/artist';
 
 interface ArtPageProps {
   artistName: string;
@@ -13,6 +19,7 @@ interface ArtPageProps {
 const ArtPage: FC<ArtPageProps> = ({artistName, artTitle}) => {
   const [art, setArt] = useState<Art | null>(null);
   const [artist, setArtist] = useState<Artist | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchArtistByName(artistName).then(artist => {
@@ -42,6 +49,19 @@ const ArtPage: FC<ArtPageProps> = ({artistName, artTitle}) => {
             <Info>{art.title}</Info>
             <Info>{art.materials}</Info>
             <Info>{`${art.widthMM} x ${art.heightMM} mm`}</Info>
+            {loading ? (
+              <BuyButton>Loading...</BuyButton>
+            ) : (
+              <BuyButton
+                onClick={() => {
+                  setLoading(true);
+                  buyArt(artist.uid, art.id);
+                }}>
+                購入する
+                <br />
+                &yen; {toPriceDisplay(art.priceYen)}
+              </BuyButton>
+            )}
           </CaptionContainer>
         </>
       ) : null}
@@ -50,6 +70,10 @@ const ArtPage: FC<ArtPageProps> = ({artistName, artTitle}) => {
 };
 
 export default ArtPage;
+
+function toPriceDisplay(priceYen: number): string {
+  return priceYen.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
 
 const CloseButton = styled(Link)`
   position: absolute;
@@ -132,4 +156,27 @@ const Info = styled.div`
   margin-top: 8px;
   font-family: NotoSansCJKjp-Light;
   line-height: 18px;
+`;
+
+const BuyButton = styled.button`
+  display: block;
+  width: 114px;
+  height: 67px;
+  margin: 0 auto;
+  margin-top: 35px;
+  border-radius: 4px;
+  border: 1px solid #a1a1a1;
+  background-color: white;
+  font-family: NotoSansCJKjp-Light;
+  font-size: 12px;
+  color: #a1a1a1;
+  text-align: center;
+  line-height: 20px;
+  cursor: pointer;
+
+  ${pc(`
+    display: inline-block;
+    margin: 0;
+    margin-top: 35px;
+  `)}
 `;

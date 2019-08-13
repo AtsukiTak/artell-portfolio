@@ -2,6 +2,8 @@ import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import * as D from '@mojotech/json-type-validation';
 
+import {request, Method} from 'api';
+
 export class Artist {
   constructor(
     readonly uid: string,
@@ -288,6 +290,11 @@ function fetchSumbnailUrlOfArt(
     .getDownloadURL();
 }
 
+/*
+ * ===============
+ * Create Art
+ * ===============
+ */
 export function createArt(
   fbuser: firebase.User,
   art: StoredArt,
@@ -301,6 +308,11 @@ export function createArt(
     .then(doc => doc.id);
 }
 
+/*
+ * ===============
+ * Update Art
+ * ===============
+ */
 export function updateArt(
   fbuser: firebase.User,
   artId: string,
@@ -326,3 +338,47 @@ export function updateArtSumbnail(
     .putString(base64, 'base64', {contentType: 'image/jpeg'})
     .then();
 }
+
+/*
+ * =================
+ * Buy Art
+ * =================
+ */
+declare const Stripe: any;
+
+const [stripePubKey, createSessionUrl] = (() => {
+  const apiBaseUrl =
+    'https://us-central1-artell-portfolio.cloudfunctions.net/stripe';
+  const env = process.env.NODE_ENV;
+  if (env === 'development' || env === 'test') {
+    return ['pk_test_ofrOScu6Vyu1aKzd35untuIj', `${apiBaseUrl}/test/session`];
+  } else if (env === 'production') {
+    return ['pk_live_Iu2DCSkAphvtpDWy2SvMlqUQ', `${apiBaseUrl}/session`];
+  } else {
+    throw new Error(`Unexpected NODE_ENV : ${env}`);
+  }
+})();
+
+const stripe = Stripe(stripePubKey);
+
+export function buyArt(artistUid: string, artId: string): Promise<void> {
+  return request({
+    method: Method.POST,
+    url: createSessionUrl,
+    body: {
+      artistUid,
+      artId,
+    },
+    decoder: BuyArtDecoder,
+  })
+    .then(sessionId =>
+      stripe.redirectToCheckout({
+        sessionId,
+      }),
+    )
+    .then(res => console.log(res));
+}
+
+const BuyArtDecoder: D.Decoder<string> = D.object({
+  id: D.string(),
+}).map(({id}) => id);
