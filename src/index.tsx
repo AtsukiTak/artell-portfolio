@@ -3,10 +3,8 @@ import ReactDOM from 'react-dom';
 import firebase from 'firebase';
 import App from './App';
 
-const firebaseApiKey = process.env.REACT_APP_FIREBASE_API_KEY;
-
 const firebaseConfig = {
-  apiKey: firebaseApiKey,
+  apiKey: 'AIzaSyA2uPRzLu-bL9OZk8daGhTcovKEjytmLCQ',
   authDomain: 'artell-portfolio.firebaseapp.com',
   databaseURL: 'https://artell-portfolio.firebaseio.com',
   projectId: 'artell-portfolio',

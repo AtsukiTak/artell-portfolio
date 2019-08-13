@@ -346,6 +346,10 @@ export function updateArtSumbnail(
  */
 declare const Stripe: any;
 
+// - パブリックキーやAPIエンドポイントが誤った値に変更されると危険
+// - これらの値は頻繁に更新されない
+// - 外部に晒しても問題ない
+// 以上の理由から、これらの値はハードコーディングする
 const [stripePubKey, createSessionUrl] = (() => {
   const apiBaseUrl =
     'https://us-central1-artell-portfolio.cloudfunctions.net/stripe';
