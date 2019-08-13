@@ -1,6 +1,8 @@
 import React, {FC} from 'react';
 import styled from 'styled-components';
 
+export const MinPcWidth = 980;
+
 export function pc(css: string): string {
   return `@media (min-width: 980px) {
     ${css}

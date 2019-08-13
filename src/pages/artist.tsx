@@ -2,7 +2,7 @@ import React, {FC, useState, useEffect} from 'react';
 import styled from 'styled-components';
 
 import Header from '../components/header';
-import {pc} from 'components/responsive';
+import {pc, MinPcWidth} from 'components/responsive';
 import {Art, Artist, fetchArtistByName, fetchArtsOfArtist} from 'models/artist';
 
 import ProfileComponent from './artist/components/profile';
@@ -34,6 +34,7 @@ const ArtistPage: FC<ArtistPageProps> = ({artistName}) => {
         {artist != null ? (
           <>
             <ProfileComponent artist={artist} />
+            <HR />
             <ArtsComponent artist={artist} arts={arts} />
           </>
         ) : null}
@@ -44,8 +45,18 @@ const ArtistPage: FC<ArtistPageProps> = ({artistName}) => {
 
 const Contents = styled.div`
   width: 80%;
-  max-width: 780px;
+  max-width: ${MinPcWidth}px;
   margin: 50px auto;
+
+  ${pc(`
+    margin-top: 90px;
+  `)}
+`;
+
+const HR = styled.hr`
+  width: 100%;
+  margin-top: 65px;
+  border: 0.5px solid #979797;
 
   ${pc(`
     margin-top: 90px;

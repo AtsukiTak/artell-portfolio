@@ -37,7 +37,6 @@ const ProfileComponent: FC<{artist: Artist}> = ({artist}) => {
         </Sns>
         <Description>{artist.description}</Description>
       </TextContent>
-      <HR />
     </Container>
   );
 };
@@ -46,6 +45,11 @@ export default ProfileComponent;
 
 const Container = styled.div`
   width: 100%;
+
+  ${pc(`
+    width: 800px;
+    margin: 0 auto;
+  `)}
 `;
 
 const StyledSumbnail = styled(Sumbnail)`
@@ -67,9 +71,9 @@ const TextContent = styled.div`
   margin-top: 18px;
 
   ${pc(`
-    width: 266px;
+    width: 290px;
     margin-top: 0;
-    padding-left: 110px;
+    margin-left: 110px;
   `)}
 `;
 
@@ -108,15 +112,5 @@ const Description = styled.div`
   ${pc(`
     font-size: 14px;
     line-height: 28px;
-  `)}
-`;
-
-const HR = styled.hr`
-  width: 100%;
-  margin-top: 65px;
-  border: 0.5px solid #979797;
-
-  ${pc(`
-    margin-top: 90px;
   `)}
 `;

@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 
-import {pc} from 'components/responsive';
+import {pc, MinPcWidth} from 'components/responsive';
 import Sumbnail from 'components/sumbnail';
 import {Art, Artist} from 'models/artist';
 
@@ -34,9 +34,9 @@ const ArtComponent = styled.div`
 
   ${pc(`
     display: inline-block;
-    margin-right: 50px;
+    margin-right: calc((${MinPcWidth}px - (180px * 4)) / 3);
 
-    &:nth-of-type(3n) {
+    &:nth-of-type(4n) {
       margin-right: 0px;
     }
   `)}
