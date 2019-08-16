@@ -1,18 +1,22 @@
-import React, {FC, useState, useEffect} from 'react';
+import React, {FC, useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 
-import Header from '../components/header';
-import Footer from '../components/footer';
-import Sumbnail from '../components/sumbnail';
-import {Artist, fetchArtists} from '../models/artist';
+import {RootState} from 'modules/index';
+import {getArtists} from 'modules/artist';
+import {Artist} from 'models/artist';
+import Header from 'components/header';
+import Footer from 'components/footer';
+import Sumbnail from 'components/sumbnail';
 
 const TopPage = () => {
-  const [artists, setArtists] = useState<Array<Artist>>([]);
+  const artists = useSelector((state: RootState) => state.artist.artists);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchArtists().then(artists => setArtists(artists));
-  }, []);
+    dispatch(getArtists());
+  }, [dispatch]);
 
   const Items = styled.div`
     display: flex;
