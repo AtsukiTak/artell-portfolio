@@ -18,7 +18,7 @@ const TopPage = () => {
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
-    width: calc(100% * 13 / 15);
+    width: 70%;
     max-width: 990px;
     min-height: calc(100vh - 56px + 30px - 200px);
     margin: 0 auto;
