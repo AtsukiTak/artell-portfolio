@@ -57,9 +57,7 @@ const ArtPage: FC<ArtPageProps> = ({artistName, artTitle}) => {
                   setLoading(true);
                   buyArt(artist.uid, art.id);
                 }}>
-                購入する
-                <br />
-                &yen; {toPriceDisplay(art.priceYen)}
+                購入する &nbsp; / &nbsp; &yen; {toPriceDisplay(art.priceYen)}
               </BuyButton>
             )}
           </CaptionContainer>
@@ -160,8 +158,8 @@ const Info = styled.div`
 
 const BuyButton = styled.button`
   display: block;
-  width: 114px;
-  height: 67px;
+  width: 100%;
+  height: 40px;
   margin: 0 auto;
   margin-top: 35px;
   border-radius: 4px;
