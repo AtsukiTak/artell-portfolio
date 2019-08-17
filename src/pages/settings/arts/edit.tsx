@@ -61,7 +61,7 @@ interface ArtEditPageProps {
 const ArtEditPage: FC<ArtEditPageProps> = ({fbUser, art}) => {
   return (
     <>
-      <Header title="Settings" hideSigninLink />
+      <Header title="Settings" />
       <Container>
         <EditSumbnailComponent art={art} fbUser={fbUser} />
         <EditAttributesComponent art={art} fbUser={fbUser} />

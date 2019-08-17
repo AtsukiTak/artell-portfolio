@@ -5,19 +5,12 @@ import * as firebase from 'firebase';
 
 interface HeaderProps {
   title: string;
-  hideSigninLink?: boolean;
 }
 
-const Header: FC<HeaderProps> = ({title, hideSigninLink}) => {
-  const isLoggedIn = firebase.auth().currentUser !== null;
+const Header: FC<HeaderProps> = ({title}) => {
   return (
     <Container>
       <Title to="/">ARTELL</Title>
-      {hideSigninLink ? null : isLoggedIn ? (
-        <HeaderLink to="/settings/profile">アカウント</HeaderLink>
-      ) : (
-        <HeaderLink to="/signin">ログイン</HeaderLink>
-      )}
     </Container>
   );
 };
@@ -41,33 +34,16 @@ const Container = styled.header`
 const Title = styled(Link)`
   display: inline-block;
   position: absolute;
-  width: 40vw;
-  left: 30vw;
+  left: 20px;
   font-family: Roboto-Light;
   font-size: 18px;
   line-height: 53px;
   color: #6f6f6f;
-  text-align: center;
   text-decoration: none;
 
   @media (min-width: 700px) {
+    left: 100px;
     font-size: 24px;
-    line-height: 75px;
-  }
-`;
-
-const HeaderLink = styled(Link)`
-  position: absolute;
-  height: 100%;
-  right: 5vw;
-  font-family: Roboto-Light;
-  font-size: 16px;
-  line-height: 53px;
-  color: #6f6f6f;
-  text-decoration: none;
-
-  @media (min-width: 700px) {
-    font-size: 18px;
     line-height: 75px;
   }
 `;

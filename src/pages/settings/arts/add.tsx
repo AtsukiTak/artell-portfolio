@@ -73,7 +73,7 @@ const AddArtPage: FC<AddArtPageProps> = ({fbUser, history}) => {
 
   return (
     <>
-      <Header title="アート追加" hideSigninLink />
+      <Header title="アート追加" />
       <Container>
         {sumbnailInput}
         {attributesInput}

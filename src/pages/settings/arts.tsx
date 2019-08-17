@@ -56,8 +56,8 @@ const ProfileSettingPage: FC<ProfileSettingPageProps> = ({fbUser, artist}) => {
 
   return (
     <>
-      <Header title="Settings" hideSigninLink />
-      <SettingTab selected='tab2' />
+      <Header title="Settings" />
+      <SettingTab selected="tab2" />
       <Container>
         <ArtsComponent arts={arts} />
       </Container>
