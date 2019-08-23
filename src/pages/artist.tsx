@@ -1,9 +1,11 @@
-import React, {FC, useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components';
+import {useSelector, useDispatch} from 'react-redux';
 
+import {RootState} from 'services/index';
+import {getArtistByName} from 'services/artist';
 import Header from '../components/header';
 import {pc, MinPcWidth} from 'components/responsive';
-import {Art, Artist, fetchArtistByName, fetchArtsOfArtist} from 'models/artist';
 
 import ProfileComponent from './artist/components/profile';
 import ArtsComponent from './artist/components/arts';
@@ -12,20 +14,17 @@ interface ArtistPageProps {
   artistName: string;
 }
 
-const ArtistPage: FC<ArtistPageProps> = ({artistName}) => {
-  const [artist, setArtist] = useState<Artist | null>(null);
-  const [arts, setArts] = useState<Art[]>([]);
+const ArtistPage: React.FC<ArtistPageProps> = ({artistName}) => {
+  const artist = useSelector((state: RootState) =>
+    state.artist.list.find(artist => artist.name === artistName),
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchArtistByName(artistName).then(artist => {
-      if (artist === null) {
-        alert('指定のアーティストが見つかりません');
-      } else {
-        setArtist(artist);
-        fetchArtsOfArtist(artist).then(arts => setArts(arts));
-      }
-    });
-  }, [artistName]);
+    if (!artist) {
+      dispatch(getArtistByName(artistName));
+    }
+  }, [artistName, artist, dispatch]);
 
   return (
     <>
@@ -35,7 +34,7 @@ const ArtistPage: FC<ArtistPageProps> = ({artistName}) => {
           <>
             <ProfileComponent artist={artist} />
             <HR />
-            <ArtsComponent artist={artist} arts={arts} />
+            <ArtsComponent artist={artist} />
           </>
         ) : null}
       </Contents>

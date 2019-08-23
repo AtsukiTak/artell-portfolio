@@ -26,13 +26,13 @@ const ProfileSettingPageWrapper: FC<Props> = ({fbUser, history, artTitle}) => {
         if (artist === null) {
           throw new Error(`Artist ${fbUser.uid} not found`);
         } else {
-          fetchArtByTitle(artist, artTitle)
+          fetchArtByTitle(artist.uid, artTitle)
             .then(setArt)
             .catch(() => history.push('/settings/arts'));
         }
       });
     }
-  }, [fbUser, artTitle]);
+  }, [fbUser, artTitle, history]);
 
   if (fbUser === null) {
     return (

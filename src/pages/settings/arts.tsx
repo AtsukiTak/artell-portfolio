@@ -1,11 +1,14 @@
-import React, {FC, useState, useEffect} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import * as firebase from 'firebase';
 import {Link} from 'react-router-dom';
+import {useSelector, useDispatch} from 'react-redux';
 
+import {RootState} from 'services/index';
+import {getArtist} from 'services/artist';
 import {pc} from 'components/responsive';
 import Header from 'components/header';
-import {Artist, Art, fetchArtist, fetchArtsOfArtist} from 'models/artist';
+import {Artist} from 'models/artist';
 
 import SettingTab from './components/tab';
 import ArtsComponent from './arts/components/arts';
@@ -14,16 +17,21 @@ interface Props {
   fbUser: firebase.User | null;
 }
 
-const ProfileSettingPageWrapper: FC<Props> = ({fbUser}) => {
-  const [artist, setArtist] = useState<Artist | null>(null);
+const ProfileSettingPageWrapper: React.FC<Props> = ({fbUser}) => {
+  const artist = useSelector((state: RootState) =>
+    fbUser
+      ? state.artist.list.find(artist => artist.uid === fbUser.uid)
+      : undefined,
+  );
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (fbUser) {
-      fetchArtist(fbUser.uid).then(setArtist);
+  React.useEffect(() => {
+    if (!artist && fbUser) {
+      dispatch(getArtist(fbUser.uid));
     }
-  }, [fbUser]);
+  }, [fbUser, artist, dispatch]);
 
-  if (fbUser === null) {
+  if (fbUser) {
     return (
       <div>
         <h3>
@@ -32,8 +40,8 @@ const ProfileSettingPageWrapper: FC<Props> = ({fbUser}) => {
       </div>
     );
   } else {
-    if (artist !== null) {
-      return <ProfileSettingPage fbUser={fbUser} artist={artist} />;
+    if (artist) {
+      return <ProfileSettingPage artist={artist} />;
     } else {
       return null;
     }
@@ -43,23 +51,16 @@ const ProfileSettingPageWrapper: FC<Props> = ({fbUser}) => {
 export default ProfileSettingPageWrapper;
 
 interface ProfileSettingPageProps {
-  fbUser: firebase.User;
   artist: Artist;
 }
 
-const ProfileSettingPage: FC<ProfileSettingPageProps> = ({fbUser, artist}) => {
-  const [arts, setArts] = useState<Art[]>([]);
-
-  useEffect(() => {
-    fetchArtsOfArtist(artist).then(setArts);
-  }, [artist]);
-
+const ProfileSettingPage: React.FC<ProfileSettingPageProps> = ({artist}) => {
   return (
     <>
       <Header title="Settings" />
       <SettingTab selected="tab2" />
       <Container>
-        <ArtsComponent arts={arts} />
+        <ArtsComponent arts={artist.arts} />
       </Container>
     </>
   );

@@ -1,15 +1,12 @@
 import React, {FC, useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
+import {useSelector, useDispatch} from 'react-redux';
 
+import {RootState} from 'services/index';
+import {getArtistByName} from 'services/artist';
 import {pc} from 'components/responsive';
-import {
-  Art,
-  Artist,
-  fetchArtistByName,
-  fetchArtByTitle,
-  buyArt,
-} from 'models/artist';
+import {buyArt} from 'models/artist';
 
 interface ArtPageProps {
   artistName: string;
@@ -17,31 +14,25 @@ interface ArtPageProps {
 }
 
 const ArtPage: FC<ArtPageProps> = ({artistName, artTitle}) => {
-  const [art, setArt] = useState<Art | null>(null);
-  const [artist, setArtist] = useState<Artist | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [buying, setBuying] = useState(false);
+
+  const artist = useSelector((state: RootState) =>
+    state.artist.list.find(artist => artist.name === artistName),
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchArtistByName(artistName).then(artist => {
-      if (artist === null) {
-        alert('アーティストが見つかりません');
-      } else {
-        setArtist(artist);
-        fetchArtByTitle(artist, artTitle).then(art => {
-          if (art === null) {
-            alert('指定の作品が見つかりません');
-          } else {
-            setArt(art);
-          }
-        });
-      }
-    });
-  }, [artistName, artTitle]);
+    if (artist === undefined) {
+      dispatch(getArtistByName(artistName));
+    }
+  }, [artistName, artist, dispatch]);
+
+  const art = artist ? artist.getArt(artTitle) : undefined;
 
   return (
     <>
       <CloseButton to={`/${artistName}/`} />
-      {art != null && artist != null ? (
+      {art && artist ? (
         <>
           <ArtContainer src={art.sumbnailUrl} />
           <CaptionContainer>
@@ -49,12 +40,12 @@ const ArtPage: FC<ArtPageProps> = ({artistName, artTitle}) => {
             <Info>{art.title}</Info>
             <Info>{art.materials}</Info>
             <Info>{`${art.widthMM} x ${art.heightMM} mm`}</Info>
-            {loading ? (
+            {buying ? (
               <BuyButton>Loading...</BuyButton>
             ) : (
               <BuyButton
                 onClick={() => {
-                  setLoading(true);
+                  setBuying(true);
                   buyArt(artist.uid, art.id);
                 }}>
                 購入する &nbsp; / &nbsp; &yen; {toPriceDisplay(art.priceYen)}

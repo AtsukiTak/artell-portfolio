@@ -3,19 +3,19 @@ import {useSelector, useDispatch} from 'react-redux';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 
-import {RootState} from 'modules/index';
-import {getArtists} from 'modules/artist';
+import {RootState} from 'services/index';
+import {getArtistList} from 'services/artist';
 import {Artist} from 'models/artist';
 import Header from 'components/header';
 import Footer from 'components/footer';
 import Sumbnail from 'components/sumbnail';
 
 const TopPage = () => {
-  const artists = useSelector((state: RootState) => state.artist.artists);
+  const artists = useSelector((state: RootState) => state.artist.list);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getArtists());
+    dispatch(getArtistList());
   }, [dispatch]);
 
   const Items = styled.div`

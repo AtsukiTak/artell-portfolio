@@ -15,14 +15,18 @@ export class Artist {
     readonly twitter: string,
     readonly facebook: string,
     readonly instagram: string,
+    readonly arts: Art[],
   ) {}
+
+  getArt(title: string): Art | undefined {
+    return this.arts.find(art => art.title === title);
+  }
 }
 
 export class Art {
   constructor(
     readonly id: string,
     readonly title: string,
-    readonly artist: Artist,
     readonly sumbnailUrl: string,
     readonly widthMM: number,
     readonly heightMM: number,
@@ -107,8 +111,11 @@ function constructArtist(
   }
   const artist = StoredArtistDecoder.runWithException(data);
   const id = doc.id;
-  return fetchSumbnailUrlOfArtist(id).then(
-    url =>
+  return Promise.all([
+    fetchSumbnailUrlOfArtist(id),
+    fetchArtsOfArtist(id),
+  ]).then(
+    ([url, arts]) =>
       new Artist(
         id,
         artist.name,
@@ -119,6 +126,7 @@ function constructArtist(
         artist.twitter,
         artist.facebook,
         artist.instagram,
+        arts,
       ),
   );
 }
@@ -207,38 +215,38 @@ export function updateArtistSumbnail(
  * Get Art
  * ====================
  */
-export function fetchArtsOfArtist(artist: Artist): Promise<Art[]> {
+export function fetchArtsOfArtist(artistUid: string): Promise<Art[]> {
   return firebase
     .firestore()
     .collection('artists')
-    .doc(artist.uid)
+    .doc(artistUid)
     .collection('arts')
     .get()
     .then(snapshot =>
       Promise.all(
         snapshot.docs.map(doc =>
           // この場合はconstructArtは常にPromise<Art>を返す
-          constructArt(artist, doc).then(art => art as Art),
+          constructArt(artistUid, doc).then(art => art as Art),
         ),
       ),
     );
 }
 
 export function fetchArtByTitle(
-  artist: Artist,
+  artistUid: string,
   title: string,
 ): Promise<Art | null> {
   return firebase
     .firestore()
     .collection('artists')
-    .doc(artist.uid)
+    .doc(artistUid)
     .collection('arts')
     .where('title', '==', title)
     .limit(1)
     .get()
     .then(snapshot => {
       if (snapshot.docs.length === 1) {
-        return constructArt(artist, snapshot.docs[0]);
+        return constructArt(artistUid, snapshot.docs[0]);
       } else {
         return null;
       }
@@ -246,7 +254,7 @@ export function fetchArtByTitle(
 }
 
 function constructArt(
-  artist: Artist,
+  artistUid: string,
   doc: firebase.firestore.DocumentSnapshot,
 ): Promise<Art | null> {
   const data = doc.data();
@@ -255,12 +263,11 @@ function constructArt(
   }
   const art = StoredArtDecoder.runWithException(data);
   const id = doc.id;
-  return fetchSumbnailUrlOfArt(artist.uid, id).then(
+  return fetchSumbnailUrlOfArt(artistUid, id).then(
     url =>
       new Art(
         id,
         art.title,
-        artist,
         url,
         art.widthMM,
         art.heightMM,

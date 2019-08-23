@@ -12,7 +12,7 @@ import {
   Redirect,
 } from 'react-router-dom';
 
-import {rootReducer} from 'modules/index';
+import {rootReducer} from 'services/index';
 import TopPage from 'pages/top';
 import SigninPage from 'pages/signin';
 import SettingProfilePage from 'pages/settings/profile';
