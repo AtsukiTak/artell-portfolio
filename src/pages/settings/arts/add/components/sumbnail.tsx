@@ -7,6 +7,9 @@ import {pc} from 'components/responsive';
 import Sumbnail from 'components/sumbnail';
 import {SquareBasedWidth} from 'components/square';
 
+const MaxImageWidth = 2048;
+const MaxImageHeight = 2048;
+
 interface Props {
   fbUser: firebase.User;
   onSumbnailSelected: (base64: string) => void;
@@ -23,7 +26,12 @@ const SumbnailComponent: FC<Props> = ({fbUser, onSumbnailSelected}) => {
         reader.onload = () => {
           const buf = new Buffer(reader.result as ArrayBuffer);
           Jimp.read(buf)
-            .then(lenna => lenna.cover(512, 512).getBase64Async(Jimp.MIME_JPEG))
+            .then(lenna =>
+              lenna
+                .background(0xFFFFFFFF)
+                .contain(MaxImageWidth, MaxImageHeight)
+                .getBase64Async(Jimp.MIME_JPEG),
+            )
             .then(dataURI => {
               const base64 = extractBase64FromDataURI(dataURI);
               onSumbnailSelected(base64);
