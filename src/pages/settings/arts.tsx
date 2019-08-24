@@ -31,7 +31,7 @@ const ProfileSettingPageWrapper: React.FC<Props> = ({fbUser}) => {
     }
   }, [fbUser, artist, dispatch]);
 
-  if (fbUser) {
+  if (!fbUser) {
     return (
       <div>
         <h3>
