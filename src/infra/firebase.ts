@@ -9,10 +9,7 @@ export class Firestore {
    * Artist
    * ==========
    */
-  static async upsertArtistDoc(
-    artistUid: string,
-    doc: ArtistDocument,
-  ) {
+  static async upsertArtistDoc(artistUid: string, doc: ArtistDocument) {
     await firebase
       .firestore()
       .doc(`artists/${artistUid}`)
@@ -186,11 +183,12 @@ export class Storage {
       .then();
   }
 
-  static async queryArtistThumbnailUrl(id: string): Promise<string> {
+  static async queryArtistThumbnailUrl(id: string): Promise<string | null> {
     return await firebase
       .storage()
       .ref(`artists/${id}/sumbnail.jpg`)
-      .getDownloadURL();
+      .getDownloadURL()
+      .catch(() => null);
   }
 
   /*

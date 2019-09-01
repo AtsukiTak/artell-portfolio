@@ -53,7 +53,7 @@ export class ArtistRepository {
     }
     const {id, doc} = res;
     const url = await Storage.queryArtistThumbnailUrl(uid);
-    const thumbnail = await DownloadImage.download(url);
+    const thumbnail = url ? await DownloadImage.download(url) : null;
     return new Artist(uid, doc, thumbnail);
   }
 
@@ -64,7 +64,7 @@ export class ArtistRepository {
     }
     const {id, doc} = res;
     const url = await Storage.queryArtistThumbnailUrl(id);
-    const thumbnail = await DownloadImage.download(url);
+    const thumbnail = url ? await DownloadImage.download(url) : null;
     return new Artist(id, doc, thumbnail);
   }
 
@@ -73,7 +73,7 @@ export class ArtistRepository {
     return await Promise.all(
       docs.map(async ({id, doc}) => {
         const url = await Storage.queryArtistThumbnailUrl(id);
-        const thumbnail = await DownloadImage.download(url);
+        const thumbnail = url ? await DownloadImage.download(url) : null;
         return new Artist(id, doc, thumbnail);
       }),
     );
