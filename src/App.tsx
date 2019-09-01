@@ -40,7 +40,9 @@ const App: React.FC = () => {
       <GlobalStyle />
       <Router>
         <Switch>
-          <Route path="/" exact render={() => <TopPage />} />
+          {
+            //<Route path="/" exact render={() => <TopPage />} />
+          }
           <Route
             path="/settings/profile"
             exact
