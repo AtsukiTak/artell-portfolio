@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
 import {useDispatch} from 'react-redux';
+import {Link} from 'react-router-dom';
 
 import {setUser} from 'services/login';
 import {Image} from 'models/image';
@@ -38,6 +39,9 @@ const ProfileSettingPage: React.FC<UserProps> = ({user}) => {
       <Header title="Settings" />
       <SettingTab selected="tab1" />
       <Container>
+        <LinkToArtistPage to={`/${artist.attrs.name}`}>
+          自分の作家ページへ →
+        </LinkToArtistPage>
         <EditThumbnailComponent
           thumbnail={thumbnail}
           setThumbnail={setThumbnail}
@@ -63,6 +67,17 @@ const Container = styled.div`
   ${pc(`
     margin-top: 90px;
   `)}
+`;
+
+const LinkToArtistPage = styled(Link)`
+  display: block;
+  margin-bottom: 20px;
+  text-decoration: underline;
+  color: #586069;
+
+  &:visited {
+    color: #586069;
+  }
 `;
 
 const SubmitButton = styled.button`
