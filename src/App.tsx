@@ -12,7 +12,6 @@ import {
 } from 'react-router-dom';
 
 import {rootReducer} from 'services/index';
-// import TopPage from 'pages/top';
 import SigninPage from 'pages/signin';
 import SettingProfilePage from 'pages/settings/profile';
 import SettingArtsPage from 'pages/settings/arts';
@@ -39,9 +38,6 @@ const App: React.FC = () => {
       <GlobalStyle />
       <Router>
         <Switch>
-          {
-            //<Route path="/" exact render={() => <TopPage />} />
-          }
           <Route
             path="/settings/profile"
             exact
