@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import * as firebase from 'firebase';
 
-import {Artist, ArtistAttributes, ArtistRepository} from 'models/artist';
+import {ArtistAttributes} from 'models/artist';
 
 interface Props {
   attrs: ArtistAttributes;

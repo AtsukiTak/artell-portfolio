@@ -1,10 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {createGlobalStyle} from 'styled-components';
 import {createStore, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
-import * as firebase from 'firebase';
 import {
   BrowserRouter as Router,
   Route,
@@ -13,7 +12,7 @@ import {
 } from 'react-router-dom';
 
 import {rootReducer} from 'services/index';
-import TopPage from 'pages/top';
+// import TopPage from 'pages/top';
 import SigninPage from 'pages/signin';
 import SettingProfilePage from 'pages/settings/profile';
 import SettingArtsPage from 'pages/settings/arts';

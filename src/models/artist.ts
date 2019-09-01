@@ -1,7 +1,5 @@
-import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import * as D from '@mojotech/json-type-validation';
-import Jimp from 'jimp';
 
 import {Firestore, Storage, ArtistDocument} from 'infra/firebase';
 import {Image, DownloadImage, UploadImage} from 'models/image';
@@ -51,7 +49,7 @@ export class ArtistRepository {
     if (res === null) {
       return null;
     }
-    const {id, doc} = res;
+    const {doc} = res;
     const url = await Storage.queryArtistThumbnailUrl(uid);
     const thumbnail = url ? await DownloadImage.download(url) : null;
     return new Artist(uid, doc, thumbnail);

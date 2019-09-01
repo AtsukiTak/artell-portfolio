@@ -1,14 +1,14 @@
-import React, {FC, useState} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-import {Art, ArtAttributes, ArtRepository} from 'models/art';
+import {ArtAttributes} from 'models/art';
 
 interface Props {
   attrs: ArtAttributes;
   setAttrs: (attrs: ArtAttributes) => void;
 }
 
-const EditAttributesComponent: FC<Props> = ({attrs, setAttrs}) => {
+const EditAttributesComponent: React.FC<Props> = ({attrs, setAttrs}) => {
   return (
     <Container>
       <EditAttributeElement>

@@ -1,10 +1,7 @@
-import React, {useState, useCallback} from 'react';
+import React, {useCallback} from 'react';
 import styled from 'styled-components';
-import * as firebase from 'firebase';
-import Jimp from 'jimp';
 
 import {Image, UploadImage} from 'models/image';
-import {Artist, ArtistRepository} from 'models/artist';
 import {pc} from 'components/responsive';
 import Sumbnail from 'components/sumbnail';
 
@@ -20,7 +17,7 @@ const EditSumbnailComponent: React.FC<Props> = ({thumbnail, setThumbnail}) => {
       const image = await UploadImage.fromFile(file);
       setThumbnail(image);
     }
-  }, []);
+  }, [setThumbnail]);
 
   return (
     <>

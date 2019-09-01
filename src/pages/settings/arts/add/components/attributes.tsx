@@ -1,6 +1,5 @@
-import React, {FC, useState, useEffect} from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import * as firebase from 'firebase';
 
 import {ArtAttributes} from 'models/art';
 
@@ -9,7 +8,7 @@ interface Props {
   setAttrs: (attrs: ArtAttributes) => void;
 }
 
-const EditAttributesComponent: FC<Props> = ({attrs, setAttrs}) => {
+const EditAttributesComponent: React.FC<Props> = ({attrs, setAttrs}) => {
   return (
     <Container>
       <EditAttributeElement>
