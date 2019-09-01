@@ -1,65 +1,59 @@
-import React, {FC, useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
-import * as firebase from 'firebase';
-import {Link} from 'react-router-dom';
+import {useDispatch} from 'react-redux';
 
+import {setUser} from 'services/login';
+import {Image} from 'models/image';
+import {Artist, ArtistAttributes, ArtistRepository} from 'models/artist';
+import {withUser, UserProps} from 'components/with-user';
 import {pc} from 'components/responsive';
 import Header from 'components/header';
-import {Artist, fetchArtist} from 'models/artist';
 
 import SettingTab from './components/tab';
-import EditSumbnailComponent from './profile/components/edit_sumbnail';
+import EditThumbnailComponent from './profile/components/edit_thumbnail';
 import EditAttributesComponent from './profile/components/edit_attributes';
 
-interface Props {
-  fbUser: firebase.User | null;
-}
+const ProfileSettingPage: React.FC<UserProps> = ({user}) => {
+  const {artist, arts} = user;
+  const [attrs, setAttrs] = useState<ArtistAttributes>(artist.attrs);
+  const [thumbnail, setThumbnail] = useState<Image | null>(artist.thumbnail);
+  const [updating, setUpdating] = useState(false);
+  const dispatch = useDispatch();
 
-const ProfileSettingPageWrapper: FC<Props> = ({fbUser}) => {
-  const [artist, setArtist] = useState<Artist | null>(null);
-
-  useEffect(() => {
-    if (fbUser) {
-      fetchArtist(fbUser.uid).then(setArtist);
+  const onSubmit = async () => {
+    const newArtist = new Artist(artist.uid, attrs, thumbnail);
+    setUpdating(true);
+    if (newArtist.attrs !== artist.attrs) {
+      await ArtistRepository.updateAttrs(newArtist);
     }
-  }, [fbUser]);
-
-  if (fbUser === null) {
-    return (
-      <div>
-        <h3>
-          <Link to="/signin">ログイン</Link>が必要です
-        </h3>
-      </div>
-    );
-  } else {
-    if (artist !== null) {
-      return <ProfileSettingPage fbUser={fbUser} artist={artist} />;
-    } else {
-      return null;
+    if (newArtist.thumbnail !== artist.thumbnail) {
+      await ArtistRepository.updateThumbnail(newArtist);
     }
-  }
-};
+    dispatch(setUser(newArtist, arts));
+    setUpdating(false);
+  };
 
-export default ProfileSettingPageWrapper;
-
-interface ProfileSettingPageProps {
-  fbUser: firebase.User;
-  artist: Artist;
-}
-
-const ProfileSettingPage: FC<ProfileSettingPageProps> = ({fbUser, artist}) => {
   return (
     <>
       <Header title="Settings" />
       <SettingTab selected="tab1" />
       <Container>
-        <EditSumbnailComponent artist={artist} fbUser={fbUser} />
-        <EditAttributesComponent artist={artist} fbUser={fbUser} />
+        <EditThumbnailComponent
+          thumbnail={thumbnail}
+          setThumbnail={setThumbnail}
+        />
+        <EditAttributesComponent attrs={attrs} setAttrs={setAttrs} />
+        {updating ? (
+          <SubmitButton disabled>Updating...</SubmitButton>
+        ) : (
+          <SubmitButton onClick={onSubmit}>Update</SubmitButton>
+        )}
       </Container>
     </>
   );
 };
+
+export default withUser(ProfileSettingPage);
 
 const Container = styled.div`
   width: 80%;
@@ -69,4 +63,18 @@ const Container = styled.div`
   ${pc(`
     margin-top: 90px;
   `)}
+`;
+
+const SubmitButton = styled.button`
+  display: block;
+  width: 100px;
+  height: 40px;
+  margin: 30px auto 0 auto;
+  border: none;
+  border-radius: 4px;
+  background-color: linear-gradient(-180deg, #32d058, #28a745 90%);
+  font-size: 16px;
+  line-height: 40px;
+  text-align: center;
+  color: white;
 `;

@@ -2,81 +2,68 @@ import React, {FC, useState, useEffect} from 'react';
 import styled from 'styled-components';
 import * as firebase from 'firebase';
 
-import {StoredArt} from 'models/artist';
+import {ArtAttributes} from 'models/art';
 
 interface Props {
-  fbUser: firebase.User;
-  onAttributeChange: (attrs: StoredArt | null) => void;
+  attrs: ArtAttributes;
+  setAttrs: (attrs: ArtAttributes) => void;
 }
 
-const EditAttributesComponent: FC<Props> = ({fbUser, onAttributeChange}) => {
-  const [title, setTitle] = useState('');
-  const [widthMM, setWidthMM] = useState<number>(0);
-  const [heightMM, setHeightMM] = useState<number>(0);
-  const [desc, setDesc] = useState('');
-  const [materials, setMaterials] = useState('');
-  const [priceYen, setPriceYen] = useState<number>(0);
-
-  useEffect(() => {
-    if (title === '') {
-      onAttributeChange(null);
-    } else {
-      onAttributeChange({
-        title: title,
-        widthMM: widthMM,
-        heightMM: heightMM,
-        description: desc,
-        materials: materials,
-        priceYen: priceYen,
-      });
-    }
-  }, [title, widthMM, heightMM, desc, materials, priceYen, onAttributeChange]);
-
+const EditAttributesComponent: FC<Props> = ({attrs, setAttrs}) => {
   return (
     <Container>
       <EditAttributeElement>
         <AttributeName>Title</AttributeName>
         <InputField
           type="text"
-          value={title}
-          onChange={e => setTitle(e.target.value)}
+          value={attrs.title}
+          onChange={e => setAttrs({title: attrs.title, ...attrs})}
         />
       </EditAttributeElement>
       <EditAttributeElement>
         <AttributeName>Width (mm)</AttributeName>
         <InputField
           type="tel"
-          value={widthMM || ''}
-          onChange={e => setWidthMM(validateNum(e.target.value))}
+          value={attrs.widthMM || ''}
+          onChange={e =>
+            setAttrs({widthMM: validateNum(e.target.value), ...attrs})
+          }
         />
       </EditAttributeElement>
       <EditAttributeElement>
         <AttributeName>Height (mm)</AttributeName>
         <InputField
           type="tel"
-          value={heightMM || ''}
-          onChange={e => setHeightMM(validateNum(e.target.value))}
+          value={attrs.heightMM || ''}
+          onChange={e =>
+            setAttrs({heightMM: validateNum(e.target.value), ...attrs})
+          }
         />
       </EditAttributeElement>
       <EditAttributeElement>
         <AttributeName>Description</AttributeName>
-        <TextField value={desc} onChange={e => setDesc(e.target.value)} />
+        <TextField
+          value={attrs.description}
+          onChange={e => setAttrs({description: e.target.value, ...attrs})}
+        />
       </EditAttributeElement>
       <EditAttributeElement>
         <AttributeName>素材</AttributeName>
         <InputField
           type="text"
           placeholder="Acrylic, transfers, colored pencil, charcoal, and pastel on paper"
-          value={materials}
-          onChange={e => setMaterials(e.target.value)}
+          value={attrs.materials}
+          onChange={e => setAttrs({materials: e.target.value, ...attrs})}
         />
       </EditAttributeElement>
       <EditAttributeElement>
         <AttributeName>Price (Yen)</AttributeName>
         <InputField
           type="tel"
-          value={priceYen || ''}
-          onChange={e => setPriceYen(validateNum(e.target.value))}
+          value={attrs.priceYen || ''}
+          onChange={e =>
+            setAttrs({priceYen: validateNum(e.target.value), ...attrs})
+          }
         />
       </EditAttributeElement>
     </Container>

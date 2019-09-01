@@ -1,19 +1,18 @@
 import {Action} from 'redux';
 import {ThunkAction} from 'redux-thunk';
 
-import {
-  Artist,
-  fetchArtists,
-  fetchArtist,
-  fetchArtistByName,
-} from 'models/artist';
+import {Art, ArtRepository} from 'models/art';
+import {Artist, ArtistRepository} from 'models/artist';
 
 /*
  * State
  */
 export interface State {
   requesting: boolean;
-  list: Artist[];
+  list: {
+    artist: Artist;
+    arts: Art[];
+  }[];
 }
 
 export const InitialState = {
@@ -38,17 +37,22 @@ export enum ArtistActionType {
 
 export type ArtistAction =
   | AppAction<ArtistActionType.requestGetArtistList>
-  | AppAction<ArtistActionType.successGetArtistList, {list: Artist[]}>
+  | AppAction<
+      ArtistActionType.successGetArtistList,
+      {list: {artist: Artist; arts: Art[]}[]}
+    >
   | AppAction<ArtistActionType.failureGetArtistList, {msg: string}>
   | AppAction<ArtistActionType.requestGetArtist>
-  | AppAction<ArtistActionType.successGetArtist, {artist: Artist}>
+  | AppAction<ArtistActionType.successGetArtist, {artist: Artist; arts: Art[]}>
   | AppAction<ArtistActionType.failureGetArtist, {msg: string}>;
 
 const requestGetArtistList = (): ArtistAction => ({
   type: ArtistActionType.requestGetArtistList,
 });
 
-const successGetArtistList = (list: Artist[]): ArtistAction => ({
+const successGetArtistList = (
+  list: {artist: Artist; arts: Art[]}[],
+): ArtistAction => ({
   type: ArtistActionType.successGetArtistList,
   list,
 });
@@ -62,9 +66,10 @@ const requestGetArtist = (): ArtistAction => ({
   type: ArtistActionType.requestGetArtist,
 });
 
-const successGetArtist = (artist: Artist): ArtistAction => ({
+const successGetArtist = (artist: Artist, arts: Art[]): ArtistAction => ({
   type: ArtistActionType.successGetArtist,
   artist,
+  arts,
 });
 
 const failureGetArtist = (msg: string): ArtistAction => ({
@@ -78,53 +83,34 @@ export function getArtistList(): ThunkAction<
   null,
   ArtistAction
 > {
-  return dispatch => {
+  return async dispatch => {
     dispatch(requestGetArtistList());
-    return fetchArtists()
-      .then(artists => {
-        dispatch(successGetArtistList(artists));
-      })
-      .catch(err => {
-        dispatch(failureGetArtistList(err));
-      });
-  };
-}
-
-export function getArtist(
-  uid: string,
-): ThunkAction<Promise<void>, State, null, ArtistAction> {
-  return dispatch => {
-    dispatch(requestGetArtist());
-    return fetchArtist(uid)
-      .then(artist => {
-        if (artist === null) {
-          dispatch(failureGetArtist('Not Found'));
-        } else {
-          dispatch(successGetArtist(artist));
-        }
-      })
-      .catch(err => {
-        dispatch(failureGetArtist(err));
-      });
+    const artists = await ArtistRepository.queryList();
+    const list = await Promise.all(
+      artists.map(async artist => {
+        const arts = await ArtRepository.queryListByArtist(artist);
+        return {
+          artist,
+          arts,
+        };
+      }),
+    );
+    dispatch(successGetArtistList(list));
   };
 }
 
 export function getArtistByName(
   name: string,
 ): ThunkAction<Promise<void>, State, null, ArtistAction> {
-  return dispatch => {
+  return async dispatch => {
     dispatch(requestGetArtist());
-    return fetchArtistByName(name)
-      .then(artist => {
-        if (artist === null) {
-          dispatch(failureGetArtist('Not Found'));
-        } else {
-          dispatch(successGetArtist(artist));
-        }
-      })
-      .catch(err => {
-        dispatch(failureGetArtist(err));
-      });
+    const artist = await ArtistRepository.queryByName(name);
+    if (artist === null) {
+      dispatch(failureGetArtist('Not Found'));
+    } else {
+      const arts = await ArtRepository.queryListByArtist(artist);
+      dispatch(successGetArtist(artist, arts));
+    }
   };
 }
 
@@ -158,11 +144,16 @@ export function reducer(
       };
     case ArtistActionType.successGetArtist:
       const newList = Array.from(state.list);
-      const idx = newList.findIndex(artist => artist.uid === action.artist.uid);
+      const idx = newList.findIndex(
+        ({artist}) => artist.uid === action.artist.uid,
+      );
       if (idx === -1) {
-        newList.push(action.artist);
+        newList.push({artist: action.artist, arts: action.arts});
       } else {
-        newList[idx] = action.artist;
+        newList[idx] = {
+          artist: action.artist,
+          arts: action.arts,
+        };
       }
       return {
         requesting: false,

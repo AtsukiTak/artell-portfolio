@@ -1,67 +1,46 @@
-import React, {FC, useState} from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import * as firebase from 'firebase';
 
-import {Artist, updateArtist} from 'models/artist';
+import {Artist, ArtistAttributes, ArtistRepository} from 'models/artist';
 
 interface Props {
-  fbUser: firebase.User;
-  artist: Artist;
+  attrs: ArtistAttributes;
+  setAttrs: (attrs: ArtistAttributes) => void;
 }
 
-const EditAttributesComponent: FC<Props> = ({fbUser, artist}) => {
-  const [name, setName] = useState(artist.name);
-  const [comment, setComment] = useState(artist.comment);
-  const [description, setDescription] = useState(artist.description);
-  const [twitter, setTwitter] = useState(artist.twitter);
-  const [facebook, setFacebook] = useState(artist.facebook);
-  const [instagram, setInstagram] = useState(artist.instagram);
-
-  const onUpdateRequested = () => {
-    updateArtist(fbUser, {
-      email: artist.email,
-      name: name,
-      comment: comment,
-      description: description,
-      twitter: twitter,
-      facebook: facebook,
-      instagram: instagram,
-    }).then(() => {
-      window.location.reload();
-    });
-  };
-
+const EditAttributesComponent: React.FC<Props> = ({attrs, setAttrs}) => {
   return (
     <Container>
       <EditAttributeElement>
         <AttributeName>Name</AttributeName>
         <InputField
           type="text"
-          value={name}
-          onChange={e => setName(e.target.value)}
+          value={attrs.name}
+          onChange={e => setAttrs({name: e.target.value, ...attrs})}
         />
       </EditAttributeElement>
       <EditAttributeElement>
         <AttributeName>Comment</AttributeName>
         <InputField
           type="text"
-          value={comment}
-          onChange={e => setComment(e.target.value)}
+          value={attrs.comment}
+          onChange={e => setAttrs({comment: e.target.value, ...attrs})}
         />
       </EditAttributeElement>
       <EditAttributeElement>
         <AttributeName>Description</AttributeName>
         <TextField
-          value={description}
-          onChange={e => setDescription(e.target.value)}
+          value={attrs.description}
+          onChange={e => setAttrs({description: e.target.value, ...attrs})}
         />
       </EditAttributeElement>
       <EditAttributeElement>
         <AttributeName>Twitter</AttributeName>
         <InputField
           type="text"
-          value={'@' + twitter}
-          onChange={e => setTwitter(e.target.value.slice(1))}
+          value={'@' + attrs.twitter}
+          onChange={e => setAttrs({twitter: e.target.value.slice(1), ...attrs})}
         />
       </EditAttributeElement>
       <EditAttributeElement>
@@ -69,8 +48,8 @@ const EditAttributesComponent: FC<Props> = ({fbUser, artist}) => {
         <InputField
           type="text"
           placeholder="artell.life.42"
-          value={facebook}
-          onChange={e => setFacebook(e.target.value)}
+          value={attrs.facebook}
+          onChange={e => setAttrs({facebook: e.target.value, ...attrs})}
         />
       </EditAttributeElement>
       <EditAttributeElement>
@@ -78,14 +57,15 @@ const EditAttributesComponent: FC<Props> = ({fbUser, artist}) => {
         <InputField
           type="text"
           placeholder="artell.gallery"
-          value={instagram}
-          onChange={e => setInstagram(e.target.value)}
+          value={attrs.instagram}
+          onChange={e => setAttrs({instagram: e.target.value, ...attrs})}
         />
       </EditAttributeElement>
-      <SubmitButton onClick={onUpdateRequested}>Update</SubmitButton>
     </Container>
   );
 };
+
+export default EditAttributesComponent;
 
 const Container = styled.div`
   width: 100%;
@@ -132,20 +112,3 @@ const TextField = styled.textarea`
   font-size: 14px;
   line-height: 20px;
 `;
-
-const SubmitButton = styled.button`
-  display: block;
-  width: 100px;
-  height: 40px;
-  margin: 0 auto;
-  margin-top: 30px;
-  border: none;
-  border-radius: 4px;
-  line-height: 40px;
-  text-align: center;
-  font-size: 16px;
-  background-image: linear-gradient(-180deg, #34d058, #28a745 90%);
-  color: white;
-`;
-
-export default EditAttributesComponent;

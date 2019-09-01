@@ -9,33 +9,39 @@ import {Artist} from 'models/artist';
 const ProfileComponent: FC<{artist: Artist}> = ({artist}) => {
   return (
     <Container>
-      <StyledSumbnail src={artist.sumbnailUrl} />
+      <StyledSumbnail
+        src={
+          artist.thumbnail
+            ? artist.thumbnail.getUrl()
+            : '/img/artist-default-thumbnail.jpg'
+        }
+      />
       <TextContent>
-        <Name>{artist.name}</Name>
+        <Name>{artist.attrs.name}</Name>
         <Sns>
-          {artist.facebook !== '' ? (
+          {artist.attrs.facebook !== '' ? (
             <SnsLink
-              href={`https://www.facebook.com/${artist.facebook}`}
+              href={`https://www.facebook.com/${artist.attrs.facebook}`}
               target="_blank">
               <logo.Facebook />
             </SnsLink>
           ) : null}
-          {artist.twitter !== '' ? (
+          {artist.attrs.twitter !== '' ? (
             <SnsLink
-              href={`https://twitter.com/${artist.twitter}`}
+              href={`https://twitter.com/${artist.attrs.twitter}`}
               target="_blank">
               <logo.Twitter />
             </SnsLink>
           ) : null}
-          {artist.instagram !== '' ? (
+          {artist.attrs.instagram !== '' ? (
             <SnsLink
-              href={`https://www.instagram.com/${artist.instagram}/`}
+              href={`https://www.instagram.com/${artist.attrs.instagram}/`}
               target="_blank">
               <logo.Instagram />
             </SnsLink>
           ) : null}
         </Sns>
-        <Description>{artist.description}</Description>
+        <Description>{artist.attrs.description}</Description>
       </TextContent>
     </Container>
   );

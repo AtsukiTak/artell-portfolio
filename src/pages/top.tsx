@@ -37,8 +37,8 @@ const TopPage = () => {
     <>
       <Header title="Artists" />
       <Items>
-        {artists.map(artist => (
-          <ArtistItem artist={artist} key={artist.name} />
+        {artists.map(({artist, arts}) => (
+          <ArtistItem artist={artist} key={artist.attrs.name} />
         ))}
       </Items>
       <Footer />
@@ -106,11 +106,17 @@ const ArtistItem: FC<ArtistItemProps> = ({artist}) => {
 
   return (
     <Container>
-      <Link to={'/' + artist.name + '/'}>
-        <StyledSumbnail src={artist.sumbnailUrl} />
+      <Link to={'/' + artist.attrs.name + '/'}>
+        <StyledSumbnail
+          src={
+            artist.thumbnail
+              ? artist.thumbnail.getUrl()
+              : 'img/artist-default-thumbnail.jpg'
+          }
+        />
       </Link>
-      <Name>{artist.name}</Name>
-      <Comment>{artist.comment}</Comment>
+      <Name>{artist.attrs.name}</Name>
+      <Comment>{artist.attrs.comment}</Comment>
     </Container>
   );
 };

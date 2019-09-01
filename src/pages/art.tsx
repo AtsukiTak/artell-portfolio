@@ -16,30 +16,33 @@ interface ArtPageProps {
 const ArtPage: FC<ArtPageProps> = ({artistName, artTitle}) => {
   const [buying, setBuying] = useState(false);
 
-  const artist = useSelector((state: RootState) =>
-    state.artist.list.find(artist => artist.name === artistName),
+  const artistAndArts = useSelector((state: RootState) =>
+    state.artist.list.find(({artist}) => artist.attrs.name === artistName),
   );
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (artist === undefined) {
+    if (!artistAndArts) {
       dispatch(getArtistByName(artistName));
     }
-  }, [artistName, artist, dispatch]);
+  }, [artistName, artistAndArts, dispatch]);
 
-  const art = artist ? artist.getArt(artTitle) : undefined;
+  const artist = artistAndArts ? artistAndArts.artist : undefined;
+  const art = artistAndArts
+    ? artistAndArts.arts.find(art => art.attrs.title === artTitle)
+    : undefined;
 
   return (
     <>
       <CloseButton to={`/${artistName}/`} />
       {art && artist ? (
         <>
-          <ArtContainer src={art.sumbnailUrl} />
+          <ArtContainer src={art.thumbnail.getUrl()} />
           <CaptionContainer>
-            <ArtistName>{artist.name}</ArtistName>
-            <Info>{art.title}</Info>
-            <Info>{art.materials}</Info>
-            <Info>{`${art.widthMM} x ${art.heightMM} mm`}</Info>
+            <ArtistName>{artist.attrs.name}</ArtistName>
+            <Info>{art.attrs.title}</Info>
+            <Info>{art.attrs.materials}</Info>
+            <Info>{`${art.attrs.widthMM} x ${art.attrs.heightMM} mm`}</Info>
             {buying ? (
               <BuyButton>Loading...</BuyButton>
             ) : (
@@ -48,7 +51,7 @@ const ArtPage: FC<ArtPageProps> = ({artistName, artTitle}) => {
                   setBuying(true);
                   buyArt(artist.uid, art.id);
                 }}>
-                購入する &nbsp; / &nbsp; &yen; {toPriceDisplay(art.priceYen)}
+                購入する &nbsp; / &nbsp; &yen; {toPriceDisplay(art.attrs.priceYen)}
               </BuyButton>
             )}
           </CaptionContainer>

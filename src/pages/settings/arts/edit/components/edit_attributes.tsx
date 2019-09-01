@@ -1,83 +1,70 @@
 import React, {FC, useState} from 'react';
 import styled from 'styled-components';
-import * as firebase from 'firebase';
 
-import {Art, updateArt} from 'models/artist';
+import {Art, ArtAttributes, ArtRepository} from 'models/art';
 
 interface Props {
-  fbUser: firebase.User;
-  art: Art;
+  attrs: ArtAttributes;
+  setAttrs: (attrs: ArtAttributes) => void;
 }
 
-const EditAttributesComponent: FC<Props> = ({fbUser, art}) => {
-  const [title, setTitle] = useState(art.title);
-  const [widthMM, setWidthMM] = useState<number>(art.widthMM);
-  const [heightMM, setHeightMM] = useState<number>(art.heightMM);
-  const [desc, setDesc] = useState(art.description);
-  const [materials, setMaterials] = useState(art.materials);
-  const [priceYen, setPriceYen] = useState<number>(art.priceYen);
-
-  const onUpdateRequested = () => {
-    updateArt(fbUser, art.id, {
-      title: title,
-      widthMM: widthMM,
-      heightMM: heightMM,
-      description: desc,
-      materials: materials,
-      priceYen: priceYen,
-    }).then(() => {
-      window.location.reload();
-    });
-  };
-
+const EditAttributesComponent: FC<Props> = ({attrs, setAttrs}) => {
   return (
     <Container>
       <EditAttributeElement>
         <AttributeName>Title</AttributeName>
         <InputField
           type="text"
-          value={title}
-          onChange={e => setTitle(e.target.value)}
+          value={attrs.title}
+          onChange={e => setAttrs({title: e.target.value, ...attrs})}
         />
       </EditAttributeElement>
       <EditAttributeElement>
         <AttributeName>Width (mm)</AttributeName>
         <InputField
           type="tel"
-          value={widthMM || ''}
-          onChange={e => setWidthMM(validateNum(e.target.value))}
+          value={attrs.widthMM || ''}
+          onChange={e =>
+            setAttrs({widthMM: validateNum(e.target.value), ...attrs})
+          }
         />
       </EditAttributeElement>
       <EditAttributeElement>
         <AttributeName>Height (mm)</AttributeName>
         <InputField
           type="tel"
-          value={heightMM || ''}
-          onChange={e => setHeightMM(validateNum(e.target.value))}
+          value={attrs.heightMM || ''}
+          onChange={e =>
+            setAttrs({heightMM: validateNum(e.target.value), ...attrs})
+          }
         />
       </EditAttributeElement>
       <EditAttributeElement>
         <AttributeName>Description</AttributeName>
-        <TextField value={desc} onChange={e => setDesc(e.target.value)} />
+        <TextField
+          value={attrs.description}
+          onChange={e => setAttrs({description: e.target.value, ...attrs})}
+        />
       </EditAttributeElement>
       <EditAttributeElement>
         <AttributeName>素材</AttributeName>
         <InputField
           type="text"
           placeholder="Acrylic, transfers, colored pencil, charcoal, and pastel on paper"
-          value={materials}
-          onChange={e => setMaterials(e.target.value)}
+          value={attrs.materials}
+          onChange={e => setAttrs({materials: e.target.value, ...attrs})}
         />
       </EditAttributeElement>
       <EditAttributeElement>
         <AttributeName>Price (Yen)</AttributeName>
         <InputField
           type="tel"
-          value={priceYen || ''}
-          onChange={e => setPriceYen(validateNum(e.target.value))}
+          value={attrs.priceYen || ''}
+          onChange={e =>
+            setAttrs({priceYen: validateNum(e.target.value), ...attrs})
+          }
         />
       </EditAttributeElement>
-      <SubmitButton onClick={onUpdateRequested}>Update</SubmitButton>
     </Container>
   );
 };
@@ -91,6 +78,8 @@ function validateNum(s: string): number {
     return n;
   }
 }
+
+export default EditAttributesComponent;
 
 const Container = styled.div`
   width: 100%;
@@ -137,20 +126,3 @@ const TextField = styled.textarea`
   font-size: 14px;
   line-height: 20px;
 `;
-
-const SubmitButton = styled.button`
-  display: block;
-  width: 100px;
-  height: 40px;
-  margin: 0 auto;
-  margin-top: 30px;
-  border: none;
-  border-radius: 4px;
-  line-height: 40px;
-  text-align: center;
-  font-size: 16px;
-  background-image: linear-gradient(-180deg, #34d058, #28a745 90%);
-  color: white;
-`;
-
-export default EditAttributesComponent;

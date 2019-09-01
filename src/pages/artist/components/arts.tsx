@@ -4,17 +4,18 @@ import {Link} from 'react-router-dom';
 
 import {pc, MinPcWidth} from 'components/responsive';
 import Sumbnail from 'components/sumbnail';
+import {Art} from 'models/art';
 import {Artist} from 'models/artist';
 
-const ArtsComponent: FC<{artist: Artist}> = ({artist}) => {
+const ArtsComponent: FC<{artist: Artist; arts: Art[]}> = ({artist, arts}) => {
   return (
     <Container>
-      {artist.arts.map(art => (
-        <ArtComponent key={art.title}>
-          <Link to={`/${artist.name}/${art.title}/`}>
-            <StyledSumbnail src={art.sumbnailUrl} />
+      {arts.map(art => (
+        <ArtComponent key={art.attrs.title}>
+          <Link to={`/${artist.attrs.name}/${art.attrs.title}/`}>
+            <StyledSumbnail src={art.thumbnail.getUrl()} />
           </Link>
-          <Title>{art.title}</Title>
+          <Title>{art.attrs.title}</Title>
         </ArtComponent>
       ))}
     </Container>

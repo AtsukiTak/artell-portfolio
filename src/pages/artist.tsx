@@ -15,26 +15,29 @@ interface ArtistPageProps {
 }
 
 const ArtistPage: React.FC<ArtistPageProps> = ({artistName}) => {
-  const artist = useSelector((state: RootState) =>
-    state.artist.list.find(artist => artist.name === artistName),
+  const artistAndArts = useSelector((state: RootState) =>
+    state.artist.list.find(({artist}) => artist.attrs.name === artistName),
   );
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!artist) {
+    if (!artistAndArts) {
       dispatch(getArtistByName(artistName));
     }
-  }, [artistName, artist, dispatch]);
+  }, [artistName, artistAndArts, dispatch]);
+
+  const artist = artistAndArts ? artistAndArts.artist : undefined;
+  const arts = artistAndArts ? artistAndArts.arts : undefined;
 
   return (
     <>
       <Header title={artistName} />
       <Contents>
-        {artist != null ? (
+        {artist && arts ? (
           <>
             <ProfileComponent artist={artist} />
             <HR />
-            <ArtsComponent artist={artist} />
+            <ArtsComponent artist={artist} arts={arts} />
           </>
         ) : null}
       </Contents>

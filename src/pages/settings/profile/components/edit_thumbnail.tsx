@@ -1,41 +1,47 @@
-import React, {FC, useCallback} from 'react';
+import React, {useState, useCallback} from 'react';
 import styled from 'styled-components';
+import * as firebase from 'firebase';
+import Jimp from 'jimp';
 
-import {UploadImage} from 'models/image';
+import {Image, UploadImage} from 'models/image';
+import {Artist, ArtistRepository} from 'models/artist';
 import {pc} from 'components/responsive';
 import Sumbnail from 'components/sumbnail';
-import {SquareBasedWidth} from 'components/square';
 
 interface Props {
-  thumbnail: UploadImage | null;
-  setThumbnail: (thumbnail: UploadImage | null) => void;
+  thumbnail: Image | null;
+  setThumbnail: (image: Image) => void;
 }
 
-const SumbnailComponent: FC<Props> = ({thumbnail, setThumbnail}) => {
-  const onFileSelected = useCallback(async e => {
+const EditSumbnailComponent: React.FC<Props> = ({thumbnail, setThumbnail}) => {
+  const onThumbnailSelected = useCallback(async e => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       const image = await UploadImage.fromFile(file);
       setThumbnail(image);
     }
-  }, [setThumbnail]);
+  }, []);
 
   return (
     <>
       <Container>
-        {thumbnail ? <Sumbnail src={thumbnail.getUrl()} /> : <StyledSquare />}
-        <AddSumbnailRect>Select</AddSumbnailRect>
+        <Sumbnail
+          src={
+            thumbnail ? thumbnail.getUrl() : '/img/artist-default-thumbnail.jpg'
+          }
+        />
+        <EditSumbnailRect>Edit</EditSumbnailRect>
         <HiddenFileInput
           type="file"
           accept="image/*"
-          onChange={onFileSelected}
+          onChange={onThumbnailSelected}
         />
       </Container>
     </>
   );
 };
 
-export default SumbnailComponent;
+export default EditSumbnailComponent;
 
 const Container = styled.label`
   display: block;
@@ -51,11 +57,7 @@ const Container = styled.label`
   `)}
 `;
 
-const StyledSquare = styled(SquareBasedWidth)`
-  background-color: lightgray;
-`;
-
-const AddSumbnailRect = styled.div`
+const EditSumbnailRect = styled.div`
   position: absolute;
   left: 10px;
   bottom: 10px;

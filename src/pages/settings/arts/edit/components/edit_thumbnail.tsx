@@ -1,18 +1,17 @@
 import React, {FC, useCallback} from 'react';
 import styled from 'styled-components';
 
-import {UploadImage} from 'models/image';
+import {Image, UploadImage} from 'models/image';
 import {pc} from 'components/responsive';
 import Sumbnail from 'components/sumbnail';
-import {SquareBasedWidth} from 'components/square';
 
 interface Props {
-  thumbnail: UploadImage | null;
-  setThumbnail: (thumbnail: UploadImage | null) => void;
+  thumbnail: Image;
+  setThumbnail: (image: Image) => void;
 }
 
-const SumbnailComponent: FC<Props> = ({thumbnail, setThumbnail}) => {
-  const onFileSelected = useCallback(async e => {
+const EditSumbnailComponent: FC<Props> = ({thumbnail, setThumbnail}) => {
+  const onThumbnailSelected = useCallback(async e => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       const image = await UploadImage.fromFile(file);
@@ -21,21 +20,19 @@ const SumbnailComponent: FC<Props> = ({thumbnail, setThumbnail}) => {
   }, [setThumbnail]);
 
   return (
-    <>
-      <Container>
-        {thumbnail ? <Sumbnail src={thumbnail.getUrl()} /> : <StyledSquare />}
-        <AddSumbnailRect>Select</AddSumbnailRect>
-        <HiddenFileInput
-          type="file"
-          accept="image/*"
-          onChange={onFileSelected}
-        />
-      </Container>
-    </>
+    <Container>
+      <Sumbnail src={thumbnail.getUrl()} />
+      <EditSumbnailRect>Edit</EditSumbnailRect>
+      <HiddenFileInput
+        type="file"
+        accept="image/*"
+        onChange={onThumbnailSelected}
+      />
+    </Container>
   );
 };
 
-export default SumbnailComponent;
+export default EditSumbnailComponent;
 
 const Container = styled.label`
   display: block;
@@ -51,11 +48,7 @@ const Container = styled.label`
   `)}
 `;
 
-const StyledSquare = styled(SquareBasedWidth)`
-  background-color: lightgray;
-`;
-
-const AddSumbnailRect = styled.div`
+const EditSumbnailRect = styled.div`
   position: absolute;
   left: 10px;
   bottom: 10px;

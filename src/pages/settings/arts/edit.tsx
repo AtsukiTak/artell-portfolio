@@ -1,70 +1,70 @@
-import React, {FC, useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
-import * as firebase from 'firebase';
-import {Link} from 'react-router-dom';
-import {History} from 'history';
+import {useDispatch} from 'react-redux';
 
+import {Image} from 'models/image';
+import {ArtAttributes, Art, ArtRepository} from 'models/art';
+import {Artist} from 'models/artist';
+import {setUser} from 'services/login';
+import {withUser, UserProps} from 'components/with-user';
 import {pc} from 'components/responsive';
 import Header from 'components/header';
-import {Art, fetchArtist, fetchArtByTitle} from 'models/artist';
 
-import EditSumbnailComponent from './edit/components/edit_sumbnail';
+import EditThumbnailComponent from './edit/components/edit_thumbnail';
 import EditAttributesComponent from './edit/components/edit_attributes';
 
 interface Props {
-  fbUser: firebase.User | null;
-  history: History;
   artTitle: string;
 }
 
-const ProfileSettingPageWrapper: FC<Props> = ({fbUser, history, artTitle}) => {
-  const [art, setArt] = useState<Art | null>(null);
-
-  useEffect(() => {
-    if (fbUser) {
-      fetchArtist(fbUser.uid).then(artist => {
-        if (artist === null) {
-          throw new Error(`Artist ${fbUser.uid} not found`);
-        } else {
-          fetchArtByTitle(artist.uid, artTitle)
-            .then(setArt)
-            .catch(() => history.push('/settings/arts'));
-        }
-      });
-    }
-  }, [fbUser, artTitle, history]);
-
-  if (fbUser === null) {
-    return (
-      <div>
-        <h3>
-          <Link to="/signin">ログイン</Link>が必要です
-        </h3>
-      </div>
-    );
+const ArtEditPageWrapper: React.FC<UserProps & Props> = ({user, artTitle}) => {
+  const art = user.arts.find(art => art.attrs.title === artTitle);
+  if (!art) {
+    return null;
   } else {
-    if (art !== null) {
-      return <ArtEditPage fbUser={fbUser} art={art} />;
-    } else {
-      return null;
-    }
+    return <ArtEditPage user={user} art={art} />;
   }
 };
 
-export default ProfileSettingPageWrapper;
+export default withUser(ArtEditPageWrapper);
 
-interface ArtEditPageProps {
-  fbUser: firebase.User;
+const ArtEditPage: React.FC<{
+  user: {artist: Artist; arts: Art[]};
   art: Art;
-}
+}> = ({user, art}) => {
+  const [thumbnail, setThumbnail] = useState<Image>(art.thumbnail);
+  const [attrs, setAttrs] = useState<ArtAttributes>(art.attrs);
+  const [updating, setUpdating] = useState(false);
+  const dispatch = useDispatch();
 
-const ArtEditPage: FC<ArtEditPageProps> = ({fbUser, art}) => {
+  const onSubmit = async () => {
+    const newArt = new Art(art.id, attrs, thumbnail);
+    setUpdating(true);
+    if (newArt.attrs !== art.attrs) {
+      await ArtRepository.updateAttrs(user.artist, newArt);
+    }
+    if (newArt.thumbnail !== art.thumbnail) {
+      await ArtRepository.updateThumbnail(user.artist, newArt);
+    }
+    const newArts = user.arts.map(art => (art.id === newArt.id ? newArt : art));
+    dispatch(setUser(user.artist, newArts));
+    setUpdating(false);
+  };
+
   return (
     <>
       <Header title="Settings" />
       <Container>
-        <EditSumbnailComponent art={art} fbUser={fbUser} />
-        <EditAttributesComponent art={art} fbUser={fbUser} />
+        <EditThumbnailComponent
+          thumbnail={thumbnail}
+          setThumbnail={setThumbnail}
+        />
+        <EditAttributesComponent attrs={attrs} setAttrs={setAttrs} />
+        {updating ? (
+          <SubmitButton disabled>Updating...</SubmitButton>
+        ) : (
+          <SubmitButton onClick={onSubmit}>Update</SubmitButton>
+        )}
       </Container>
     </>
   );
@@ -78,4 +78,18 @@ const Container = styled.div`
   ${pc(`
     margin-top: 90px;
   `)}
+`;
+
+const SubmitButton = styled.button`
+  display: block;
+  width: 100px;
+  height: 40px;
+  margin: 30px auto 0 auto;
+  border: none;
+  border-radius: 4px;
+  background-image: linear-gradient(-180deg, #34d058, #28a745 90%);
+  font-size: 16px;
+  line-height: 40px;
+  text-align: center;
+  color: white;
 `;

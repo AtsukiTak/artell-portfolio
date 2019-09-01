@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom';
 import {pc} from 'components/responsive';
 import Sumbnail from 'components/sumbnail';
 import {SquareBasedWidth} from 'components/square';
-import {Art} from 'models/artist';
+import {Art} from 'models/art';
 
 interface Props {
   arts: Art[];
@@ -22,10 +22,10 @@ const ArtsComponent: FC<Props> = ({arts}) => {
       </ArtContainer>
       {arts.map(art => (
         <ArtContainer key={art.id}>
-          <Link to={`/settings/arts/edit/${art.title}`}>
-            <Sumbnail src={art.sumbnailUrl} />
+          <Link to={`/settings/arts/edit/${art.attrs.title}`}>
+            <Sumbnail src={art.thumbnail.getUrl()} />
           </Link>
-          <ArtTitle>{art.title}</ArtTitle>
+          <ArtTitle>{art.attrs.title}</ArtTitle>
         </ArtContainer>
       ))}
     </Container>
@@ -35,11 +35,8 @@ const ArtsComponent: FC<Props> = ({arts}) => {
 export default ArtsComponent;
 
 const Container = styled.div`
-  display: flex;
   width: 100%;
   padding-bottom: 50px;
-  justify-content: center;
-  flex-wrap: wrap;
 
   ${pc(`
     justify-content: start;
@@ -50,15 +47,11 @@ const Container = styled.div`
 const ArtContainer = styled.div`
   display: block;
   width: 50vw;
-  margin-top: 50px;
-
-  &:first-of-type {
-    margin-left: 0px;
-  }
+  margin: 50px auto 0 auto;
 
   ${pc(`
     width: 280px;
-    margin-left: 70px;
+    margin: 25px 70px;
   `)}
 `;
 
