@@ -18,7 +18,7 @@ const ArtsComponent: FC<Props> = ({arts}) => {
         <Link to={`/settings/arts/add`}>
           <AddArtSumbnail />
         </Link>
-        <ArtTitle>アートを追加する</ArtTitle>
+        <ArtTitle>作品を追加する</ArtTitle>
       </ArtContainer>
       {arts.map(art => (
         <ArtContainer key={art.id}>

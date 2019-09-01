@@ -25,17 +25,17 @@ const AddArtPage: FC<UserProps & {history: History}> = ({user, history}) => {
 
   const onSubmitClick = async () => {
     if (thumbnail === null) {
-      alert('アートの画像が選択されていません。');
+      alert('作品の画像が選択されていません。');
     } else {
       await ArtRepository.create(user.artist, attrs, thumbnail);
-      alert('新しいアートを追加しました！');
+      alert('新しい作品を追加しました！');
       history.push('/settings/arts');
     }
   };
 
   return (
     <>
-      <Header title="アート追加" />
+      <Header title="作品追加" />
       <Container>
         <SumbnailComponent thumbnail={thumbnail} setThumbnail={setThumbnail} />
         <AttributesComponent attrs={attrs} setAttrs={setAttrs} />
