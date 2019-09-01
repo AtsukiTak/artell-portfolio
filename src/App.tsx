@@ -14,6 +14,7 @@ import SettingProfilePage from 'pages/settings/profile';
 import SettingArtsPage from 'pages/settings/arts';
 import SettingArtsAddPage from 'pages/settings/arts/add';
 import SettingArtsEditPage from 'pages/settings/arts/edit';
+import ThanksPage from 'pages/thanks';
 import ArtistPage from 'pages/artist';
 import ArtPage from 'pages/art';
 
@@ -52,6 +53,7 @@ const App: React.FC<{store: Store}> = ({store}) => {
             )}
           />
           <Route path="/signin" exact component={SigninPage} />
+          <Route path="/_thanks" exact component={ThanksPage} />
           <Route
             path="/:artistName"
             exact
