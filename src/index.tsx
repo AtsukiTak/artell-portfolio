@@ -1,6 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import firebase from 'firebase';
+import * as firebase from 'firebase';
+import {createStore, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+import logger from 'redux-logger';
+
+import {rootReducer} from 'services/index';
+import {startObserving} from 'services/login';
 import App from './App';
 
 const firebaseConfig = {
@@ -14,4 +20,7 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const store = createStore(rootReducer, applyMiddleware(thunk, logger));
+store.dispatch<any>(startObserving());
+
+ReactDOM.render(<App store={store} />, document.getElementById('root'));

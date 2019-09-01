@@ -1,4 +1,4 @@
-import {Action} from 'redux';
+import {Action as ReduxAction} from 'redux';
 import {ThunkAction} from 'redux-thunk';
 
 import {Art, ArtRepository} from 'models/art';
@@ -23,10 +23,10 @@ export const InitialState = {
 /*
  * Action
  */
-export type AppAction<T extends string, Extra extends {} = {}> = Action<T> &
+type AppAction<T extends string, Extra extends {} = {}> = ReduxAction<T> &
   {[K in keyof Extra]: Extra[K]};
 
-export enum ArtistActionType {
+export enum ActionType {
   requestGetArtistList = 'REQUEST_GET_ARTIST_LIST',
   successGetArtistList = 'SUCCESS_GET_ARTIST_LIST',
   failureGetArtistList = 'FAILURE_GET_ARTIST_LIST',
@@ -35,45 +35,45 @@ export enum ArtistActionType {
   failureGetArtist = 'FAILURE_GET_ARTIST',
 }
 
-export type ArtistAction =
-  | AppAction<ArtistActionType.requestGetArtistList>
+export type Action =
+  | AppAction<ActionType.requestGetArtistList>
   | AppAction<
-      ArtistActionType.successGetArtistList,
+      ActionType.successGetArtistList,
       {list: {artist: Artist; arts: Art[]}[]}
     >
-  | AppAction<ArtistActionType.failureGetArtistList, {msg: string}>
-  | AppAction<ArtistActionType.requestGetArtist>
-  | AppAction<ArtistActionType.successGetArtist, {artist: Artist; arts: Art[]}>
-  | AppAction<ArtistActionType.failureGetArtist, {msg: string}>;
+  | AppAction<ActionType.failureGetArtistList, {msg: string}>
+  | AppAction<ActionType.requestGetArtist>
+  | AppAction<ActionType.successGetArtist, {artist: Artist; arts: Art[]}>
+  | AppAction<ActionType.failureGetArtist, {msg: string}>;
 
-const requestGetArtistList = (): ArtistAction => ({
-  type: ArtistActionType.requestGetArtistList,
+const requestGetArtistList = (): Action => ({
+  type: ActionType.requestGetArtistList,
 });
 
 const successGetArtistList = (
   list: {artist: Artist; arts: Art[]}[],
-): ArtistAction => ({
-  type: ArtistActionType.successGetArtistList,
+): Action => ({
+  type: ActionType.successGetArtistList,
   list,
 });
 
-const failureGetArtistList = (msg: string): ArtistAction => ({
-  type: ArtistActionType.failureGetArtistList,
+const failureGetArtistList = (msg: string): Action => ({
+  type: ActionType.failureGetArtistList,
   msg,
 });
 
-const requestGetArtist = (): ArtistAction => ({
-  type: ArtistActionType.requestGetArtist,
+const requestGetArtist = (): Action => ({
+  type: ActionType.requestGetArtist,
 });
 
-const successGetArtist = (artist: Artist, arts: Art[]): ArtistAction => ({
-  type: ArtistActionType.successGetArtist,
+const successGetArtist = (artist: Artist, arts: Art[]): Action => ({
+  type: ActionType.successGetArtist,
   artist,
   arts,
 });
 
-const failureGetArtist = (msg: string): ArtistAction => ({
-  type: ArtistActionType.failureGetArtist,
+const failureGetArtist = (msg: string): Action => ({
+  type: ActionType.failureGetArtist,
   msg,
 });
 
@@ -81,7 +81,7 @@ export function getArtistList(): ThunkAction<
   Promise<void>,
   State,
   null,
-  ArtistAction
+  Action
 > {
   return async dispatch => {
     dispatch(requestGetArtistList());
@@ -101,7 +101,7 @@ export function getArtistList(): ThunkAction<
 
 export function getArtistByName(
   name: string,
-): ThunkAction<Promise<void>, State, null, ArtistAction> {
+): ThunkAction<Promise<void>, State, null, Action> {
   return async dispatch => {
     dispatch(requestGetArtist());
     const artist = await ArtistRepository.queryByName(name);
@@ -117,32 +117,29 @@ export function getArtistByName(
 /*
  * Reducer
  */
-export function reducer(
-  state: State = InitialState,
-  action: ArtistAction,
-): State {
+export function reducer(state: State = InitialState, action: Action): State {
   switch (action.type) {
-    case ArtistActionType.requestGetArtistList:
+    case ActionType.requestGetArtistList:
       return {
         requesting: true,
         ...state,
       };
-    case ArtistActionType.successGetArtistList:
+    case ActionType.successGetArtistList:
       return {
         requesting: false,
         list: action.list,
       };
-    case ArtistActionType.failureGetArtistList:
+    case ActionType.failureGetArtistList:
       return {
         requesting: false,
         list: [],
       };
-    case ArtistActionType.requestGetArtist:
+    case ActionType.requestGetArtist:
       return {
         requesting: true,
         ...state,
       };
-    case ArtistActionType.successGetArtist:
+    case ActionType.successGetArtist:
       const newList = Array.from(state.list);
       const idx = newList.findIndex(
         ({artist}) => artist.uid === action.artist.uid,
@@ -159,7 +156,7 @@ export function reducer(
         requesting: false,
         list: newList,
       };
-    case ArtistActionType.failureGetArtist:
+    case ActionType.failureGetArtist:
       return {
         requesting: false,
         list: state.list,

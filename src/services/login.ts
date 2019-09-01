@@ -6,15 +6,20 @@ import 'firebase/auth';
 import {Artist, ArtistRepository} from 'models/artist';
 import {Art, ArtRepository} from 'models/art';
 
+const MAX_CHECKING_MILLIS = 5000;
+
 export interface State {
-  user: {
-    artist: Artist;
-    arts: Art[];
-  } | null;
+  user:
+    | {
+        artist: Artist;
+        arts: Art[];
+      }
+    | null
+    | 'checking';
 }
 
 export const InitialState = {
-  user: null,
+  user: 'checking' as const,
 };
 
 export type AppAction<T extends string, Extra extends {} = {}> = ReduxAction<
@@ -24,12 +29,14 @@ export type AppAction<T extends string, Extra extends {} = {}> = ReduxAction<
 
 export enum ActionType {
   setUser = 'SET_USER',
-  logout = 'LOGOUT',
+  clearUser = 'CLEAR_USER',
+  clearUserIfChecking = 'CLEAR_USER_IF_CHECKING',
 }
 
 export type Action =
   | AppAction<ActionType.setUser, {artist: Artist; arts: Art[]}>
-  | AppAction<ActionType.logout>;
+  | AppAction<ActionType.clearUser>
+  | AppAction<ActionType.clearUserIfChecking>;
 
 export const setUser = (artist: Artist, arts: Art[]): Action => ({
   type: ActionType.setUser,
@@ -37,12 +44,20 @@ export const setUser = (artist: Artist, arts: Art[]): Action => ({
   arts,
 });
 
-export const logout = (): Action => ({
-  type: ActionType.logout,
+export const clearUser = (): Action => ({
+  type: ActionType.clearUser,
+});
+
+export const clearUserIfChecking = (): Action => ({
+  type: ActionType.clearUserIfChecking,
 });
 
 export function startObserving(): ThunkAction<void, State, null, Action> {
   return dispatch => {
+    setTimeout(() => {
+      dispatch(clearUserIfChecking());
+    }, MAX_CHECKING_MILLIS);
+
     firebase.auth().onAuthStateChanged(async fbuser => {
       if (fbuser) {
         let artist = await ArtistRepository.queryByUid(fbuser.uid);
@@ -59,7 +74,7 @@ export function startObserving(): ThunkAction<void, State, null, Action> {
         const arts = await ArtRepository.queryListByArtist(artist);
         dispatch(setUser(artist, arts));
       } else {
-        dispatch(logout());
+        dispatch(clearUser());
       }
     });
   };
@@ -74,10 +89,18 @@ export function reducer(state: State = InitialState, action: Action): State {
           arts: action.arts,
         },
       };
-    case ActionType.logout:
+    case ActionType.clearUser:
       return {
         user: null,
       };
+    case ActionType.clearUserIfChecking:
+      if (state.user === 'checking') {
+        return {
+          user: null,
+        };
+      } else {
+        return state;
+      }
     default:
       return state;
   }

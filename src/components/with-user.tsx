@@ -27,7 +27,13 @@ export function withUser<P extends UserProps>(
   const WithUser: React.FC<Omit<P, keyof UserProps>> = props => {
     const user = useSelector((state: RootState) => state.login.user);
 
-    if (!user) {
+    if (user === 'checking') {
+      return (
+        <div>
+          <h3>Checking...</h3>
+        </div>
+      );
+    } else if (user === null) {
       return (
         <div>
           <h3>

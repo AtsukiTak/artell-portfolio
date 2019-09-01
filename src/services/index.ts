@@ -1,14 +1,24 @@
-import {combineReducers} from 'redux';
+import {combineReducers, Store as ReduxStore} from 'redux';
 
-import {reducer as artistReducer} from './artist';
-import {reducer as loginReducer} from './login';
+import * as artist from './artist';
+import * as login from './login';
+
+/*
+ * Store
+ */
+export type Store = ReduxStore<RootState, RootAction>;
+
+/*
+ * Action
+ */
+export type RootAction = artist.Action | login.Action;
 
 /*
  * Reducer
  */
 export const rootReducer = combineReducers({
-  artist: artistReducer,
-  login: loginReducer,
+  artist: artist.reducer,
+  login: login.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

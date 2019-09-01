@@ -1,9 +1,6 @@
 import React from 'react';
 import {createGlobalStyle} from 'styled-components';
-import {createStore, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
-import thunk from 'redux-thunk';
-import logger from 'redux-logger';
 import {
   BrowserRouter as Router,
   Route,
@@ -11,7 +8,7 @@ import {
   Redirect,
 } from 'react-router-dom';
 
-import {rootReducer} from 'services/index';
+import {Store} from 'services/index';
 import SigninPage from 'pages/signin';
 import SettingProfilePage from 'pages/settings/profile';
 import SettingArtsPage from 'pages/settings/arts';
@@ -19,8 +16,6 @@ import SettingArtsAddPage from 'pages/settings/arts/add';
 import SettingArtsEditPage from 'pages/settings/arts/edit';
 import ArtistPage from 'pages/artist';
 import ArtPage from 'pages/art';
-
-const store = createStore(rootReducer, applyMiddleware(thunk, logger));
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -32,7 +27,7 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const App: React.FC = () => {
+const App: React.FC<{store: Store}> = ({store}) => {
   return (
     <Provider store={store}>
       <GlobalStyle />
@@ -74,7 +69,7 @@ const App: React.FC = () => {
               />
             )}
           />
-          <Redirect to="/" />
+          <Redirect to="/signin" />
         </Switch>
       </Router>
     </Provider>
