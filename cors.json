@@ -1,5 +1,5 @@
 [{
-  "origin": ["http://localhost:3000", "https://artell-portfolio.netlify.com"],
+  "origin": ["http://localhost:3000", "https://portfolio.artell.life"],
   "responseHeader": ["*"],
   "method": ["GET"]
 }]
