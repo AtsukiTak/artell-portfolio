@@ -1,16 +1,16 @@
-import React, {FC} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import {withRouter} from 'react-router-dom';
-import {History} from 'history';
 import {useSelector} from 'react-redux';
 
 import {RootState} from 'services/index';
+import {useRouter} from 'components/router';
 import Header from 'components/header';
 
-const SigninPage: FC<{history: History}> = ({history}) => {
+const SigninPage: React.FC = () => {
+  const {history} = useRouter();
   const user = useSelector((state: RootState) => state.login.user);
 
   if (user) {
@@ -40,7 +40,7 @@ const SigninPage: FC<{history: History}> = ({history}) => {
   );
 };
 
-export default withRouter(SigninPage);
+export default SigninPage;
 
 const Container = styled.div`
   width: 90%;

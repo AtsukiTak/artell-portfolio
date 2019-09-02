@@ -1,10 +1,9 @@
 import React, {FC, useState} from 'react';
 import styled from 'styled-components';
-import {History} from 'history';
-import {withRouter} from 'react-router-dom';
 
 import {UploadImage} from 'models/image';
 import {ArtAttributes, ArtRepository} from 'models/art';
+import {useRouter} from 'components/router';
 import {withUser, UserProps} from 'components/with-user';
 import {pc} from 'components/responsive';
 import Header from 'components/header';
@@ -12,7 +11,8 @@ import Header from 'components/header';
 import SumbnailComponent from './add/components/sumbnail';
 import AttributesComponent from './add/components/attributes';
 
-const AddArtPage: FC<UserProps & {history: History}> = ({user, history}) => {
+const AddArtPage: FC<UserProps> = ({user}) => {
+  const {history} = useRouter();
   const [thumbnail, setThumbnail] = useState<UploadImage | null>(null);
   const [attrs, setAttrs] = useState<ArtAttributes>({
     title: '',
@@ -45,7 +45,7 @@ const AddArtPage: FC<UserProps & {history: History}> = ({user, history}) => {
   );
 };
 
-export default withRouter(withUser(AddArtPage));
+export default withUser(AddArtPage);
 
 const Container = styled.div`
   width: 80%;
