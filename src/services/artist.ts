@@ -121,8 +121,8 @@ export function reducer(state: State = InitialState, action: Action): State {
   switch (action.type) {
     case ActionType.requestGetArtistList:
       return {
-        requesting: true,
         ...state,
+        requesting: true,
       };
     case ActionType.successGetArtistList:
       return {
@@ -136,8 +136,8 @@ export function reducer(state: State = InitialState, action: Action): State {
       };
     case ActionType.requestGetArtist:
       return {
-        requesting: true,
         ...state,
+        requesting: true,
       };
     case ActionType.successGetArtist:
       const newList = Array.from(state.list);
