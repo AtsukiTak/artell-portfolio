@@ -1,14 +1,14 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import {ArtAttributes} from 'models/art';
+import { ArtAttributes } from "models/art";
 
 interface Props {
   attrs: ArtAttributes;
   setAttrs: (attrs: ArtAttributes) => void;
 }
 
-const EditAttributesComponent: React.FC<Props> = ({attrs, setAttrs}) => {
+const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
   return (
     <Container>
       <EditAttributeElement>
@@ -16,16 +16,16 @@ const EditAttributesComponent: React.FC<Props> = ({attrs, setAttrs}) => {
         <InputField
           type="text"
           value={attrs.title}
-          onChange={e => setAttrs({title: attrs.title, ...attrs})}
+          onChange={e => setAttrs({ ...attrs, title: e.target.value })}
         />
       </EditAttributeElement>
       <EditAttributeElement>
         <AttributeName>Width (mm)</AttributeName>
         <InputField
           type="tel"
-          value={attrs.widthMM || ''}
+          value={attrs.widthMM || ""}
           onChange={e =>
-            setAttrs({widthMM: validateNum(e.target.value), ...attrs})
+            setAttrs({ ...attrs, widthMM: validateNum(e.target.value) })
           }
         />
       </EditAttributeElement>
@@ -33,9 +33,9 @@ const EditAttributesComponent: React.FC<Props> = ({attrs, setAttrs}) => {
         <AttributeName>Height (mm)</AttributeName>
         <InputField
           type="tel"
-          value={attrs.heightMM || ''}
+          value={attrs.heightMM || ""}
           onChange={e =>
-            setAttrs({heightMM: validateNum(e.target.value), ...attrs})
+            setAttrs({ ...attrs, heightMM: validateNum(e.target.value) })
           }
         />
       </EditAttributeElement>
@@ -43,7 +43,7 @@ const EditAttributesComponent: React.FC<Props> = ({attrs, setAttrs}) => {
         <AttributeName>Description</AttributeName>
         <TextField
           value={attrs.description}
-          onChange={e => setAttrs({description: e.target.value, ...attrs})}
+          onChange={e => setAttrs({ ...attrs, description: e.target.value })}
         />
       </EditAttributeElement>
       <EditAttributeElement>
@@ -52,16 +52,16 @@ const EditAttributesComponent: React.FC<Props> = ({attrs, setAttrs}) => {
           type="text"
           placeholder="Acrylic, transfers, colored pencil, charcoal, and pastel on paper"
           value={attrs.materials}
-          onChange={e => setAttrs({materials: e.target.value, ...attrs})}
+          onChange={e => setAttrs({ ...attrs, materials: e.target.value })}
         />
       </EditAttributeElement>
       <EditAttributeElement>
         <AttributeName>Price (Yen)</AttributeName>
         <InputField
           type="tel"
-          value={attrs.priceYen || ''}
+          value={attrs.priceYen || ""}
           onChange={e =>
-            setAttrs({priceYen: validateNum(e.target.value), ...attrs})
+            setAttrs({ ...attrs, priceYen: validateNum(e.target.value) })
           }
         />
       </EditAttributeElement>
@@ -72,7 +72,7 @@ const EditAttributesComponent: React.FC<Props> = ({attrs, setAttrs}) => {
 function validateNum(s: string): number {
   const n = Number(s);
   if (Number.isNaN(n)) {
-    alert('数字を入力してください');
+    alert("数字を入力してください");
     return 0;
   } else {
     return n;
