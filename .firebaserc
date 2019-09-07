@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "artell-portfolio"
+  },
+  "targets": {
+    "artell-portfolio": {
+      "hosting": {
+        "portfolio": [
+          "artell-portfolio"
+        ],
+        "rental": [
+          "artell-rental"
+        ]
+      }
+    }
   }
 }
