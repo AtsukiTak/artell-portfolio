@@ -3,10 +3,11 @@ import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
 
+import {buyArt} from 'artell-models';
+
 import {RootState} from 'services/index';
 import {getArtistByName} from 'services/artist';
 import {pc} from 'components/responsive';
-import {buyArt} from 'models/artist';
 
 interface ArtPageProps {
   artistName: string;

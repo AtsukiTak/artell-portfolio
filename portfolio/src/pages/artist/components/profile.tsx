@@ -1,10 +1,11 @@
 import React, {FC} from 'react';
 import styled from 'styled-components';
 
+import {Artist} from 'artell-models';
+
 import Sumbnail from 'components/sumbnail';
 import * as logo from 'components/logo';
 import {pc} from 'components/responsive';
-import {Artist} from 'models/artist';
 
 const ProfileComponent: FC<{artist: Artist}> = ({artist}) => {
   return (

@@ -2,10 +2,11 @@ import React, {FC} from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 
+import {Art} from 'artell-models';
+
 import {pc} from 'components/responsive';
 import Sumbnail from 'components/sumbnail';
 import {SquareBasedWidth} from 'components/square';
-import {Art} from 'models/art';
 
 interface Props {
   arts: Art[];

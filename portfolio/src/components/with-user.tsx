@@ -2,8 +2,8 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
 
-import {Artist} from 'models/artist';
-import {Art} from 'models/art';
+import {Artist, Art} from 'artell-models';
+
 import {RootState} from 'services/index';
 
 export interface UserProps {

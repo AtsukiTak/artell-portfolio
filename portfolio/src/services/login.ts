@@ -1,10 +1,9 @@
-import {Action as ReduxAction} from 'redux';
-import {ThunkAction} from 'redux-thunk';
-import * as firebase from 'firebase/app';
-import 'firebase/auth';
+import { Action as ReduxAction } from "redux";
+import { ThunkAction } from "redux-thunk";
+import * as firebase from "firebase/app";
+import "firebase/auth";
 
-import {Artist, ArtistRepository} from 'models/artist';
-import {Art, ArtRepository} from 'models/art';
+import { Artist, ArtistRepository, Art, ArtRepository } from "artell-models";
 
 const MAX_CHECKING_MILLIS = 5000;
 
@@ -15,41 +14,41 @@ export interface State {
         arts: Art[];
       }
     | null
-    | 'checking';
+    | "checking";
 }
 
 export const InitialState = {
-  user: 'checking' as const,
+  user: "checking" as const
 };
 
 export type AppAction<T extends string, Extra extends {} = {}> = ReduxAction<
   T
 > &
-  {[K in keyof Extra]: Extra[K]};
+  { [K in keyof Extra]: Extra[K] };
 
 export enum ActionType {
-  setUser = 'SET_USER',
-  clearUser = 'CLEAR_USER',
-  clearUserIfChecking = 'CLEAR_USER_IF_CHECKING',
+  setUser = "SET_USER",
+  clearUser = "CLEAR_USER",
+  clearUserIfChecking = "CLEAR_USER_IF_CHECKING"
 }
 
 export type Action =
-  | AppAction<ActionType.setUser, {artist: Artist; arts: Art[]}>
+  | AppAction<ActionType.setUser, { artist: Artist; arts: Art[] }>
   | AppAction<ActionType.clearUser>
   | AppAction<ActionType.clearUserIfChecking>;
 
 export const setUser = (artist: Artist, arts: Art[]): Action => ({
   type: ActionType.setUser,
   artist,
-  arts,
+  arts
 });
 
 export const clearUser = (): Action => ({
-  type: ActionType.clearUser,
+  type: ActionType.clearUser
 });
 
 export const clearUserIfChecking = (): Action => ({
-  type: ActionType.clearUserIfChecking,
+  type: ActionType.clearUserIfChecking
 });
 
 export function startObserving(): ThunkAction<void, State, null, Action> {
@@ -60,18 +59,26 @@ export function startObserving(): ThunkAction<void, State, null, Action> {
 
     firebase.auth().onAuthStateChanged(async fbuser => {
       if (fbuser) {
-        let artist = await ArtistRepository.queryByUid(fbuser.uid);
+        let artist = await new ArtistRepository(firebase.app()).queryByUid(
+          fbuser.uid
+        );
         if (artist === null) {
           const name = fbuser.displayName;
           const email = fbuser.email;
           if (!name || !email) {
-            alert('名前、またはメールアドレスを取得できませんでした');
+            alert("名前、またはメールアドレスを取得できませんでした");
             throw new Error("Can't get user name or email");
           }
-          artist = await ArtistRepository.create(fbuser.uid, name, email);
+          artist = await new ArtistRepository(firebase.app()).create(
+            fbuser.uid,
+            name,
+            email
+          );
         }
 
-        const arts = await ArtRepository.queryListByArtist(artist);
+        const arts = await new ArtRepository(firebase.app()).queryListByArtist(
+          artist
+        );
         dispatch(setUser(artist, arts));
       } else {
         dispatch(clearUser());
@@ -86,17 +93,17 @@ export function reducer(state: State = InitialState, action: Action): State {
       return {
         user: {
           artist: action.artist,
-          arts: action.arts,
-        },
+          arts: action.arts
+        }
       };
     case ActionType.clearUser:
       return {
-        user: null,
+        user: null
       };
     case ActionType.clearUserIfChecking:
-      if (state.user === 'checking') {
+      if (state.user === "checking") {
         return {
-          user: null,
+          user: null
         };
       } else {
         return state;

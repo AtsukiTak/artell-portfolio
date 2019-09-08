@@ -1,14 +1,12 @@
-import Jimp from 'jimp';
+import Jimp from "jimp";
 
 export interface Image {
   getUrl(): string;
   clone(): Image;
 }
 
-export class DownloadImage extends Image {
-  constructor(private url: string) {
-    super();
-  }
+export class DownloadImage {
+  constructor(private url: string) {}
 
   static async download(externalUrl: string): Promise<DownloadImage> {
     const res = await fetch(externalUrl);
@@ -25,10 +23,8 @@ export class DownloadImage extends Image {
   }
 }
 
-export class UploadImage extends Image {
-  constructor(readonly uri: DataURI) {
-    super();
-  }
+export class UploadImage {
+  constructor(readonly uri: DataURI) {}
 
   static MaxWidth = 2048;
   static MaxHeight = 2048;

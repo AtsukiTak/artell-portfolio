@@ -1,35 +1,40 @@
-import React, {FC, useState} from 'react';
-import styled from 'styled-components';
+import React, { FC, useState } from "react";
+import styled from "styled-components";
+import * as firebase from "firebase/app";
 
-import {UploadImage} from 'models/image';
-import {ArtAttributes, ArtRepository} from 'models/art';
-import {useRouter} from 'components/router';
-import {withUser, UserProps} from 'components/with-user';
-import {pc} from 'components/responsive';
-import Header from 'components/header';
+import { UploadImage, ArtAttributes, ArtRepository } from "artell-models";
 
-import SumbnailComponent from './add/components/sumbnail';
-import AttributesComponent from './add/components/attributes';
+import { useRouter } from "components/router";
+import { withUser, UserProps } from "components/with-user";
+import { pc } from "components/responsive";
+import Header from "components/header";
 
-const AddArtPage: FC<UserProps> = ({user}) => {
-  const {history} = useRouter();
+import SumbnailComponent from "./add/components/sumbnail";
+import AttributesComponent from "./add/components/attributes";
+
+const AddArtPage: FC<UserProps> = ({ user }) => {
+  const { history } = useRouter();
   const [thumbnail, setThumbnail] = useState<UploadImage | null>(null);
   const [attrs, setAttrs] = useState<ArtAttributes>({
-    title: '',
+    title: "",
     widthMM: 0,
     heightMM: 0,
-    description: '',
-    materials: '',
-    priceYen: 0,
+    description: "",
+    materials: "",
+    priceYen: 0
   });
 
   const onSubmitClick = async () => {
     if (thumbnail === null) {
-      alert('作品の画像が選択されていません。');
+      alert("作品の画像が選択されていません。");
     } else {
-      await ArtRepository.create(user.artist, attrs, thumbnail);
-      alert('新しい作品を追加しました！');
-      history.push('/settings/arts');
+      await new ArtRepository(firebase.app()).create(
+        user.artist,
+        attrs,
+        thumbnail
+      );
+      alert("新しい作品を追加しました！");
+      history.push("/settings/arts");
     }
   };
 

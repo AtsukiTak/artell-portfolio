@@ -1,21 +1,27 @@
-import React, {useState} from 'react';
-import styled from 'styled-components';
-import {useDispatch} from 'react-redux';
-import {Link} from 'react-router-dom';
+import React, { useState } from "react";
+import styled from "styled-components";
+import * as firebase from "firebase/app";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
-import {setUser} from 'services/login';
-import {Image} from 'models/image';
-import {Artist, ArtistAttributes, ArtistRepository} from 'models/artist';
-import {withUser, UserProps} from 'components/with-user';
-import {pc} from 'components/responsive';
-import Header from 'components/header';
+import {
+  Image,
+  Artist,
+  ArtistAttributes,
+  ArtistRepository
+} from "artell-models";
 
-import SettingTab from './components/tab';
-import EditThumbnailComponent from './profile/components/edit_thumbnail';
-import EditAttributesComponent from './profile/components/edit_attributes';
+import { setUser } from "services/login";
+import { withUser, UserProps } from "components/with-user";
+import { pc } from "components/responsive";
+import Header from "components/header";
 
-const ProfileSettingPage: React.FC<UserProps> = ({user}) => {
-  const {artist, arts} = user;
+import SettingTab from "./components/tab";
+import EditThumbnailComponent from "./profile/components/edit_thumbnail";
+import EditAttributesComponent from "./profile/components/edit_attributes";
+
+const ProfileSettingPage: React.FC<UserProps> = ({ user }) => {
+  const { artist, arts } = user;
   const [attrs, setAttrs] = useState<ArtistAttributes>(artist.attrs);
   const [thumbnail, setThumbnail] = useState<Image | null>(artist.thumbnail);
   const [updating, setUpdating] = useState(false);
@@ -25,10 +31,10 @@ const ProfileSettingPage: React.FC<UserProps> = ({user}) => {
     const newArtist = new Artist(artist.uid, attrs, thumbnail);
     setUpdating(true);
     if (newArtist.attrs !== artist.attrs) {
-      await ArtistRepository.updateAttrs(newArtist);
+      await new ArtistRepository(firebase.app()).updateAttrs(newArtist);
     }
     if (newArtist.thumbnail !== artist.thumbnail) {
-      await ArtistRepository.updateThumbnail(newArtist);
+      await new ArtistRepository(firebase.app()).updateThumbnail(newArtist);
     }
     dispatch(setUser(newArtist, arts));
     setUpdating(false);

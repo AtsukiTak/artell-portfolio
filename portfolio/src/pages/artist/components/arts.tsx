@@ -2,10 +2,10 @@ import React, {FC} from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 
+import {Art, Artist} from 'artell-models';
+
 import {pc, MinPcWidth} from 'components/responsive';
 import Sumbnail from 'components/sumbnail';
-import {Art} from 'models/art';
-import {Artist} from 'models/artist';
 
 const ArtsComponent: FC<{artist: Artist; arts: Art[]}> = ({artist, arts}) => {
   return (

@@ -1,7 +1,8 @@
 import React, {FC, useCallback} from 'react';
 import styled from 'styled-components';
 
-import {UploadImage} from 'models/image';
+import {UploadImage} from 'artell-models';
+
 import {pc} from 'components/responsive';
 import Sumbnail from 'components/sumbnail';
 import {SquareBasedWidth} from 'components/square';

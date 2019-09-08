@@ -1,39 +1,42 @@
-import * as firebase from 'firebase/app';
-import 'firebase/firestore';
-import 'firebase/storage';
-import * as D from '@mojotech/json-type-validation';
+import * as firebase from "firebase/app";
+import "firebase/firestore";
+import "firebase/storage";
+import * as D from "@mojotech/json-type-validation";
 
 export class Firestore {
+  constructor(readonly firebaseApp: firebase.app.App) {}
+
+  firestore(): firebase.firestore.Firestore {
+    return firebase.firestore(this.firebaseApp);
+  }
+
   /*
    * ==========
    * Artist
    * ==========
    */
-  static async upsertArtistDoc(artistUid: string, doc: ArtistDocument) {
-    await firebase
-      .firestore()
+  async upsertArtistDoc(artistUid: string, doc: ArtistDocument) {
+    await this.firestore()
       .doc(`artists/${artistUid}`)
       .set(doc);
   }
 
-  static async queryArtistDocList(): Promise<
-    {id: string; doc: ArtistDocument}[]
+  async queryArtistDocList(): Promise<
+    { id: string; doc: ArtistDocument }[]
   > {
-    const collection = await firebase
-      .firestore()
-      .collection('artists')
+    const collection = await this.firestore()
+      .collection("artists")
       .get();
     return collection.docs.map(doc => ({
       id: doc.id,
-      doc: ArtistDocumentDecoder.runWithException(doc.data()),
+      doc: ArtistDocumentDecoder.runWithException(doc.data())
     }));
   }
 
-  static async queryArtistDoc(
-    id: string,
-  ): Promise<{id: string; doc: ArtistDocument} | null> {
-    const doc = await firebase
-      .firestore()
+  async queryArtistDoc(
+    id: string
+  ): Promise<{ id: string; doc: ArtistDocument } | null> {
+    const doc = await this.firestore()
       .doc(`artists/${id}`)
       .get();
     const data = doc.data();
@@ -42,25 +45,24 @@ export class Firestore {
     } else {
       return {
         id,
-        doc: ArtistDocumentDecoder.runWithException(data),
+        doc: ArtistDocumentDecoder.runWithException(data)
       };
     }
   }
 
-  static async queryArtistDocByName(
-    name: string,
-  ): Promise<{id: string; doc: ArtistDocument} | null> {
-    const collection = await firebase
-      .firestore()
-      .collection('artists')
-      .where('name', '==', name)
+  async queryArtistDocByName(
+    name: string
+  ): Promise<{ id: string; doc: ArtistDocument } | null> {
+    const collection = await this.firestore()
+      .collection("artists")
+      .where("name", "==", name)
       .limit(1)
       .get();
     if (collection.docs.length === 1) {
       const doc = collection.docs[0];
       return {
         id: doc.id,
-        doc: ArtistDocumentDecoder.runWithException(doc.data()),
+        doc: ArtistDocumentDecoder.runWithException(doc.data())
       };
     } else {
       return null;
@@ -71,58 +73,54 @@ export class Firestore {
    * Art
    * ==========
    */
-  static async addArtDoc(
+  async addArtDoc(
     artistUid: string,
-    data: ArtDocument,
+    data: ArtDocument
   ): Promise<string> {
-    const doc = await firebase
-      .firestore()
+    const doc = await this.firestore()
       .collection(`artists/${artistUid}/arts`)
       .add(data);
     return doc.id;
   }
 
-  static async queryArtDocList(
-    artistUid: string,
-  ): Promise<{id: string; doc: ArtDocument}[]> {
-    const collection = await firebase
-      .firestore()
+  async queryArtDocList(
+    artistUid: string
+  ): Promise<{ id: string; doc: ArtDocument }[]> {
+    const collection = await this.firestore()
       .collection(`artists/${artistUid}/arts`)
       .get();
     return collection.docs.map(doc => ({
       id: doc.id,
-      doc: ArtDocumentDecoder.runWithException(doc.data()),
+      doc: ArtDocumentDecoder.runWithException(doc.data())
     }));
   }
 
-  static async queryArtDocByTitle(
+  async queryArtDocByTitle(
     artistUid: string,
-    title: string,
-  ): Promise<{id: string; doc: ArtDocument} | null> {
-    const collection = await firebase
-      .firestore()
+    title: string
+  ): Promise<{ id: string; doc: ArtDocument } | null> {
+    const collection = await this.firestore()
       .collection(`artists/${artistUid}/arts`)
-      .where('title', '==', title)
+      .where("title", "==", title)
       .limit(1)
       .get();
     if (collection.docs.length === 1) {
       const doc = collection.docs[0];
       return {
         id: doc.id,
-        doc: ArtDocumentDecoder.runWithException(doc.data()),
+        doc: ArtDocumentDecoder.runWithException(doc.data())
       };
     } else {
       return null;
     }
   }
 
-  static async updateArtDoc(
+  async updateArtDoc(
     artistUid: string,
     artId: string,
-    doc: ArtDocument,
+    doc: ArtDocument
   ) {
-    await firebase
-      .firestore()
+    await this.firestore()
       .doc(`artists/${artistUid}/arts/${artId}`)
       .set(doc);
   }
@@ -145,7 +143,7 @@ const ArtistDocumentDecoder: D.Decoder<ArtistDocument> = D.object({
   description: D.string(),
   twitter: D.string(),
   facebook: D.string(),
-  instagram: D.string(),
+  instagram: D.string()
 });
 
 export interface ArtDocument {
@@ -163,29 +161,32 @@ const ArtDocumentDecoder: D.Decoder<ArtDocument> = D.object({
   heightMM: D.number(),
   description: D.string(),
   materials: D.string(),
-  priceYen: D.number(),
+  priceYen: D.number()
 });
 
 export class Storage {
+  constructor(readonly firebaseApp: firebase.app.App) {}
+
+  storage(): firebase.storage.Storage {
+    return firebase.storage(this.firebaseApp);
+  }
   /*
    * ==========
    * Artist
    * ==========
    */
-  static async upsertArtistThumbnail(
+  async upsertArtistThumbnail(
     artistUid: string,
-    thumbnailBase64: string,
+    thumbnailBase64: string
   ): Promise<void> {
-    return firebase
-      .storage()
+    return this.storage()
       .ref(`/artists/${artistUid}/sumbnail.jpg`)
-      .putString(thumbnailBase64, 'base64', {contentType: 'image/jpeg'})
+      .putString(thumbnailBase64, "base64", { contentType: "image/jpeg" })
       .then();
   }
 
-  static async queryArtistThumbnailUrl(id: string): Promise<string | null> {
-    return await firebase
-      .storage()
+  async queryArtistThumbnailUrl(id: string): Promise<string | null> {
+    return await this.storage()
       .ref(`artists/${id}/sumbnail.jpg`)
       .getDownloadURL()
       .catch(() => null);
@@ -196,24 +197,22 @@ export class Storage {
    * Art
    * ==========
    */
-  static async upsertArtThumbnail(
+  async upsertArtThumbnail(
     artistUid: string,
     artId: string,
-    thumbnailBase64: string,
+    thumbnailBase64: string
   ) {
-    return await firebase
-      .storage()
+    return await this.storage()
       .ref(`/artists/${artistUid}/arts/${artId}/sumbnail.jpg`)
-      .putString(thumbnailBase64, 'base64', {contentType: 'image/jpeg'})
+      .putString(thumbnailBase64, "base64", { contentType: "image/jpeg" })
       .then();
   }
 
-  static async queryArtThumbnailUrl(
+  async queryArtThumbnailUrl(
     artistUid: string,
-    artId: string,
+    artId: string
   ): Promise<string> {
-    return await firebase
-      .storage()
+    return await this.storage()
       .ref(`artists/${artistUid}/arts/${artId}/sumbnail.jpg`)
       .getDownloadURL();
   }

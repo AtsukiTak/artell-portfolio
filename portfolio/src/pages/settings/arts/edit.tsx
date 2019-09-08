@@ -1,23 +1,32 @@
-import React, {useState} from 'react';
-import styled from 'styled-components';
-import {useDispatch} from 'react-redux';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import * as firebase from "firebase/app";
 
-import {Image} from 'models/image';
-import {ArtAttributes, Art, ArtRepository} from 'models/art';
-import {Artist} from 'models/artist';
-import {setUser} from 'services/login';
-import {withUser, UserProps} from 'components/with-user';
-import {pc} from 'components/responsive';
-import Header from 'components/header';
+import {
+  Image,
+  Art,
+  ArtAttributes,
+  ArtRepository,
+  Artist
+} from "artell-models";
 
-import EditThumbnailComponent from './edit/components/edit_thumbnail';
-import EditAttributesComponent from './edit/components/edit_attributes';
+import { setUser } from "services/login";
+import { withUser, UserProps } from "components/with-user";
+import { pc } from "components/responsive";
+import Header from "components/header";
+
+import EditThumbnailComponent from "./edit/components/edit_thumbnail";
+import EditAttributesComponent from "./edit/components/edit_attributes";
 
 interface Props {
   artTitle: string;
 }
 
-const ArtEditPageWrapper: React.FC<UserProps & Props> = ({user, artTitle}) => {
+const ArtEditPageWrapper: React.FC<UserProps & Props> = ({
+  user,
+  artTitle
+}) => {
   const art = user.arts.find(art => art.attrs.title === artTitle);
   if (!art) {
     return null;
@@ -29,9 +38,9 @@ const ArtEditPageWrapper: React.FC<UserProps & Props> = ({user, artTitle}) => {
 export default withUser(ArtEditPageWrapper);
 
 const ArtEditPage: React.FC<{
-  user: {artist: Artist; arts: Art[]};
+  user: { artist: Artist; arts: Art[] };
   art: Art;
-}> = ({user, art}) => {
+}> = ({ user, art }) => {
   const [thumbnail, setThumbnail] = useState<Image>(art.thumbnail);
   const [attrs, setAttrs] = useState<ArtAttributes>(art.attrs);
   const [updating, setUpdating] = useState(false);
@@ -41,10 +50,13 @@ const ArtEditPage: React.FC<{
     const newArt = new Art(art.id, attrs, thumbnail);
     setUpdating(true);
     if (newArt.attrs !== art.attrs) {
-      await ArtRepository.updateAttrs(user.artist, newArt);
+      await new ArtRepository(firebase.app()).updateAttrs(user.artist, newArt);
     }
     if (newArt.thumbnail !== art.thumbnail) {
-      await ArtRepository.updateThumbnail(user.artist, newArt);
+      await new ArtRepository(firebase.app()).updateThumbnail(
+        user.artist,
+        newArt
+      );
     }
     const newArts = user.arts.map(art => (art.id === newArt.id ? newArt : art));
     dispatch(setUser(user.artist, newArts));

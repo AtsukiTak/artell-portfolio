@@ -1,7 +1,8 @@
 import React, {useCallback} from 'react';
 import styled from 'styled-components';
 
-import {Image, UploadImage} from 'models/image';
+import {Image, UploadImage} from 'artell-models';
+
 import {pc} from 'components/responsive';
 import Sumbnail from 'components/sumbnail';
 

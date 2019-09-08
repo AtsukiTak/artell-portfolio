@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {ArtistAttributes} from 'models/artist';
+import {ArtistAttributes} from 'artell-models';
 
 interface Props {
   attrs: ArtistAttributes;

@@ -1,8 +1,8 @@
-import {Action as ReduxAction} from 'redux';
-import {ThunkAction} from 'redux-thunk';
+import { Action as ReduxAction } from "redux";
+import { ThunkAction } from "redux-thunk";
+import * as firebase from "firebase/app";
 
-import {Art, ArtRepository} from 'models/art';
-import {Artist, ArtistRepository} from 'models/artist';
+import { Art, ArtRepository, Artist, ArtistRepository } from "artell-models";
 
 /*
  * State
@@ -17,64 +17,64 @@ export interface State {
 
 export const InitialState = {
   requesting: false,
-  list: [],
+  list: []
 };
 
 /*
  * Action
  */
 type AppAction<T extends string, Extra extends {} = {}> = ReduxAction<T> &
-  {[K in keyof Extra]: Extra[K]};
+  { [K in keyof Extra]: Extra[K] };
 
 export enum ActionType {
-  requestGetArtistList = 'REQUEST_GET_ARTIST_LIST',
-  successGetArtistList = 'SUCCESS_GET_ARTIST_LIST',
-  failureGetArtistList = 'FAILURE_GET_ARTIST_LIST',
-  requestGetArtist = 'REQUEST_GET_ARTIST',
-  successGetArtist = 'SUCCESS_GET_ARTIST',
-  failureGetArtist = 'FAILURE_GET_ARTIST',
+  requestGetArtistList = "REQUEST_GET_ARTIST_LIST",
+  successGetArtistList = "SUCCESS_GET_ARTIST_LIST",
+  failureGetArtistList = "FAILURE_GET_ARTIST_LIST",
+  requestGetArtist = "REQUEST_GET_ARTIST",
+  successGetArtist = "SUCCESS_GET_ARTIST",
+  failureGetArtist = "FAILURE_GET_ARTIST"
 }
 
 export type Action =
   | AppAction<ActionType.requestGetArtistList>
   | AppAction<
       ActionType.successGetArtistList,
-      {list: {artist: Artist; arts: Art[]}[]}
+      { list: { artist: Artist; arts: Art[] }[] }
     >
-  | AppAction<ActionType.failureGetArtistList, {msg: string}>
+  | AppAction<ActionType.failureGetArtistList, { msg: string }>
   | AppAction<ActionType.requestGetArtist>
-  | AppAction<ActionType.successGetArtist, {artist: Artist; arts: Art[]}>
-  | AppAction<ActionType.failureGetArtist, {msg: string}>;
+  | AppAction<ActionType.successGetArtist, { artist: Artist; arts: Art[] }>
+  | AppAction<ActionType.failureGetArtist, { msg: string }>;
 
 const requestGetArtistList = (): Action => ({
-  type: ActionType.requestGetArtistList,
+  type: ActionType.requestGetArtistList
 });
 
 const successGetArtistList = (
-  list: {artist: Artist; arts: Art[]}[],
+  list: { artist: Artist; arts: Art[] }[]
 ): Action => ({
   type: ActionType.successGetArtistList,
-  list,
+  list
 });
 
 const failureGetArtistList = (msg: string): Action => ({
   type: ActionType.failureGetArtistList,
-  msg,
+  msg
 });
 
 const requestGetArtist = (): Action => ({
-  type: ActionType.requestGetArtist,
+  type: ActionType.requestGetArtist
 });
 
 const successGetArtist = (artist: Artist, arts: Art[]): Action => ({
   type: ActionType.successGetArtist,
   artist,
-  arts,
+  arts
 });
 
 const failureGetArtist = (msg: string): Action => ({
   type: ActionType.failureGetArtist,
-  msg,
+  msg
 });
 
 export function getArtistList(): ThunkAction<
@@ -85,30 +85,34 @@ export function getArtistList(): ThunkAction<
 > {
   return async dispatch => {
     dispatch(requestGetArtistList());
-    const artists = await ArtistRepository.queryList();
+    const artists = await new ArtistRepository(firebase.app()).queryList();
     const list = await Promise.all(
       artists.map(async artist => {
-        const arts = await ArtRepository.queryListByArtist(artist);
+        const arts = await new ArtRepository(firebase.app()).queryListByArtist(
+          artist
+        );
         return {
           artist,
-          arts,
+          arts
         };
-      }),
+      })
     );
     dispatch(successGetArtistList(list));
   };
 }
 
 export function getArtistByName(
-  name: string,
+  name: string
 ): ThunkAction<Promise<void>, State, null, Action> {
   return async dispatch => {
     dispatch(requestGetArtist());
-    const artist = await ArtistRepository.queryByName(name);
+    const artist = await new ArtistRepository(firebase.app()).queryByName(name);
     if (artist === null) {
-      dispatch(failureGetArtist('Not Found'));
+      dispatch(failureGetArtist("Not Found"));
     } else {
-      const arts = await ArtRepository.queryListByArtist(artist);
+      const arts = await new ArtRepository(firebase.app()).queryListByArtist(
+        artist
+      );
       dispatch(successGetArtist(artist, arts));
     }
   };
@@ -122,44 +126,44 @@ export function reducer(state: State = InitialState, action: Action): State {
     case ActionType.requestGetArtistList:
       return {
         ...state,
-        requesting: true,
+        requesting: true
       };
     case ActionType.successGetArtistList:
       return {
         requesting: false,
-        list: action.list,
+        list: action.list
       };
     case ActionType.failureGetArtistList:
       return {
         requesting: false,
-        list: [],
+        list: []
       };
     case ActionType.requestGetArtist:
       return {
         ...state,
-        requesting: true,
+        requesting: true
       };
     case ActionType.successGetArtist:
       const newList = Array.from(state.list);
       const idx = newList.findIndex(
-        ({artist}) => artist.uid === action.artist.uid,
+        ({ artist }) => artist.uid === action.artist.uid
       );
       if (idx === -1) {
-        newList.push({artist: action.artist, arts: action.arts});
+        newList.push({ artist: action.artist, arts: action.arts });
       } else {
         newList[idx] = {
           artist: action.artist,
-          arts: action.arts,
+          arts: action.arts
         };
       }
       return {
         requesting: false,
-        list: newList,
+        list: newList
       };
     case ActionType.failureGetArtist:
       return {
         requesting: false,
-        list: state.list,
+        list: state.list
       };
     default:
       return state;
