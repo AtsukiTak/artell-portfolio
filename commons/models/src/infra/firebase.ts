@@ -66,6 +66,7 @@ export class Firestore {
       return null;
     }
   }
+
   /*
    * ==========
    * Art

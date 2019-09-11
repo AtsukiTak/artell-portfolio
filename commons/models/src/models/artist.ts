@@ -82,6 +82,10 @@ export class ArtistRepository {
     );
   }
 
+  async checkExistenceByName(name: string): Promise<boolean> {
+    return (await this.firestore.queryArtistDocByName(name)) !== null;
+  }
+
   /*
    * =================
    * UPDATE
