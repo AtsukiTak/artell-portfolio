@@ -6,3 +6,7 @@ export {
   ArtistRepository,
   buyArt
 } from "./models/artist";
+
+export * from './models/image';
+export * from './models/art';
+export * from './models/artist';

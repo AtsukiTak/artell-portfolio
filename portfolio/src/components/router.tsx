@@ -1,5 +1,5 @@
-import React, {ReactElement} from 'react';
-import {Route as OriginalRoute, RouteComponentProps} from 'react-router-dom';
+import React, { ReactElement } from "react";
+import { Route as OriginalRoute, RouteComponentProps } from "react-router-dom";
 
 const RouterContext = React.createContext<RouteComponentProps | null>(null);
 
@@ -9,7 +9,7 @@ interface RouteProps {
   exact?: boolean;
 }
 
-export const Route: React.FC<RouteProps> = ({children, path, exact}) => (
+export const Route: React.FC<RouteProps> = ({ children, path, exact }) => (
   <OriginalRoute
     path={path}
     exact={exact}
@@ -28,7 +28,7 @@ function isReactElement(children: any): children is ReactElement {
 export function useRouter() {
   const context = React.useContext(RouterContext);
   if (!context) {
-    throw new Error('useRouter MUST be used inside Router');
+    throw new Error("useRouter MUST be used inside Router");
   } else {
     return context;
   }

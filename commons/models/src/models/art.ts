@@ -1,4 +1,4 @@
-import * as firebase from 'firebase/app';
+import * as firebase from "firebase/app";
 
 import { Firestore, ArtDocument, Storage } from "../infra/firebase";
 import { Image, UploadImage, DownloadImage } from "./image";
@@ -48,7 +48,7 @@ export class ArtRepository {
    * =============
    */
   async queryListByArtist(artist: Artist): Promise<Art[]> {
-    const artList = await this.firestore.queryArtDocList(artist.uid);
+    const artList = await this.firestore.queryArtDocListByArtist(artist.uid);
     return await Promise.all(
       artList.map(async ({ id, doc }) => {
         const url = await this.storage.queryArtThumbnailUrl(artist.uid, id);

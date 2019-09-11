@@ -21,9 +21,7 @@ export class Firestore {
       .set(doc);
   }
 
-  async queryArtistDocList(): Promise<
-    { id: string; doc: ArtistDocument }[]
-  > {
+  async queryArtistDocList(): Promise<{ id: string; doc: ArtistDocument }[]> {
     const collection = await this.firestore()
       .collection("artists")
       .get();
@@ -73,17 +71,14 @@ export class Firestore {
    * Art
    * ==========
    */
-  async addArtDoc(
-    artistUid: string,
-    data: ArtDocument
-  ): Promise<string> {
+  async addArtDoc(artistUid: string, data: ArtDocument): Promise<string> {
     const doc = await this.firestore()
       .collection(`artists/${artistUid}/arts`)
       .add(data);
     return doc.id;
   }
 
-  async queryArtDocList(
+  async queryArtDocListByArtist(
     artistUid: string
   ): Promise<{ id: string; doc: ArtDocument }[]> {
     const collection = await this.firestore()
@@ -115,11 +110,7 @@ export class Firestore {
     }
   }
 
-  async updateArtDoc(
-    artistUid: string,
-    artId: string,
-    doc: ArtDocument
-  ) {
+  async updateArtDoc(artistUid: string, artId: string, doc: ArtDocument) {
     await this.firestore()
       .doc(`artists/${artistUid}/arts/${artId}`)
       .set(doc);

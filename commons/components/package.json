@@ -1,0 +1,16 @@
+{
+  "name": "artell-components",
+  "version": "0.0.0",
+  "main": "build/index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@types/react": "^16.9.2",
+    "@types/styled-components": "^4.1.19",
+    "react": "^16.9.0",
+    "styled-components": "^4.3.2",
+    "typescript": "^3.6.2"
+  }
+}

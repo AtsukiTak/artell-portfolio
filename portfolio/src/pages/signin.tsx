@@ -5,9 +5,10 @@ import 'firebase/auth';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import {useSelector} from 'react-redux';
 
+
 import {RootState} from 'services/index';
-import {useRouter} from 'components/router';
 import Header from 'components/header';
+import {useRouter} from 'components/router';
 
 const SigninPage: React.FC = () => {
   const {history} = useRouter();

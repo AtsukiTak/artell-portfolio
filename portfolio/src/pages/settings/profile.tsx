@@ -68,7 +68,7 @@ export default withUser(ProfileSettingPage);
 const Container = styled.div`
   width: 80%;
   margin: 0px auto;
-  margin-top: 50px;
+  padding: 50px 0;
 
   ${pc(`
     margin-top: 90px;
@@ -93,9 +93,13 @@ const SubmitButton = styled.button`
   margin: 30px auto 0 auto;
   border: none;
   border-radius: 4px;
-  background-color: linear-gradient(-180deg, #32d058, #28a745 90%);
+  background: linear-gradient(-180deg, #32d058, #28a745 90%);
   font-size: 16px;
   line-height: 40px;
   text-align: center;
   color: white;
+
+  &:disabled {
+    background: lightgray;
+  }
 `;

@@ -12,6 +12,7 @@
     "@types/react-router-dom": "^4.3.3",
     "@types/redux-logger": "^3.0.7",
     "@types/styled-components": "^4.1.15",
+    "artell-components": "../commons/components",
     "artell-models": "../commons/models",
     "firebase": "^6.2.0",
     "jimp": "^0.6.4",
