@@ -20,14 +20,11 @@ import EditThumbnailComponent from "./edit/components/edit_thumbnail";
 import EditAttributesComponent from "./edit/components/edit_attributes";
 
 interface Props {
-  artTitle: string;
+  artId: string;
 }
 
-const ArtEditPageWrapper: React.FC<UserProps & Props> = ({
-  user,
-  artTitle
-}) => {
-  const art = user.arts.find(art => art.attrs.title === artTitle);
+const ArtEditPageWrapper: React.FC<UserProps & Props> = ({ user, artId }) => {
+  const art = user.arts.find(art => art.id === artId);
   if (!art) {
     return null;
   } else {

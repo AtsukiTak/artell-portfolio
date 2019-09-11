@@ -1,24 +1,24 @@
-import React, {FC, useState, useEffect} from 'react';
-import styled from 'styled-components';
-import {Link} from 'react-router-dom';
-import {useSelector, useDispatch} from 'react-redux';
+import React, { FC, useState, useEffect } from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
-import {buyArt} from 'artell-models';
+import { buyArt } from "artell-models";
 
-import {RootState} from 'services/index';
-import {getArtistByName} from 'services/artist';
-import {pc} from 'components/responsive';
+import { RootState } from "services/index";
+import { getArtistByName } from "services/artist";
+import { pc } from "components/responsive";
 
 interface ArtPageProps {
   artistName: string;
-  artTitle: string;
+  artId: string;
 }
 
-const ArtPage: FC<ArtPageProps> = ({artistName, artTitle}) => {
+const ArtPage: FC<ArtPageProps> = ({ artistName, artId }) => {
   const [buying, setBuying] = useState(false);
 
   const artistAndArts = useSelector((state: RootState) =>
-    state.artist.list.find(({artist}) => artist.attrs.name === artistName),
+    state.artist.list.find(({ artist }) => artist.attrs.name === artistName)
   );
   const dispatch = useDispatch();
 
@@ -30,7 +30,7 @@ const ArtPage: FC<ArtPageProps> = ({artistName, artTitle}) => {
 
   const artist = artistAndArts ? artistAndArts.artist : undefined;
   const art = artistAndArts
-    ? artistAndArts.arts.find(art => art.attrs.title === artTitle)
+    ? artistAndArts.arts.find(art => art.id === artId)
     : undefined;
 
   return (
@@ -51,8 +51,10 @@ const ArtPage: FC<ArtPageProps> = ({artistName, artTitle}) => {
                 onClick={() => {
                   setBuying(true);
                   buyArt(artist.uid, art.id);
-                }}>
-                購入する &nbsp; / &nbsp; &yen; {toPriceDisplay(art.attrs.priceYen)}
+                }}
+              >
+                購入する &nbsp; / &nbsp; &yen;{" "}
+                {toPriceDisplay(art.attrs.priceYen)}
               </BuyButton>
             )}
           </CaptionContainer>
@@ -65,7 +67,7 @@ const ArtPage: FC<ArtPageProps> = ({artistName, artTitle}) => {
 export default ArtPage;
 
 function toPriceDisplay(priceYen: number): string {
-  return priceYen.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return priceYen.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 const CloseButton = styled(Link)`
@@ -84,7 +86,7 @@ const CloseButton = styled(Link)`
   &:after {
     position: absolute;
     left: 30px;
-    content: ' ';
+    content: " ";
     height: 41px;
     width: 2px;
     background-color: #d8d8d8;
@@ -97,11 +99,11 @@ const CloseButton = styled(Link)`
   }
 `;
 
-const ArtContainer = styled('div')<{src: string}>`
+const ArtContainer = styled("div")<{ src: string }>`
   width: 90vw;
   height: 80vh;
   margin: 0 auto;
-  background-image: url(${({src}) => src});
+  background-image: url(${({ src }) => src});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

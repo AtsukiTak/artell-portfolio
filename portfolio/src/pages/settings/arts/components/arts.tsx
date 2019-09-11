@@ -23,7 +23,7 @@ const ArtsComponent: FC<Props> = ({arts}) => {
       </ArtContainer>
       {arts.map(art => (
         <ArtContainer key={art.id}>
-          <Link to={`/settings/arts/edit/${art.attrs.title}`}>
+          <Link to={`/settings/arts/edit/${art.id}`}>
             <Sumbnail src={art.thumbnail.getUrl()} />
           </Link>
           <ArtTitle>{art.attrs.title}</ArtTitle>

@@ -40,9 +40,9 @@ const App: React.FC<{store: Store}> = ({store}) => {
           <Route path="/settings/arts/add" exact>
             <SettingArtsAddPage />
           </Route>
-          <Route path="/settings/arts/edit/:artTitle" exact>
+          <Route path="/settings/arts/edit/:artId" exact>
             {({match}) => (
-              <SettingArtsEditPage artTitle={match.params.artTitle} />
+              <SettingArtsEditPage artId={match.params.artId} />
             )}
           </Route>
           <Route path="/signin" exact>
@@ -54,11 +54,11 @@ const App: React.FC<{store: Store}> = ({store}) => {
           <Route path="/:artistName" exact>
             {({match}) => <ArtistPage artistName={match.params.artistName} />}
           </Route>
-          <Route path="/:artistName/:artTitle" exact>
+          <Route path="/:artistName/:artId" exact>
             {({match}) => (
               <ArtPage
                 artistName={match.params.artistName}
-                artTitle={match.params.artTitle}
+                artId={match.params.artId}
               />
             )}
           </Route>

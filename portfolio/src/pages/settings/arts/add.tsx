@@ -1,9 +1,11 @@
 import React, { FC, useState } from "react";
 import styled from "styled-components";
 import * as firebase from "firebase/app";
+import { useDispatch } from "react-redux";
 
 import { UploadImage, ArtAttributes, ArtRepository } from "artell-models";
 
+import { setUser } from "services/login";
 import { withUser, UserProps } from "components/with-user";
 import { pc } from "components/responsive";
 import Header from "components/header";
@@ -23,17 +25,19 @@ const AddArtPage: FC<UserProps> = ({ user }) => {
     materials: "",
     priceYen: 0
   });
+  const dispatch = useDispatch();
 
   const onSubmitClick = async () => {
     if (thumbnail === null) {
       alert("作品の画像が選択されていません。");
     } else {
-      await new ArtRepository(firebase.app()).create(
+      const newArt = await new ArtRepository(firebase.app()).create(
         user.artist,
         attrs,
         thumbnail
       );
       alert("新しい作品を追加しました！");
+      dispatch(setUser(user.artist, [...user.arts, newArt]));
       history.push("/settings/arts");
     }
   };
