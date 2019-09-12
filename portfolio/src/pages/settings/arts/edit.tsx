@@ -15,6 +15,7 @@ import { setUser } from "services/login";
 import { withUser, UserProps } from "components/with-user";
 import { pc } from "components/responsive";
 import Header from "components/header";
+import { PrimaryButton } from "components/button";
 
 import EditThumbnailComponent from "./edit/components/edit_thumbnail";
 import EditAttributesComponent from "./edit/components/edit_attributes";
@@ -70,9 +71,9 @@ const ArtEditPage: React.FC<{
         />
         <EditAttributesComponent attrs={attrs} setAttrs={setAttrs} />
         {updating ? (
-          <SubmitButton disabled>Updating...</SubmitButton>
+          <UpdateButton disabled>Updating...</UpdateButton>
         ) : (
-          <SubmitButton onClick={onSubmit}>Update</SubmitButton>
+          <UpdateButton onClick={onSubmit}>Update</UpdateButton>
         )}
       </Container>
     </>
@@ -82,23 +83,14 @@ const ArtEditPage: React.FC<{
 const Container = styled.div`
   width: 80%;
   margin: 0px auto;
-  margin-top: 50px;
+  padding: 50px 0;
 
   ${pc(`
     margin-top: 90px;
   `)}
 `;
 
-const SubmitButton = styled.button`
+const UpdateButton = styled(PrimaryButton)`
   display: block;
-  width: 100px;
-  height: 40px;
   margin: 30px auto 0 auto;
-  border: none;
-  border-radius: 4px;
-  background-image: linear-gradient(-180deg, #34d058, #28a745 90%);
-  font-size: 16px;
-  line-height: 40px;
-  text-align: center;
-  color: white;
 `;

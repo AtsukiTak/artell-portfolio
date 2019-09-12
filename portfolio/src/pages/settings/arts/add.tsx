@@ -7,9 +7,10 @@ import { UploadImage, ArtAttributes, ArtRepository } from "artell-models";
 
 import { setUser } from "services/login";
 import { withUser, UserProps } from "components/with-user";
+import { useRouter } from "components/router";
 import { pc } from "components/responsive";
 import Header from "components/header";
-import { useRouter } from "components/router";
+import { PrimaryButton } from "components/button";
 
 import SumbnailComponent from "./add/components/sumbnail";
 import AttributesComponent from "./add/components/attributes";
@@ -59,24 +60,14 @@ export default withUser(AddArtPage);
 const Container = styled.div`
   width: 80%;
   margin: 0px auto;
-  margin-top: 50px;
+  padding: 50px 0;
 
   ${pc(`
     margin-top: 90px;
   `)}
 `;
 
-const SubmitButton = styled.button`
+const SubmitButton = styled(PrimaryButton)`
   display: block;
-  width: 100px;
-  height: 40px;
   margin: 0 auto;
-  margin-top: 30px;
-  border: none;
-  border-radius: 4px;
-  line-height: 40px;
-  text-align: center;
-  font-size: 16px;
-  background-image: linear-gradient(-180deg, #34d058, #28a745 90%);
-  color: white;
 `;
