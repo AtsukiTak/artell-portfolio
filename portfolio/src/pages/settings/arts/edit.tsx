@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import * as firebase from "firebase/app";
+import { Link } from "react-router-dom";
 
 import {
   Image,
@@ -65,6 +66,9 @@ const ArtEditPage: React.FC<{
     <>
       <Header title="Settings" />
       <Container>
+        <LinkToArtPage to={`/${user.artist.attrs.name}/${art.id}`}>
+          作品ページへ →
+        </LinkToArtPage>
         <EditThumbnailComponent
           thumbnail={thumbnail}
           setThumbnail={setThumbnail}
@@ -88,6 +92,17 @@ const Container = styled.div`
   ${pc(`
     margin-top: 90px;
   `)}
+`;
+
+const LinkToArtPage = styled(Link)`
+  display: block;
+  margin-bottom: 20px;
+  text-decoration: underline;
+  color: #586069;
+
+  &:visited {
+    color: #586069;
+  }
 `;
 
 const UpdateButton = styled(PrimaryButton)`
