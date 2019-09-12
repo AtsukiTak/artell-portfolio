@@ -6,7 +6,6 @@ import {Art} from 'artell-models';
 
 import {pc} from 'components/responsive';
 import Sumbnail from 'components/sumbnail';
-import {SquareBasedWidth} from 'components/square';
 
 interface Props {
   arts: Art[];
@@ -17,7 +16,7 @@ const ArtsComponent: FC<Props> = ({arts}) => {
     <Container>
       <ArtContainer key="new">
         <Link to={`/settings/arts/add`}>
-          <AddArtSumbnail />
+          <Sumbnail src="/img/add-art-thumbnail.png" />
         </Link>
         <ArtTitle>作品を追加する</ArtTitle>
       </ArtContainer>
@@ -60,13 +59,4 @@ const ArtTitle = styled.h4`
   margin: 0;
   margin-top: 5px;
   color: gray;
-`;
-
-const AddArtSumbnail = styled(SquareBasedWidth)`
-  width: 50vw;
-  background-color: lightgray;
-
-  ${pc(`
-    width: 280px;
-  `)}
 `;

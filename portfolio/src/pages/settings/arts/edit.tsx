@@ -17,8 +17,8 @@ import { withUser, UserProps } from "components/with-user";
 import { pc } from "components/responsive";
 import Header from "components/header";
 import { PrimaryButton } from "components/button";
+import SelectImageComponent from "components/select_image";
 
-import EditThumbnailComponent from "./edit/components/edit_thumbnail";
 import EditAttributesComponent from "./edit/components/edit_attributes";
 
 interface Props {
@@ -69,10 +69,7 @@ const ArtEditPage: React.FC<{
         <LinkToArtPage to={`/${user.artist.attrs.name}/${art.id}`}>
           作品ページへ →
         </LinkToArtPage>
-        <EditThumbnailComponent
-          thumbnail={thumbnail}
-          setThumbnail={setThumbnail}
-        />
+        <SelectImageComponent image={thumbnail} setImage={setThumbnail} />
         <EditAttributesComponent attrs={attrs} setAttrs={setAttrs} />
         {updating ? (
           <UpdateButton disabled>Updating...</UpdateButton>

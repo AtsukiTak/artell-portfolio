@@ -3,7 +3,12 @@ import styled from "styled-components";
 import * as firebase from "firebase/app";
 import { useDispatch } from "react-redux";
 
-import { UploadImage, ArtAttributes, ArtRepository } from "artell-models";
+import {
+  DownloadImage,
+  UploadImage,
+  ArtAttributes,
+  ArtRepository
+} from "artell-models";
 
 import { setUser } from "services/login";
 import { withUser, UserProps } from "components/with-user";
@@ -11,8 +16,8 @@ import { useRouter } from "components/router";
 import { pc } from "components/responsive";
 import Header from "components/header";
 import { PrimaryButton } from "components/button";
+import SelectImageComponent from "components/select_image";
 
-import SumbnailComponent from "./add/components/sumbnail";
 import AttributesComponent from "./add/components/attributes";
 
 const AddArtPage: FC<UserProps> = ({ user }) => {
@@ -47,7 +52,10 @@ const AddArtPage: FC<UserProps> = ({ user }) => {
     <>
       <Header title="作品追加" />
       <Container>
-        <SumbnailComponent thumbnail={thumbnail} setThumbnail={setThumbnail} />
+        <SelectImageComponent
+          image={thumbnail || AddArtThumbnail}
+          setImage={img => setThumbnail(img)}
+        />
         <AttributesComponent attrs={attrs} setAttrs={setAttrs} />
         <SubmitButton onClick={onSubmitClick}>追加</SubmitButton>
       </Container>
@@ -56,6 +64,8 @@ const AddArtPage: FC<UserProps> = ({ user }) => {
 };
 
 export default withUser(AddArtPage);
+
+const AddArtThumbnail = new DownloadImage("/img/add-art-thumbnail.png");
 
 const Container = styled.div`
   width: 80%;

@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 import {
   Image,
+  DownloadImage,
   Artist,
   ArtistAttributes,
   ArtistRepository
@@ -16,9 +17,9 @@ import { withUser, UserProps } from "components/with-user";
 import { pc } from "components/responsive";
 import Header from "components/header";
 import { PrimaryButton } from "components/button";
+import SelectImageComponent from "components/select_image";
 
 import SettingTab from "./components/tab";
-import EditThumbnailComponent from "./profile/components/edit_thumbnail";
 import EditAttributesComponent from "./profile/components/edit_attributes";
 
 const ProfileSettingPage: React.FC<UserProps> = ({ user }) => {
@@ -61,9 +62,9 @@ const ProfileSettingPage: React.FC<UserProps> = ({ user }) => {
         <LinkToArtistPage to={`/${artist.attrs.name}`}>
           自分の作家ページへ →
         </LinkToArtistPage>
-        <EditThumbnailComponent
-          thumbnail={thumbnail}
-          setThumbnail={setThumbnail}
+        <SelectImageComponent
+          image={thumbnail || ArtistDefaultThumbnail}
+          setImage={setThumbnail}
         />
         <EditAttributesComponent attrs={attrs} setAttrs={setAttrs} />
         {updating ? (
@@ -77,6 +78,10 @@ const ProfileSettingPage: React.FC<UserProps> = ({ user }) => {
 };
 
 export default withUser(ProfileSettingPage);
+
+const ArtistDefaultThumbnail = new DownloadImage(
+  "/img/artist-default-thumbnail.jpg"
+);
 
 const Container = styled.div`
   width: 80%;
