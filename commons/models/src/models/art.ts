@@ -87,4 +87,14 @@ export class ArtRepository {
       );
     }
   }
+
+  /*
+   * =============
+   * DELETE
+   * =============
+   */
+  async deleteArt(artist: Artist, art: Art) {
+    await this.firestore.deleteArtDoc(artist.uid, art.id);
+    await this.storage.deleteArtThumbnail(artist.uid, art.id);
+  }
 }

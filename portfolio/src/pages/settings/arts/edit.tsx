@@ -14,9 +14,10 @@ import {
 
 import { setUser } from "services/login";
 import { withUser, UserProps } from "components/with-user";
+import { useRouter } from "components/router";
 import { pc } from "components/responsive";
 import Header from "components/header";
-import { PrimaryButton } from "components/button";
+import { PrimaryButton, DangerButton } from "components/button";
 import SelectImageComponent from "components/select_image";
 
 import EditAttributesComponent from "./edit/components/edit_attributes";
@@ -40,14 +41,15 @@ const ArtEditPage: React.FC<{
   user: { artist: Artist; arts: Art[] };
   art: Art;
 }> = ({ user, art }) => {
+  const { history } = useRouter();
   const [thumbnail, setThumbnail] = useState<Image>(art.thumbnail);
   const [attrs, setAttrs] = useState<ArtAttributes>(art.attrs);
-  const [updating, setUpdating] = useState(false);
+  const [requesting, setRequesting] = useState(false);
   const dispatch = useDispatch();
 
   const onSubmit = async () => {
     const newArt = new Art(art.id, attrs, thumbnail);
-    setUpdating(true);
+    setRequesting(true);
     if (newArt.attrs !== art.attrs) {
       await new ArtRepository(firebase.app()).updateAttrs(user.artist, newArt);
     }
@@ -59,7 +61,20 @@ const ArtEditPage: React.FC<{
     }
     const newArts = user.arts.map(art => (art.id === newArt.id ? newArt : art));
     dispatch(setUser(user.artist, newArts));
-    setUpdating(false);
+    setRequesting(false);
+  };
+
+  const onDelete = async () => {
+    setRequesting(true);
+    if (window.confirm("本当にこの作品を削除しますか？")) {
+      const artRepo = new ArtRepository(firebase.app());
+      console.log(artRepo);
+      await artRepo.deleteArt(user.artist, art);
+      const newUserArts = user.arts.filter(a => a.id !== art.id);
+      dispatch(setUser(user.artist, newUserArts));
+      history.push("/settings/arts");
+    }
+    setRequesting(false);
   };
 
   return (
@@ -71,11 +86,19 @@ const ArtEditPage: React.FC<{
         </LinkToArtPage>
         <SelectImageComponent image={thumbnail} setImage={setThumbnail} />
         <EditAttributesComponent attrs={attrs} setAttrs={setAttrs} />
-        {updating ? (
-          <UpdateButton disabled>Updating...</UpdateButton>
-        ) : (
-          <UpdateButton onClick={onSubmit}>Update</UpdateButton>
-        )}
+        <Buttons>
+          {requesting ? (
+            <>
+              <UpdateButton disabled>Update</UpdateButton>
+              <DangerButton disabled>Delete</DangerButton>
+            </>
+          ) : (
+            <>
+              <UpdateButton onClick={onSubmit}>Update</UpdateButton>
+              <DangerButton onClick={onDelete}>Delete</DangerButton>
+            </>
+          )}
+        </Buttons>
       </Container>
     </>
   );
@@ -102,7 +125,12 @@ const LinkToArtPage = styled(Link)`
   }
 `;
 
+const Buttons = styled.div`
+  display: flex;
+  justify-content: space-around;
+  margin-top: 30px;
+`;
+
 const UpdateButton = styled(PrimaryButton)`
   display: block;
-  margin: 30px auto 0 auto;
 `;

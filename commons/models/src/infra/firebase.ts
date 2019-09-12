@@ -116,6 +116,12 @@ export class Firestore {
       .doc(`artists/${artistUid}/arts/${artId}`)
       .set(doc);
   }
+
+  async deleteArtDoc(artistUid: string, artId: string) {
+    await this.firestore()
+      .doc(`artists/${artistUid}/arts/${artId}`)
+      .delete();
+  }
 }
 
 export interface ArtistDocument {
@@ -207,5 +213,11 @@ export class Storage {
     return await this.storage()
       .ref(`artists/${artistUid}/arts/${artId}/sumbnail.jpg`)
       .getDownloadURL();
+  }
+
+  async deleteArtThumbnail(artistUid: string, artId: string) {
+    await this.storage()
+      .ref(`artists/${artistUid}/arts/${artId}/sumbnail.jpg`)
+      .delete();
   }
 }
