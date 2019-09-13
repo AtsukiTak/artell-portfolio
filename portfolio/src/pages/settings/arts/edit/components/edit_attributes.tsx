@@ -12,6 +12,19 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
   return (
     <Container>
       <EditAttributeElement>
+        <AttributeName>公開設定</AttributeName>
+        <InputCheckbox
+          type="checkbox"
+          checked={attrs.showPublic}
+          onChange={e => setAttrs({ ...attrs, showPublic: e.target.checked })}
+        />
+        <Desc>
+          {attrs.showPublic
+            ? "チェックを外すと作品は非公開になります。"
+            : "チェックすると作品は公開されます。"}
+        </Desc>
+      </EditAttributeElement>
+      <EditAttributeElement>
         <AttributeName>Title</AttributeName>
         <InputField
           type="text"
@@ -108,6 +121,20 @@ const AttributeName = styled.div`
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 5px;
+`;
+
+const InputCheckbox = styled.input`
+  width: 20px;
+  height: 20px;
+  margin: 5px 0 0 0;
+`;
+
+const Desc = styled.p`
+  display: inline-block;
+  vertical-align: top;
+  width: calc(100% - 20px - 20px);
+  margin: 5px 0 0 20px;
+  font-size: 11px;
 `;
 
 const InputField = styled.input`

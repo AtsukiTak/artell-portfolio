@@ -88,9 +88,9 @@ export function getArtistList(): ThunkAction<
     const artists = await new ArtistRepository(firebase.app()).queryList();
     const list = await Promise.all(
       artists.map(async artist => {
-        const arts = await new ArtRepository(firebase.app()).queryListByArtist(
-          artist
-        );
+        const arts = await new ArtRepository(
+          firebase.app()
+        ).queryPublicListByArtist(artist);
         return {
           artist,
           arts
@@ -110,9 +110,9 @@ export function getArtistByName(
     if (artist === null) {
       dispatch(failureGetArtist("Not Found"));
     } else {
-      const arts = await new ArtRepository(firebase.app()).queryListByArtist(
-        artist
-      );
+      const arts = await new ArtRepository(
+        firebase.app()
+      ).queryPublicListByArtist(artist);
       dispatch(successGetArtist(artist, arts));
     }
   };

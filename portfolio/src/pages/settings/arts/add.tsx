@@ -29,7 +29,8 @@ const AddArtPage: FC<UserProps> = ({ user }) => {
     heightMM: 0,
     description: "",
     materials: "",
-    priceYen: 0
+    priceYen: 0,
+    showPublic: true
   });
   const dispatch = useDispatch();
 

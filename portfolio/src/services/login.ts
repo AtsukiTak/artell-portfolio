@@ -76,9 +76,9 @@ export function startObserving(): ThunkAction<void, State, null, Action> {
           );
         }
 
-        const arts = await new ArtRepository(firebase.app()).queryListByArtist(
-          artist
-        );
+        const arts = await new ArtRepository(
+          firebase.app()
+        ).queryAllListByArtist(artist);
         dispatch(setUser(artist, arts));
       } else {
         dispatch(clearUser());
