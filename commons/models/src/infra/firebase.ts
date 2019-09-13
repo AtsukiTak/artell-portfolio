@@ -79,7 +79,20 @@ export class Firestore {
     return doc.id;
   }
 
-  async queryArtDocListByArtist(
+  async queryPublicArtDocListByArtist(
+    artistUid: string
+  ): Promise<{ id: string; doc: ArtDocument }[]> {
+    const collection = await this.firestore()
+      .collection(`artists/${artistUid}/arts`)
+      .where("showPublic", "==", true)
+      .get();
+    return collection.docs.map(doc => ({
+      id: doc.id,
+      doc: ArtDocumentDecoder.runWithException(doc.data())
+    }));
+  }
+
+  async queryAllArtDocListByArtist(
     artistUid: string
   ): Promise<{ id: string; doc: ArtDocument }[]> {
     const collection = await this.firestore()
@@ -151,6 +164,7 @@ export interface ArtDocument {
   description: string;
   materials: string;
   priceYen: number;
+  showPublic: boolean;
 }
 
 const ArtDocumentDecoder: D.Decoder<ArtDocument> = D.object({
@@ -159,7 +173,8 @@ const ArtDocumentDecoder: D.Decoder<ArtDocument> = D.object({
   heightMM: D.number(),
   description: D.string(),
   materials: D.string(),
-  priceYen: D.number()
+  priceYen: D.number(),
+  showPublic: D.boolean()
 });
 
 export class Storage {

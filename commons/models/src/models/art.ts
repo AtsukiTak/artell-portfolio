@@ -47,8 +47,21 @@ export class ArtRepository {
    * QUERY
    * =============
    */
-  async queryListByArtist(artist: Artist): Promise<Art[]> {
-    const artList = await this.firestore.queryArtDocListByArtist(artist.uid);
+  async queryPublicListByArtist(artist: Artist): Promise<Art[]> {
+    const artList = await this.firestore.queryPublicArtDocListByArtist(
+      artist.uid
+    );
+    return await Promise.all(
+      artList.map(async ({ id, doc }) => {
+        const url = await this.storage.queryArtThumbnailUrl(artist.uid, id);
+        const thumbnail = await DownloadImage.download(url);
+        return new Art(id, doc, thumbnail);
+      })
+    );
+  }
+
+  async queryAllListByArtist(artist: Artist): Promise<Art[]> {
+    const artList = await this.firestore.queryAllArtDocListByArtist(artist.uid);
     return await Promise.all(
       artList.map(async ({ id, doc }) => {
         const url = await this.storage.queryArtThumbnailUrl(artist.uid, id);
