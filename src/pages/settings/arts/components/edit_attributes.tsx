@@ -80,7 +80,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
             })
           }
         />
-        <Desc>作品を販売したい場合はチェックしてください。</Desc>
+        <Desc>作品を販売する場合はチェックしてください。</Desc>
       </EditAttributeElement>
       {attrs.salesPriceYen ? (
         <SubEditAttributeElement>
@@ -95,7 +95,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
         </SubEditAttributeElement>
       ) : null}
       <EditAttributeElement>
-        <AttributeName>作品のレンタルを行う</AttributeName>
+        <AttributeName>作品のレンタルを可能にする</AttributeName>
         <InputCheckbox
           type="checkbox"
           checked={attrs.rentalPriceYen !== undefined}
@@ -106,7 +106,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
             })
           }
         />
-        <Desc>作品のレンタルを行いたい場合はチェックしてください。</Desc>
+        <Desc>作品のレンタルを可能にする場合はチェックしてください。</Desc>
       </EditAttributeElement>
     </Container>
   );
