@@ -11,4 +11,4 @@ https://portfolio.artell.life
 
 ### Build & Deploy
 
-`yarn run build && firebase deploy`
+`firebase deploy`
