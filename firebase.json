@@ -1,7 +1,7 @@
 {
   "hosting": [{
     "target": "portfolio",
-    "public": "portfolio/build",
+    "public": "build",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -14,22 +14,8 @@
       }
     ],
     "predeploy": [
-      "cd portfolio && yarn build"
+      "yarn build"
     ]
-  },
-  {
-    "target": "shop",
-    "public": "shop/build",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  }]
+  }
+  ]
 }
