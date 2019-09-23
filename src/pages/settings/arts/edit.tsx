@@ -15,7 +15,7 @@ import Header from "components/header";
 import { PrimaryButton, DangerButton } from "components/button";
 import SelectImageComponent from "components/select_image";
 
-import EditAttributesComponent from "./edit/components/edit_attributes";
+import EditAttributesComponent from "./components/edit_attributes";
 
 interface Props {
   artId: string;

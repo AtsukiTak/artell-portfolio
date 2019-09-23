@@ -20,8 +20,8 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
         />
         <Desc>
           {attrs.showPublic
-            ? "チェックを外すと作品は非公開になります。"
-            : "チェックすると作品は公開されます。"}
+            ? "チェックを外すと「追加」ボタンを押しても作品は公開されません。"
+            : "チェックをすると「追加」ボタンを押したとき作品が公開されます。"}
         </Desc>
       </EditAttributeElement>
       <EditAttributeElement>
@@ -38,10 +38,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
           type="tel"
           value={attrs.widthMM || ""}
           onChange={e =>
-            setAttrs({
-              ...attrs,
-              widthMM: validateNum(e.target.value)
-            })
+            setAttrs({ ...attrs, widthMM: validateNum(e.target.value) })
           }
         />
       </EditAttributeElement>
@@ -51,10 +48,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
           type="tel"
           value={attrs.heightMM || ""}
           onChange={e =>
-            setAttrs({
-              ...attrs,
-              heightMM: validateNum(e.target.value)
-            })
+            setAttrs({ ...attrs, heightMM: validateNum(e.target.value) })
           }
         />
       </EditAttributeElement>
@@ -75,17 +69,44 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
         />
       </EditAttributeElement>
       <EditAttributeElement>
-        <AttributeName>Price (Yen)</AttributeName>
-        <InputField
-          type="tel"
-          value={attrs.priceYen || ""}
+        <AttributeName>作品を販売する</AttributeName>
+        <InputCheckbox
+          type="checkbox"
+          checked={attrs.salesPriceYen !== undefined}
           onChange={e =>
             setAttrs({
               ...attrs,
-              priceYen: validateNum(e.target.value)
+              salesPriceYen: e.target.checked ? 29800 : undefined
             })
           }
         />
+        <Desc>作品を販売したい場合はチェックしてください。</Desc>
+      </EditAttributeElement>
+      {attrs.salesPriceYen ? (
+        <SubEditAttributeElement>
+          <AttributeName>販売価格 (Yen)</AttributeName>
+          <InputField
+            type="tel"
+            value={attrs.salesPriceYen}
+            onChange={e =>
+              setAttrs({ ...attrs, salesPriceYen: validateNum(e.target.value) })
+            }
+          />
+        </SubEditAttributeElement>
+      ) : null}
+      <EditAttributeElement>
+        <AttributeName>作品のレンタルを行う</AttributeName>
+        <InputCheckbox
+          type="checkbox"
+          checked={attrs.rentalPriceYen !== undefined}
+          onChange={e =>
+            setAttrs({
+              ...attrs,
+              rentalPriceYen: e.target.checked ? 4900 : undefined
+            })
+          }
+        />
+        <Desc>作品のレンタルを行いたい場合はチェックしてください。</Desc>
       </EditAttributeElement>
     </Container>
   );
@@ -101,8 +122,6 @@ function validateNum(s: string): number {
   }
 }
 
-export default EditAttributesComponent;
-
 const Container = styled.div`
   width: 100%;
   padding: 30px 0;
@@ -110,11 +129,17 @@ const Container = styled.div`
 
 const EditAttributeElement = styled.div`
   width: 100%;
-  margin-top: 25px;
+  margin-top: 35px;
 
   &:first-of-type {
     margin-top: 0px;
   }
+`;
+
+const SubEditAttributeElement = styled.div`
+  width: 100%;
+  margin-top: 15px;
+  padding-left: 25px;
 `;
 
 const AttributeName = styled.div`
@@ -162,3 +187,5 @@ const TextField = styled.textarea`
   font-size: 14px;
   line-height: 20px;
 `;
+
+export default EditAttributesComponent;

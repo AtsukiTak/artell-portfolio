@@ -163,8 +163,9 @@ export interface ArtDocument {
   heightMM: number;
   description: string;
   materials: string;
-  priceYen: number;
   showPublic: boolean;
+  salesPriceYen?: number;
+  rentalPriceYen?: number;
 }
 
 const ArtDocumentDecoder: D.Decoder<ArtDocument> = D.object({
@@ -173,8 +174,9 @@ const ArtDocumentDecoder: D.Decoder<ArtDocument> = D.object({
   heightMM: D.number(),
   description: D.string(),
   materials: D.string(),
-  priceYen: D.number(),
-  showPublic: D.boolean()
+  showPublic: D.boolean(),
+  salesPriceYen: D.optional(D.number()),
+  rentalPriceYen: D.optional(D.number())
 });
 
 export class Storage {

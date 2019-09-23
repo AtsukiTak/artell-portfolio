@@ -13,7 +13,7 @@ import Header from "components/header";
 import { PrimaryButton } from "components/button";
 import SelectImageComponent from "components/select_image";
 
-import AttributesComponent from "./add/components/attributes";
+import AttributesComponent from "./components/edit_attributes";
 
 const AddArtPage: FC<UserProps> = ({ user }) => {
   const { history } = useRouter();
@@ -24,8 +24,9 @@ const AddArtPage: FC<UserProps> = ({ user }) => {
     heightMM: 0,
     description: "",
     materials: "",
-    priceYen: 0,
-    showPublic: true
+    showPublic: true,
+    salesPriceYen: 29800,
+    rentalPriceYen: 4980
   });
   const dispatch = useDispatch();
 

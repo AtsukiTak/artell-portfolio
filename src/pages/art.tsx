@@ -43,19 +43,21 @@ const ArtPage: FC<ArtPageProps> = ({ artistName, artId }) => {
             <Info>{art.attrs.title}</Info>
             <Info>{art.attrs.materials}</Info>
             <Info>{`${art.attrs.widthMM} x ${art.attrs.heightMM} mm`}</Info>
-            {buying ? (
-              <BuyButton>Loading...</BuyButton>
-            ) : (
-              <BuyButton
-                onClick={() => {
-                  setBuying(true);
-                  buyArt(artist.uid, art.id);
-                }}
-              >
-                購入する &nbsp; / &nbsp; &yen;{" "}
-                {toPriceDisplay(art.attrs.priceYen)}
-              </BuyButton>
-            )}
+            {art.attrs.salesPriceYen ? (
+              buying ? (
+                <BuyButton>Loading...</BuyButton>
+              ) : (
+                <BuyButton
+                  onClick={() => {
+                    setBuying(true);
+                    buyArt(artist.uid, art.id);
+                  }}
+                >
+                  購入する &nbsp; / &nbsp; &yen;{" "}
+                  {toPriceDisplay(art.attrs.salesPriceYen)}
+                </BuyButton>
+              )
+            ) : null}
           </CaptionContainer>
         </>
       ) : null}
