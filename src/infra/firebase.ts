@@ -125,9 +125,17 @@ export class Firestore {
   }
 
   async updateArtDoc(artistUid: string, artId: string, doc: ArtDocument) {
+    const updateData: { [key: string]: any } = {};
+    Object.entries(doc).forEach(([key, val]) => {
+      if (val === undefined) {
+        updateData[key] = firebase.firestore.FieldValue.delete();
+      } else {
+        updateData[key] = val;
+      }
+    });
     await this.firestore()
       .doc(`artists/${artistUid}/arts/${artId}`)
-      .set(doc);
+      .update(updateData);
   }
 
   async deleteArtDoc(artistUid: string, artId: string) {

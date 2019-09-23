@@ -82,7 +82,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
         />
         <Desc>作品を販売する場合はチェックしてください。</Desc>
       </EditAttributeElement>
-      {attrs.salesPriceYen ? (
+      {attrs.salesPriceYen !== undefined ? (
         <SubEditAttributeElement>
           <AttributeName>販売価格 (Yen)</AttributeName>
           <InputField
