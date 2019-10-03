@@ -40,7 +40,7 @@ export class ArtistRepository {
       facebook: "",
       instagram: ""
     };
-    await this.firestore.upsertArtistDoc(uid, doc);
+    await this.firestore.addArtistDoc(uid, doc);
     return new Artist(uid, doc, null);
   }
 
@@ -92,7 +92,7 @@ export class ArtistRepository {
    * ================
    */
   async updateAttrs(artist: Artist) {
-    await this.firestore.upsertArtistDoc(artist.uid, artist.attrs);
+    await this.firestore.updateArtistDoc(artist.uid, artist.attrs);
   }
 
   async updateThumbnail(artist: Artist) {

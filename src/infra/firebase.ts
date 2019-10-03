@@ -15,10 +15,18 @@ export class Firestore {
    * Artist
    * ==========
    */
-  async upsertArtistDoc(artistUid: string, doc: ArtistDocument) {
+  async addArtistDoc(artistUid: string, data: ArtistDocument) {
+    const formatedData = Firestore.formatAddData(data);
     await this.firestore()
       .doc(`artists/${artistUid}`)
-      .set(doc);
+      .set(formatedData);
+  }
+
+  async updateArtistDoc(artistUid: string, data: ArtistDocument) {
+    const formatedData = Firestore.formatUpdateData(data);
+    await this.firestore()
+      .doc(`artists/${artistUid}`)
+      .set(formatedData);
   }
 
   async queryArtistDocList(): Promise<{ id: string; doc: ArtistDocument }[]> {
@@ -73,9 +81,10 @@ export class Firestore {
    * ==========
    */
   async addArtDoc(artistUid: string, data: ArtDocument): Promise<string> {
+    const formatedData = Firestore.formatAddData(data);
     const doc = await this.firestore()
       .collection(`artists/${artistUid}/arts`)
-      .add(data);
+      .add(formatedData);
     return doc.id;
   }
 
@@ -125,14 +134,7 @@ export class Firestore {
   }
 
   async updateArtDoc(artistUid: string, artId: string, doc: ArtDocument) {
-    const updateData: { [key: string]: any } = {};
-    Object.entries(doc).forEach(([key, val]) => {
-      if (val === undefined) {
-        updateData[key] = firebase.firestore.FieldValue.delete();
-      } else {
-        updateData[key] = val;
-      }
-    });
+    const updateData = Firestore.formatUpdateData(doc);
     await this.firestore()
       .doc(`artists/${artistUid}/arts/${artId}`)
       .update(updateData);
@@ -142,6 +144,28 @@ export class Firestore {
     await this.firestore()
       .doc(`artists/${artistUid}/arts/${artId}`)
       .delete();
+  }
+
+  static formatAddData<T extends {}>(data: T): { [key: string]: any } {
+    const formated: { [key: string]: any } = {};
+    Object.entries(data).forEach(([key, val]) => {
+      if (val !== undefined) {
+        formated[key] = val;
+      }
+    });
+    return formated;
+  }
+
+  static formatUpdateData<T extends {}>(data: T): { [key: string]: any } {
+    const formated: { [key: string]: any } = {};
+    Object.entries(data).forEach(([key, val]) => {
+      if (val === undefined) {
+        formated[key] = firebase.firestore.FieldValue.delete();
+      } else {
+        formated[key] = val;
+      }
+    });
+    return formated;
   }
 }
 
