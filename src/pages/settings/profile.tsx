@@ -54,7 +54,7 @@ const ProfileSettingPage: React.FC<UserProps> = ({ user }) => {
       <Header title="Settings" />
       <SettingTab selected="tab1" />
       <Container>
-        <LinkToArtistPage to={`/${artist.attrs.name}`}>
+        <LinkToArtistPage to={`/${artist.urlName()}`}>
           自分の作家ページへ →
         </LinkToArtistPage>
         <SelectImageComponent

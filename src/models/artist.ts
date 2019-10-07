@@ -12,6 +12,20 @@ export class Artist {
     readonly attrs: ArtistAttributes,
     readonly thumbnail: Image | null
   ) {}
+
+  urlName(): string {
+    return Artist.encodeArtistName(this.attrs.name);
+  }
+
+  static encodeArtistName(name: string): string {
+    const regex = /\//gi;
+    return name.replace(regex, "%2F");
+  }
+
+  static decodeArtistUrlName(url: string): string {
+    const regex = /%2F/gi;
+    return url.replace(regex, "/");
+  }
 }
 
 export type ArtistAttributes = ArtistDocument;

@@ -1,22 +1,25 @@
-import React, {useEffect} from 'react';
-import styled from 'styled-components';
-import {useSelector, useDispatch} from 'react-redux';
+import React, { useEffect } from "react";
+import styled from "styled-components";
+import { useSelector, useDispatch } from "react-redux";
 
-import {RootState} from 'services/index';
-import {getArtistByName} from 'services/artist';
-import Header from '../components/header';
-import {pc, MinPcWidth} from 'components/responsive';
+import { Artist } from "models/artist";
+import { RootState } from "services/index";
+import { getArtistByName } from "services/artist";
+import Header from "../components/header";
+import { pc, MinPcWidth } from "components/responsive";
 
-import ProfileComponent from './artist/components/profile';
-import ArtsComponent from './artist/components/arts';
+import ProfileComponent from "./artist/components/profile";
+import ArtsComponent from "./artist/components/arts";
 
 interface ArtistPageProps {
-  artistName: string;
+  rawArtistName: string;
 }
 
-const ArtistPage: React.FC<ArtistPageProps> = ({artistName}) => {
+const ArtistPage: React.FC<ArtistPageProps> = ({ rawArtistName }) => {
+  const artistName = Artist.decodeArtistUrlName(rawArtistName);
+
   const artistAndArts = useSelector((state: RootState) =>
-    state.artist.list.find(({artist}) => artist.attrs.name === artistName),
+    state.artist.list.find(({ artist }) => artist.attrs.name === artistName)
   );
   const dispatch = useDispatch();
 
