@@ -76,7 +76,7 @@ const ArtEditPage: React.FC<{
     <>
       <Header title="Settings" />
       <Container>
-        <LinkToArtPage to={`/${user.artist.attrs.name}/${art.id}`}>
+        <LinkToArtPage to={`/${user.artist.urlName()}/${art.id}`}>
           作品ページへ →
         </LinkToArtPage>
         <SelectImageComponent image={thumbnail} setImage={setThumbnail} />

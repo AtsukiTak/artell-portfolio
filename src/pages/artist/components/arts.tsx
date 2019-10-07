@@ -16,7 +16,7 @@ const ArtsComponent: FC<{ artist: Artist; arts: Art[] }> = ({
     <Container>
       {arts.map(art => (
         <ArtComponent key={art.attrs.title}>
-          <Link to={`/${artist.attrs.name}/${art.id}/`}>
+          <Link to={`/${artist.urlName()}/${art.id}/`}>
             <StyledSumbnail src={art.thumbnail.getUrl()} />
           </Link>
           <Title>{art.attrs.title}</Title>

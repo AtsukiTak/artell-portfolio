@@ -3,17 +3,19 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { buyArt } from "models/artist";
+import { Artist, buyArt } from "models/artist";
 import { RootState } from "services/index";
 import { getArtistByName } from "services/artist";
 import { pc } from "components/responsive";
 
 interface ArtPageProps {
-  artistName: string;
+  artistUrlName: string;
   artId: string;
 }
 
-const ArtPage: FC<ArtPageProps> = ({ artistName, artId }) => {
+const ArtPage: FC<ArtPageProps> = ({ artistUrlName, artId }) => {
+  const artistName = Artist.decodeArtistUrlName(artistUrlName);
+
   const [buying, setBuying] = useState(false);
 
   const artistAndArts = useSelector((state: RootState) =>
@@ -34,7 +36,7 @@ const ArtPage: FC<ArtPageProps> = ({ artistName, artId }) => {
 
   return (
     <>
-      <CloseButton to={`/${artistName}/`} />
+      <CloseButton to={`/${artistUrlName}/`} />
       {art && artist ? (
         <>
           <ArtContainer src={art.thumbnail.getUrl()} />

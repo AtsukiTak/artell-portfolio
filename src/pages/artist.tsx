@@ -12,11 +12,11 @@ import ProfileComponent from "./artist/components/profile";
 import ArtsComponent from "./artist/components/arts";
 
 interface ArtistPageProps {
-  rawArtistName: string;
+  artistUrlName: string;
 }
 
-const ArtistPage: React.FC<ArtistPageProps> = ({ rawArtistName }) => {
-  const artistName = Artist.decodeArtistUrlName(rawArtistName);
+const ArtistPage: React.FC<ArtistPageProps> = ({ artistUrlName }) => {
+  const artistName = Artist.decodeArtistUrlName(artistUrlName);
 
   const artistAndArts = useSelector((state: RootState) =>
     state.artist.list.find(({ artist }) => artist.attrs.name === artistName)

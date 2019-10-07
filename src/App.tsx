@@ -48,15 +48,15 @@ const App: React.FC<{ store: Store }> = ({ store }) => {
           <Route path="/_thanks" exact>
             <ThanksPage />
           </Route>
-          <Route path="/:rawArtistName" exact>
+          <Route path="/:artistUrlName" exact>
             {({ match }) => (
-              <ArtistPage rawArtistName={match.params.rawArtistName} />
+              <ArtistPage artistUrlName={match.params.artistUrlName} />
             )}
           </Route>
-          <Route path="/:artistName/:artId" exact>
+          <Route path="/:artistUrlName/:artId" exact>
             {({ match }) => (
               <ArtPage
-                artistName={match.params.artistName}
+                artistUrlName={match.params.artistUrlName}
                 artId={match.params.artId}
               />
             )}
