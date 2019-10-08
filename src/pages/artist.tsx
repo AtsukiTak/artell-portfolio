@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
+import Fade from "@material-ui/core/Fade";
+import Container from "@material-ui/core/Container";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { Artist } from "models/artist";
 import { RootState } from "services/index";
 import { getArtistByName } from "services/artist";
 import Header from "../components/header";
-import { pc, MinPcWidth } from "components/responsive";
+import { pc } from "components/responsive";
 
 import ProfileComponent from "./artist/components/profile";
 import ArtsComponent from "./artist/components/arts";
@@ -35,28 +38,22 @@ const ArtistPage: React.FC<ArtistPageProps> = ({ artistUrlName }) => {
   return (
     <>
       <Header title={artistName} />
-      <Contents>
-        {artist && arts ? (
-          <>
+      {artist && arts ? (
+        <Fade in timeout={2000}>
+          <Container>
             <ProfileComponent artist={artist} />
             <HR />
             <ArtsComponent artist={artist} arts={arts} />
-          </>
-        ) : null}
-      </Contents>
+          </Container>
+        </Fade>
+      ) : (
+        <ProgressContainer>
+          <CircularProgress size={50} thickness={2} />
+        </ProgressContainer>
+      )}
     </>
   );
 };
-
-const Contents = styled.div`
-  width: 80%;
-  max-width: ${MinPcWidth}px;
-  margin: 50px auto;
-
-  ${pc(`
-    margin-top: 90px;
-  `)}
-`;
 
 const HR = styled.hr`
   width: 100%;
@@ -66,6 +63,11 @@ const HR = styled.hr`
   ${pc(`
     margin-top: 90px;
   `)}
+`;
+
+const ProgressContainer = styled.div`
+  width: 50px;
+  margin: 40vh auto;
 `;
 
 export default ArtistPage;

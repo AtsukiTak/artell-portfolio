@@ -55,10 +55,12 @@ export default ProfileComponent;
 
 const Container = styled.div`
   width: 100%;
+  margin-top: 50px;
 
   ${pc(`
     width: 800px;
     margin: 0 auto;
+    margin-top: 90px;
   `)}
 `;
 

@@ -2,6 +2,10 @@ import React, { FC, useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import Fade from "@material-ui/core/Fade";
+import Grid from "@material-ui/core/Grid";
+import Hidden from "@material-ui/core/Hidden";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { Artist, buyArt } from "models/artist";
 import { RootState } from "services/index";
@@ -34,37 +38,52 @@ const ArtPage: FC<ArtPageProps> = ({ artistUrlName, artId }) => {
     ? artistAndArts.arts.find(art => art.id === artId)
     : undefined;
 
-  return (
-    <>
-      <CloseButton to={`/${artistUrlName}/`} />
-      {art && artist ? (
-        <>
-          <ArtContainer src={art.thumbnail.getUrl()} />
-          <CaptionContainer>
-            <ArtistName>{artist.attrs.name}</ArtistName>
-            <Info>{art.attrs.title}</Info>
-            <Info>{art.attrs.materials}</Info>
-            <Info>{`${art.attrs.widthMM} x ${art.attrs.heightMM} mm`}</Info>
-            {art.attrs.salesPriceYen ? (
-              buying ? (
-                <BuyButton>Loading...</BuyButton>
-              ) : (
-                <BuyButton
-                  onClick={() => {
-                    setBuying(true);
-                    buyArt(artist.uid, art.id);
-                  }}
-                >
-                  購入する &nbsp; / &nbsp; &yen;{" "}
-                  {toPriceDisplay(art.attrs.salesPriceYen)}
-                </BuyButton>
-              )
-            ) : null}
-          </CaptionContainer>
-        </>
-      ) : null}
-    </>
-  );
+  if (art && artist) {
+    return (
+      <Fade in timeout={2000}>
+        <Grid container alignItems="flex-end">
+          <Hidden only={["lg", "xl"]}>
+            <MobileCloseButton to={`/${artistUrlName}/`} />
+          </Hidden>
+          <Hidden only={["xs", "sm", "md"]}>
+            <PcCloseButton to={`/${artistUrlName}/`} />
+          </Hidden>
+          <Grid item xs={12} md={9}>
+            <ArtContainer src={art.thumbnail.getUrl()} />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <CaptionContainer>
+              <ArtistName>{artist.attrs.name}</ArtistName>
+              <Info>{art.attrs.title}</Info>
+              <Info>{art.attrs.materials}</Info>
+              <Info>{`${art.attrs.widthMM} x ${art.attrs.heightMM} mm`}</Info>
+              {art.attrs.salesPriceYen ? (
+                buying ? (
+                  <BuyButton>Loading...</BuyButton>
+                ) : (
+                  <BuyButton
+                    onClick={() => {
+                      setBuying(true);
+                      buyArt(artist.uid, art.id);
+                    }}
+                  >
+                    購入する &nbsp; / &nbsp; &yen;{" "}
+                    {toPriceDisplay(art.attrs.salesPriceYen)}
+                  </BuyButton>
+                )
+              ) : null}
+            </CaptionContainer>
+          </Grid>
+        </Grid>
+      </Fade>
+    );
+  } else {
+    return (
+      <ProgressContainer>
+        <CircularProgress size={50} thickness={2} />
+      </ProgressContainer>
+    );
+  }
 };
 
 export default ArtPage;
@@ -75,15 +94,8 @@ function toPriceDisplay(priceYen: number): string {
 
 const CloseButton = styled(Link)`
   position: absolute;
-  right: 24px;
-  top: 24px;
   width: 40px;
   height: 40px;
-
-  @media (min-width: 700px) {
-    right: 60px;
-    top: calc(100vh - 40px - 40px);
-  }
 
   &:before,
   &:after {
@@ -102,18 +114,26 @@ const CloseButton = styled(Link)`
   }
 `;
 
+const PcCloseButton = styled(CloseButton)`
+  right: 60px;
+  top: calc(100vh - 40px - 40px);
+`;
+
+const MobileCloseButton = styled(CloseButton)`
+  right: 24px;
+  top: 24px;
+`;
+
 const ArtContainer = styled("div")<{ src: string }>`
-  width: 90vw;
-  height: 80vh;
-  margin: 0 auto;
+  width: 90%;
+  height: 150vw;
+  margin: 20px auto;
   background-image: url(${({ src }) => src});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 
   ${pc(`
-    display: inline-block;
-    width: calc(100vw - 385px);
     height: 94vh;
     margin: 0;
     margin-top: 3vh;
@@ -129,11 +149,8 @@ const CaptionContainer = styled.div`
     border-top: none;
     padding: 0px;
 
-    display: inline-block;
-    position: relative;
     width: 225px;
-    margin-left: 60px;
-    bottom: 150px;
+    margin-bottom: 100px;
   `)}
 `;
 
@@ -177,4 +194,9 @@ const BuyButton = styled.button`
     margin: 0;
     margin-top: 35px;
   `)}
+`;
+
+const ProgressContainer = styled.div`
+  width: 50px;
+  margin: 40vh auto;
 `;
