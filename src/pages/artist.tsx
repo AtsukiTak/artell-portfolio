@@ -21,19 +21,19 @@ interface ArtistPageProps {
 const ArtistPage: React.FC<ArtistPageProps> = ({ artistUrlName }) => {
   const artistName = Artist.decodeArtistUrlName(artistUrlName);
 
-  const artistAndArts = useSelector((state: RootState) =>
-    state.artist.list.find(({ artist }) => artist.attrs.name === artistName)
+  const artistArts = useSelector((state: RootState) =>
+    state.artist.map.get(artistName)
   );
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!artistAndArts) {
+    if (artistArts === undefined) {
       dispatch(getArtistByName(artistName));
     }
-  }, [artistName, artistAndArts, dispatch]);
+  }, [artistName, artistArts, dispatch]);
 
-  const artist = artistAndArts ? artistAndArts.artist : undefined;
-  const arts = artistAndArts ? artistAndArts.arts : undefined;
+  const artist = artistArts ? artistArts.artist : undefined;
+  const arts = artistArts ? artistArts.arts : undefined;
 
   return (
     <>

@@ -22,20 +22,20 @@ const ArtPage: FC<ArtPageProps> = ({ artistUrlName, artId }) => {
 
   const [buying, setBuying] = useState(false);
 
-  const artistAndArts = useSelector((state: RootState) =>
-    state.artist.list.find(({ artist }) => artist.attrs.name === artistName)
+  const artistArts = useSelector((state: RootState) =>
+    state.artist.map.get(artistName)
   );
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!artistAndArts) {
+    if (artistArts === undefined) {
       dispatch(getArtistByName(artistName));
     }
-  }, [artistName, artistAndArts, dispatch]);
+  }, [artistName, artistArts, dispatch]);
 
-  const artist = artistAndArts ? artistAndArts.artist : undefined;
-  const art = artistAndArts
-    ? artistAndArts.arts.find(art => art.id === artId)
+  const artist = artistArts ? artistArts.artist : undefined;
+  const art = artistArts
+    ? artistArts.arts.find(art => art.id === artId)
     : undefined;
 
   if (art && artist) {
