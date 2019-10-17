@@ -2,6 +2,7 @@ import React from "react";
 import { createGlobalStyle } from "styled-components";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router, Switch, Redirect } from "react-router-dom";
+import { StylesProvider } from "@material-ui/core/styles";
 
 import { Store } from "services/index";
 import { Route } from "components/router";
@@ -26,45 +27,49 @@ const GlobalStyle = createGlobalStyle`
 
 const App: React.FC<{ store: Store }> = ({ store }) => {
   return (
-    <Provider store={store}>
-      <GlobalStyle />
-      <Router>
-        <Switch>
-          <Route path="/settings/profile" exact>
-            <SettingProfilePage />
-          </Route>
-          <Route path="/settings/arts" exact>
-            <SettingArtsPage />
-          </Route>
-          <Route path="/settings/arts/add" exact>
-            <SettingArtsAddPage />
-          </Route>
-          <Route path="/settings/arts/edit/:artId" exact>
-            {({ match }) => <SettingArtsEditPage artId={match.params.artId} />}
-          </Route>
-          <Route path="/signin" exact>
-            <SigninPage />
-          </Route>
-          <Route path="/_thanks" exact>
-            <ThanksPage />
-          </Route>
-          <Route path="/:artistUrlName" exact>
-            {({ match }) => (
-              <ArtistPage artistUrlName={match.params.artistUrlName} />
-            )}
-          </Route>
-          <Route path="/:artistUrlName/:artId" exact>
-            {({ match }) => (
-              <ArtPage
-                artistUrlName={match.params.artistUrlName}
-                artId={match.params.artId}
-              />
-            )}
-          </Route>
-          <Redirect to="/signin" />
-        </Switch>
-      </Router>
-    </Provider>
+    <StylesProvider injectFirst>
+      <Provider store={store}>
+        <GlobalStyle />
+        <Router>
+          <Switch>
+            <Route path="/settings/profile" exact>
+              <SettingProfilePage />
+            </Route>
+            <Route path="/settings/arts" exact>
+              <SettingArtsPage />
+            </Route>
+            <Route path="/settings/arts/add" exact>
+              <SettingArtsAddPage />
+            </Route>
+            <Route path="/settings/arts/edit/:artId" exact>
+              {({ match }) => (
+                <SettingArtsEditPage artId={match.params.artId} />
+              )}
+            </Route>
+            <Route path="/signin" exact>
+              <SigninPage />
+            </Route>
+            <Route path="/_thanks" exact>
+              <ThanksPage />
+            </Route>
+            <Route path="/:artistUrlName" exact>
+              {({ match }) => (
+                <ArtistPage artistUrlName={match.params.artistUrlName} />
+              )}
+            </Route>
+            <Route path="/:artistUrlName/:artId" exact>
+              {({ match }) => (
+                <ArtPage
+                  artistUrlName={match.params.artistUrlName}
+                  artId={match.params.artId}
+                />
+              )}
+            </Route>
+            <Redirect to="/signin" />
+          </Switch>
+        </Router>
+      </Provider>
+    </StylesProvider>
   );
 };
 

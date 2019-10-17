@@ -6,6 +6,7 @@ import Fade from "@material-ui/core/Fade";
 import Grid from "@material-ui/core/Grid";
 import Hidden from "@material-ui/core/Hidden";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Typography from "@material-ui/core/Typography";
 
 import { Artist, buyArt } from "models/artist";
 import { RootState } from "services/index";
@@ -33,56 +34,69 @@ const ArtPage: FC<ArtPageProps> = ({ artistUrlName, artId }) => {
     }
   }, [artistName, artistArts, dispatch]);
 
-  const artist = artistArts ? artistArts.artist : undefined;
-  const art = artistArts
-    ? artistArts.arts.find(art => art.id === artId)
-    : undefined;
-
-  if (art && artist) {
-    return (
-      <Fade in timeout={2000}>
-        <Grid container alignItems="flex-end">
-          <Hidden only={["lg", "xl"]}>
-            <MobileCloseButton to={`/${artistUrlName}/`} />
-          </Hidden>
-          <Hidden only={["xs", "sm", "md"]}>
-            <PcCloseButton to={`/${artistUrlName}/`} />
-          </Hidden>
-          <Grid item xs={12} md={9}>
-            <ArtContainer src={art.thumbnail.getUrl()} />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <CaptionContainer>
-              <ArtistName>{artist.attrs.name}</ArtistName>
-              <Info>{art.attrs.title}</Info>
-              <Info>{art.attrs.materials}</Info>
-              <Info>{`${art.attrs.widthMM} x ${art.attrs.heightMM} mm`}</Info>
-              {art.attrs.salesPriceYen ? (
-                buying ? (
-                  <BuyButton>Loading...</BuyButton>
-                ) : (
-                  <BuyButton
-                    onClick={() => {
-                      setBuying(true);
-                      buyArt(artist.uid, art.id);
-                    }}
-                  >
-                    購入する &nbsp; / &nbsp; &yen;{" "}
-                    {toPriceDisplay(art.attrs.salesPriceYen)}
-                  </BuyButton>
-                )
-              ) : null}
-            </CaptionContainer>
-          </Grid>
-        </Grid>
-      </Fade>
-    );
-  } else {
+  if (artistArts === undefined) {
+    // Loading page
     return (
       <ProgressContainer>
         <CircularProgress size={50} thickness={2} />
       </ProgressContainer>
     );
+  } else if (artistArts === null) {
+    return (
+      <NotFoundMessage variant="body2" align="center" color="textSecondary">
+        `作家「${artistName}」さんが見つかりませんでした。`
+      </NotFoundMessage>
+    );
+  } else {
+    const artist = artistArts.artist;
+    const art = artistArts.arts.find(art => art.id === artId);
+    if (!art) {
+      return (
+        <NotFoundMessage variant="body2" align="center" color="textSecondary">
+          指定の作品は存在しません。
+        </NotFoundMessage>
+      );
+    } else {
+      // 作品ページ
+      return (
+        <Fade in timeout={2000}>
+          <Grid container alignItems="flex-end">
+            <Hidden only={["lg", "xl"]}>
+              <MobileCloseButton to={`/${artistUrlName}/`} />
+            </Hidden>
+            <Hidden only={["xs", "sm", "md"]}>
+              <PcCloseButton to={`/${artistUrlName}/`} />
+            </Hidden>
+            <Grid item xs={12} md={9}>
+              <ArtContainer src={art.thumbnail.getUrl()} />
+            </Grid>
+            <Grid item xs={12} md={3}>
+              <CaptionContainer>
+                <ArtistName>{artist.attrs.name}</ArtistName>
+                <Info>{art.attrs.title}</Info>
+                <Info>{art.attrs.materials}</Info>
+                <Info>{`${art.attrs.widthMM} x ${art.attrs.heightMM} mm`}</Info>
+                {art.attrs.salesPriceYen ? (
+                  buying ? (
+                    <BuyButton>Loading...</BuyButton>
+                  ) : (
+                    <BuyButton
+                      onClick={() => {
+                        setBuying(true);
+                        buyArt(artist.uid, art.id);
+                      }}
+                    >
+                      購入する &nbsp; / &nbsp; &yen;{" "}
+                      {toPriceDisplay(art.attrs.salesPriceYen)}
+                    </BuyButton>
+                  )
+                ) : null}
+              </CaptionContainer>
+            </Grid>
+          </Grid>
+        </Fade>
+      );
+    }
   }
 };
 
@@ -199,4 +213,8 @@ const BuyButton = styled.button`
 const ProgressContainer = styled.div`
   width: 50px;
   margin: 40vh auto;
+`;
+
+const NotFoundMessage = styled(Typography)`
+  margin-top: 40vh;
 `;

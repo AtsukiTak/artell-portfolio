@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Fade from "@material-ui/core/Fade";
 import Container from "@material-ui/core/Container";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Typography from "@material-ui/core/Typography";
 
 import { Artist } from "models/artist";
 import { RootState } from "services/index";
@@ -32,13 +33,15 @@ const ArtistPage: React.FC<ArtistPageProps> = ({ artistUrlName }) => {
     }
   }, [artistName, artistArts, dispatch]);
 
-  const artist = artistArts ? artistArts.artist : undefined;
-  const arts = artistArts ? artistArts.arts : undefined;
-
-  return (
-    <>
-      <Header title={artistName} />
-      {artist && arts ? (
+  if (artistArts === undefined) {
+    return <ArtistLoadingPage artistName={artistName} />;
+  } else if (artistArts === null) {
+    return <ArtistNotFoundPage artistName={artistName} />;
+  } else {
+    const { artist, arts } = artistArts;
+    return (
+      <>
+        <Header title={artistName} />
         <Fade in timeout={2000}>
           <Container>
             <ProfileComponent artist={artist} />
@@ -46,14 +49,38 @@ const ArtistPage: React.FC<ArtistPageProps> = ({ artistUrlName }) => {
             <ArtsComponent artist={artist} arts={arts} />
           </Container>
         </Fade>
-      ) : (
-        <ProgressContainer>
-          <CircularProgress size={50} thickness={2} />
-        </ProgressContainer>
-      )}
-    </>
-  );
+      </>
+    );
+  }
 };
+
+const ArtistLoadingPage: React.FC<{ artistName: string }> = ({
+  artistName
+}) => (
+  <>
+    <Header title={artistName} />
+    <ProgressContainer>
+      <CircularProgress size={50} thickness={2} />
+    </ProgressContainer>
+  </>
+);
+
+const ArtistNotFoundPage: React.FC<{ artistName: string }> = ({
+  artistName
+}) => (
+  <>
+    <Header title={artistName} />
+    <NotFoundMessage
+      variant="body2"
+      align="center"
+      color="textSecondary"
+    >{`作家 「${artistName}」 さんが見つかりませんでした。`}</NotFoundMessage>
+  </>
+);
+
+const NotFoundMessage = styled(Typography)`
+  margin-top: 40vh;
+`;
 
 const HR = styled.hr`
   width: 100%;
