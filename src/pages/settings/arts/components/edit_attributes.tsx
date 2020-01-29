@@ -53,7 +53,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
         />
       </EditAttributeElement>
       <EditAttributeElement>
-        <AttributeName>Description</AttributeName>
+        <AttributeName>Statement</AttributeName>
         <TextField
           value={attrs.description}
           placeholder="制作の中で考えたことや制作動機を記入ください"
