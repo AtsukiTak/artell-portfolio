@@ -28,7 +28,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
         />
       </EditAttributeElement>
       <EditAttributeElement>
-        <AttributeName>Description</AttributeName>
+        <AttributeName>Profile</AttributeName>
         <TextField
           value={attrs.description}
           onChange={e => setAttrs({ ...attrs, description: e.target.value })}
