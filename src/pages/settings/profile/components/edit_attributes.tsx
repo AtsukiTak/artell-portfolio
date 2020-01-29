@@ -20,7 +20,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
         />
       </EditAttributeElement>
       <EditAttributeElement>
-        <AttributeName>Comment</AttributeName>
+        <AttributeName>Status Message</AttributeName>
         <InputField
           type="text"
           value={attrs.comment}
