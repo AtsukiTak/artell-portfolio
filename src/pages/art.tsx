@@ -76,6 +76,7 @@ const ArtPage: FC<ArtPageProps> = ({ artistUrlName, artId }) => {
                 <Info>{art.attrs.title}</Info>
                 <Info>{art.attrs.materials}</Info>
                 <Info>{`${art.attrs.widthMM} x ${art.attrs.heightMM} mm`}</Info>
+                <Info>{art.attrs.description}</Info>
                 {art.attrs.salesPriceYen ? (
                   buying ? (
                     <BuyButton>Loading...</BuyButton>
