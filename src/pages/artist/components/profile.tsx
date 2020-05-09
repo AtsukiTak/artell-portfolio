@@ -93,10 +93,10 @@ const TextContent = styled.div`
 
 const Name = styled.div`
   width: 100%;
-  margin-top:56px;
+  margin-top:20px;
   font-family: YuGo;
   color: ${color.LightBlack.hex};
-  text-align: left;
+  text-align: right;
   font-size: 24px;
   letter-spacing: 2px;
 `;
