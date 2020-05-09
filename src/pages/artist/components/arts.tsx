@@ -37,7 +37,7 @@ const ArtComponent = styled.div`
   width: 100%;
   max-width: 320px;
   margin: 0 auto;
-  margin-top: 80px;
+  margin-top: 120px;
   ${pc(`
       width: 100%;
       max-width: 720px;
