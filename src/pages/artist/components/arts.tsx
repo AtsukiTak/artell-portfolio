@@ -5,6 +5,7 @@ import Grid from "@material-ui/core/Grid";
 
 import { Art } from "models/art";
 import { Artist } from "models/artist";
+import { pc } from "components/responsive";
 
 import Sumbnail from "components/sumbnail";
 
@@ -14,18 +15,18 @@ const ArtsComponent: FC<{ artist: Artist; arts: Art[] }> = ({
 }) => {
   return (
     <Container>
-      <Grid container>
+      {/* <Grid container> */}
         {arts.map(art => (
-          <Grid item xs={12} sm={6} md={3}>
+          // <Grid item xs={12} sm={6} md={3}>
             <ArtComponent key={art.attrs.title}>
               <Link to={`/${artist.urlName()}/${art.id}/`}>
                 <StyledSumbnail src={art.thumbnail.getUrl()} />
               </Link>
               <Title>{art.attrs.title}</Title>
             </ArtComponent>
-          </Grid>
+          // </Grid>
         ))}
-      </Grid>
+      {/* </Grid> */}
     </Container>
   );
 };
@@ -39,9 +40,13 @@ const Container = styled.div`
 
 const ArtComponent = styled.div`
   width: 100%;
-  max-width: 180px;
+  max-width: 320px;
   margin: 0 auto;
   margin-top: 80px;
+  ${pc(`
+      width: 50%;
+      max-width: 820px;
+  `)}
 `;
 
 const StyledSumbnail = styled(Sumbnail)`
