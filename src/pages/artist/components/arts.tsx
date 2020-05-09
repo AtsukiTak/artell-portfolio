@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 
 import { Art } from "models/art";
 import { Artist } from "models/artist";
-import { pc } from "components/responsive";
 
 import Sumbnail from "components/sumbnail";
+import * as color from "components/color";
 
 const ArtsComponent: FC<{ artist: Artist; arts: Art[] }> = ({
   artist,
@@ -35,13 +35,9 @@ const Container = styled.div`
 
 const ArtComponent = styled.div`
   width: 100%;
-  max-width: 320px;
+  max-width: 420px;
   margin: 0 auto;
   margin-top: 120px;
-  ${pc(`
-      width: 100%;
-      max-width: 720px;
-  `)}
 `;
 
 const StyledSumbnail = styled(Sumbnail)`
@@ -52,8 +48,8 @@ const Title = styled.div`
   width: 100%;
   font-family: NotoSansCJKjp-Bold;
   font-size: 14px;
-  color: #666666;
-  letter-spacing: 0.44px;
+  color: ${color.MidGray.hex};;
+  letter-spacing: 1.2px;
   text-align: center;
   margin-top: 15px;
 `;
