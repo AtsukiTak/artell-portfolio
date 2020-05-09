@@ -56,8 +56,6 @@ const Title = styled(Link)`
 `;
 
 const SnsLink = styled.a`
-  margin-left: 15px;
-
   & svg {
     width: 20px;
     height: 20px;
