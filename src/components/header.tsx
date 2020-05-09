@@ -14,10 +14,9 @@ const Header: FC<HeaderProps> = ({title}) => {
     <Container>
       <FlexBox>
         <Title to="/">ARTELL</Title>
-        <SnsLink
-          href={`https://www.instagram.com/artell_gallery/`}
-          target="_blank"
-        ><ArtellInstagram /></SnsLink>
+        <SnsLink href="https://www.instagram.com/artell_gallery/" target="_blank">
+          <ArtellInstagram />
+        </SnsLink>
       </FlexBox>
     </Container>
   );
