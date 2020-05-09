@@ -83,12 +83,12 @@ const NotFoundMessage = styled(Typography)`
 `;
 
 const HR = styled.hr`
-  width: 100%;
+  width: 10%;
   margin-top: 65px;
   border: 0.5px solid #979797;
 
   ${pc(`
-    margin-top: 90px;
+    margin-top: 130px;
   `)}
 `;
 
