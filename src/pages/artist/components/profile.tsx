@@ -93,6 +93,7 @@ const TextContent = styled.div`
 
 const Name = styled.div`
   width: 100%;
+  margin-top:56px;
   font-family: YuGo;
   color: ${color.LightBlack.hex};
   text-align: left;
@@ -103,15 +104,14 @@ const Name = styled.div`
 const Sns = styled.div`
   text-align: right;
   margin-right: 8px;
-  margin-bottom: 40px;
 `;
 
 const SnsLink = styled.a`
   margin-left: 15px;
 
   & svg {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 `;
 
