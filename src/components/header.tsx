@@ -29,9 +29,7 @@ const Container = styled.header`
   width: 100vw;
   padding: 20px;
   @media (min-width: 700px) {
-    height: 75px;
     font-size: 24px;
-    line-height: 75px;
   }
 `;
 
@@ -51,7 +49,6 @@ const Title = styled(Link)`
   @media (min-width: 700px) {
     left: 100px;
     font-size: 24px;
-    line-height: 75px;
   }
 `;
 

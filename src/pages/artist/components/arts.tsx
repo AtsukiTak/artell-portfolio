@@ -53,7 +53,7 @@ const Title = styled.div`
   width: 100%;
   font-family: NotoSansCJKjp-Bold;
   font-size: 14px;
-  color: ${color.MidGray.hex};;
+  color: ${color.MidGray.hex};
   letter-spacing: 1.2px;
   text-align: center;
   margin-top: 64px;
