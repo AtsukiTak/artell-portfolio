@@ -184,7 +184,7 @@ const ArtistName = styled.div`
   margin-bottom: 4px;
   font-family: NotoSansCJKjp-Light;
   font-size: 12px;
-  color: #a1a1a1;
+  color: ${color.LightGray.hex};
   line-height: 12px;
   letter-spacing: 2px;
 `;
@@ -193,7 +193,7 @@ const Materials = styled.div`
   padding-right: 24px;
   margin-bottom: 4px;
   font-size: 12px;
-  color: #a1a1a1;
+  color: ${color.LightGray.hex};
   margin-top: 8px;
   font-family: NotoSansCJKjp-Light;
   line-height: 12px;
@@ -203,7 +203,7 @@ const Size = styled.div`
   padding-right: 24px;
   margin-bottom: 16px;
   font-size: 12px;
-  color: #a1a1a1;
+  color: ${color.LightGray.hex};
   margin-top: 8px;
   font-family: NotoSansCJKjp-Light;
   line-height: 12px;
@@ -213,7 +213,7 @@ const Size = styled.div`
 const Description = styled.div`
   padding-right: 40px;
   font-size: 12px;
-  color: #a1a1a1;
+  color: ${color.LightGray.hex};
   margin-top: 8px;
   font-family: NotoSansCJKjp-Light;
   line-height: 16px;
