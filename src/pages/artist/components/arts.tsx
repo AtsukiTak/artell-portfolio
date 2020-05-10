@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Grid from "@material-ui/core/Grid";
 
 import { Art } from "models/art";
 import { Artist } from "models/artist";
@@ -14,14 +15,18 @@ const ArtsComponent: FC<{ artist: Artist; arts: Art[] }> = ({
 }) => {
   return (
     <Container>
-      {arts.map(art => (
-          <ArtComponent key={art.attrs.title}>
-            <Link to={`/${artist.urlName()}/${art.id}/`}>
-              <StyledSumbnail src={art.thumbnail.getUrl()} />
-            </Link>
-            <Title>{art.attrs.title}</Title>
-          </ArtComponent>
-      ))}
+      <Grid container>
+        {arts.map(art => (
+          <Grid item xs={12}>
+            <ArtComponent key={art.attrs.title}>
+              <Link to={`/${artist.urlName()}/${art.id}/`}>
+                <StyledSumbnail src={art.thumbnail.getUrl()} />
+              </Link>
+              <Title>{art.attrs.title}</Title>
+            </ArtComponent>
+          </Grid>
+        ))}
+      </Grid>
     </Container>
   );
 };
@@ -48,8 +53,8 @@ const Title = styled.div`
   width: 100%;
   font-family: NotoSansCJKjp-Bold;
   font-size: 14px;
-  color: ${color.MidGray.hex};;
+  color: ${color.MidGray.hex};
   letter-spacing: 1.2px;
   text-align: center;
-  margin-top: 15px;
+  margin-top: 64px;
 `;

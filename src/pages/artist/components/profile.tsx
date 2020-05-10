@@ -99,6 +99,9 @@ const Name = styled.div`
   text-align: right;
   font-size: 24px;
   letter-spacing: 2px;
+  ${pc(`
+      margin-top:56px;
+  `)}
 `;
 
 const Sns = styled.div`
