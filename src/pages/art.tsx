@@ -160,17 +160,17 @@ const ArtContainer = styled("div")<{ src: string }>`
 const CaptionContainer = styled.div`
   min-height: 20vh;
   padding: 25px 40px;
-  text-align: right;
+  text-align: left;
   ${pc(`
     padding: 0px;
 
     width: 225px;
     margin-bottom: 100px;
-    text-align: left;
   `)}
 `;
 
 const Title = styled.div`
+  padding-right: 24px;
   margin-bottom: 32px;
   font-size: 20px;
   color: ${color.MidGray.hex};
@@ -180,6 +180,7 @@ const Title = styled.div`
 `;
 
 const ArtistName = styled.div`
+  padding-right: 24px;
   margin-bottom: 4px;
   font-family: NotoSansCJKjp-Light;
   font-size: 12px;
@@ -189,6 +190,7 @@ const ArtistName = styled.div`
 `;
 
 const Materials = styled.div`
+  padding-right: 24px;
   margin-bottom: 4px;
   font-size: 12px;
   color: #a1a1a1;
@@ -198,7 +200,8 @@ const Materials = styled.div`
 `;
 
 const Size = styled.div`
-  margin-bottom: 24px;
+  padding-right: 24px;
+  margin-bottom: 16px;
   font-size: 12px;
   color: #a1a1a1;
   margin-top: 8px;
@@ -208,12 +211,12 @@ const Size = styled.div`
 `;
 
 const Description = styled.div`
-  margin-bottom: 32px;
+  padding-right: 40px;
   font-size: 12px;
   color: #a1a1a1;
   margin-top: 8px;
   font-family: NotoSansCJKjp-Light;
-  line-height: 12px;
+  line-height: 16px;
   letter-spacing: 0.8px;
 `;
 
@@ -223,7 +226,7 @@ const BuyButton = styled.button`
   height: 48px;
   margin: 0 auto;
   margin-top: 40px;
-  border-radius: 4px;
+  border-radius: 2px;
   border: 1px solid ${color.MidGray.hex};
   background-color: white;
   font-family: NotoSansCJKjp-Light;
