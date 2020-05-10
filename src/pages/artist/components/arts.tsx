@@ -51,5 +51,5 @@ const Title = styled.div`
   color: ${color.MidGray.hex};;
   letter-spacing: 1.2px;
   text-align: center;
-  margin-top: 15px;
+  margin-top: 64px;
 `;
