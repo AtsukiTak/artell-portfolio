@@ -13,6 +13,8 @@ import { RootState } from "services/index";
 import { getArtistByName } from "services/artist";
 import { pc } from "components/responsive";
 
+import * as color from "components/color";
+
 interface ArtPageProps {
   artistUrlName: string;
   artId: string;
@@ -72,11 +74,11 @@ const ArtPage: FC<ArtPageProps> = ({ artistUrlName, artId }) => {
             </Grid>
             <Grid item xs={12} md={3}>
               <CaptionContainer>
+                <Title>{art.attrs.title}</Title>
                 <ArtistName>{artist.attrs.name}</ArtistName>
-                <Info>{art.attrs.title}</Info>
-                <Info>{art.attrs.materials}</Info>
-                <Info>{`${art.attrs.widthMM} x ${art.attrs.heightMM} mm`}</Info>
-                <Info>{art.attrs.description}</Info>
+                <Materials>{art.attrs.materials}</Materials>
+                <Size>{`${art.attrs.widthMM} x ${art.attrs.heightMM} mm`}</Size>
+                <Description>{art.attrs.description}</Description>
                 {art.attrs.salesPriceYen ? (
                   buying ? (
                     <BuyButton>Loading...</BuyButton>
@@ -87,7 +89,7 @@ const ArtPage: FC<ArtPageProps> = ({ artistUrlName, artId }) => {
                         buyArt(artist.uid, art.id);
                       }}
                     >
-                      購入する &nbsp; / &nbsp; &yen;{" "}
+                      Buy &nbsp; / &nbsp; &yen;{" "}
                       {toPriceDisplay(art.attrs.salesPriceYen)}
                     </BuyButton>
                   )
@@ -157,11 +159,9 @@ const ArtContainer = styled("div")<{ src: string }>`
 
 const CaptionContainer = styled.div`
   min-height: 20vh;
-  border-top: solid 1px #d8d8d8;
-  padding: 25px 56px;
-
+  padding: 25px 40px;
+  text-align: left;
   ${pc(`
-    border-top: none;
     padding: 0px;
 
     width: 225px;
@@ -169,37 +169,70 @@ const CaptionContainer = styled.div`
   `)}
 `;
 
-const ArtistName = styled.div`
+const Title = styled.div`
+  padding-right: 24px;
+  margin-bottom: 32px;
+  font-size: 20px;
+  color: ${color.MidGray.hex};
   font-family: NotoSansCJKjp-Light;
-  font-size: 16px;
-  color: #484848;
-  line-height: 24px;
-
-  ${pc(`
-    font-size: 18px;
-  `)}
+  line-height: 20px;
+  letter-spacing: 2px;
 `;
 
-const Info = styled.div`
-  font-size: 14px;
-  color: #a1a1a1;
+const ArtistName = styled.div`
+  padding-right: 24px;
+  margin-bottom: 4px;
+  font-family: NotoSansCJKjp-Light;
+  font-size: 12px;
+  color: ${color.LightGray.hex};
+  line-height: 12px;
+  letter-spacing: 2px;
+`;
+
+const Materials = styled.div`
+  padding-right: 24px;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: ${color.LightGray.hex};
   margin-top: 8px;
   font-family: NotoSansCJKjp-Light;
-  line-height: 18px;
+  line-height: 12px;
+`;
+
+const Size = styled.div`
+  padding-right: 24px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: ${color.LightGray.hex};
+  margin-top: 8px;
+  font-family: NotoSansCJKjp-Light;
+  line-height: 12px;
+  letter-spacing: 0.5px;
+`;
+
+const Description = styled.div`
+  padding-right: 40px;
+  font-size: 12px;
+  color: ${color.LightGray.hex};
+  margin-top: 8px;
+  font-family: NotoSansCJKjp-Light;
+  line-height: 16px;
+  letter-spacing: 0.8px;
 `;
 
 const BuyButton = styled.button`
   display: block;
   width: 100%;
-  height: 40px;
+  height: 48px;
   margin: 0 auto;
-  margin-top: 35px;
-  border-radius: 4px;
-  border: 1px solid #a1a1a1;
+  margin-top: 40px;
+  border-radius: 2px;
+  border: 1px solid ${color.MidGray.hex};
   background-color: white;
   font-family: NotoSansCJKjp-Light;
   font-size: 12px;
-  color: #a1a1a1;
+  letter-spacing: 1.57px;
+  color: ${color.MidGray.hex};
   text-align: center;
   line-height: 20px;
   cursor: pointer;

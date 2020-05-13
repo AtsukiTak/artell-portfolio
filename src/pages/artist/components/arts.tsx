@@ -7,6 +7,7 @@ import { Art } from "models/art";
 import { Artist } from "models/artist";
 
 import Sumbnail from "components/sumbnail";
+import * as color from "components/color";
 
 const ArtsComponent: FC<{ artist: Artist; arts: Art[] }> = ({
   artist,
@@ -16,7 +17,7 @@ const ArtsComponent: FC<{ artist: Artist; arts: Art[] }> = ({
     <Container>
       <Grid container>
         {arts.map(art => (
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12}>
             <ArtComponent key={art.attrs.title}>
               <Link to={`/${artist.urlName()}/${art.id}/`}>
                 <StyledSumbnail src={art.thumbnail.getUrl()} />
@@ -39,9 +40,9 @@ const Container = styled.div`
 
 const ArtComponent = styled.div`
   width: 100%;
-  max-width: 180px;
+  max-width: 420px;
   margin: 0 auto;
-  margin-top: 80px;
+  margin-top: 120px;
 `;
 
 const StyledSumbnail = styled(Sumbnail)`
@@ -52,8 +53,8 @@ const Title = styled.div`
   width: 100%;
   font-family: NotoSansCJKjp-Bold;
   font-size: 14px;
-  color: #666666;
-  letter-spacing: 0.44px;
+  color: ${color.MidGray.hex};
+  letter-spacing: 1.2px;
   text-align: center;
-  margin-top: 15px;
+  margin-top: 64px;
 `;

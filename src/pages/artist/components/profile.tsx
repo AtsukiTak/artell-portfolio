@@ -7,6 +7,8 @@ import Sumbnail from "components/sumbnail";
 import * as logo from "components/logo";
 import { pc } from "components/responsive";
 
+import * as color from "components/color";
+
 const ProfileComponent: FC<{ artist: Artist }> = ({ artist }) => {
   return (
     <Container>
@@ -18,7 +20,6 @@ const ProfileComponent: FC<{ artist: Artist }> = ({ artist }) => {
         }
       />
       <TextContent>
-        <Name>{artist.attrs.name}</Name>
         <Sns>
           {artist.attrs.facebook !== "" ? (
             <SnsLink
@@ -45,6 +46,7 @@ const ProfileComponent: FC<{ artist: Artist }> = ({ artist }) => {
             </SnsLink>
           ) : null}
         </Sns>
+        <Name>{artist.attrs.name}</Name>
         <Description>{artist.attrs.description}</Description>
       </TextContent>
     </Container>
@@ -91,31 +93,35 @@ const TextContent = styled.div`
 
 const Name = styled.div`
   width: 100%;
-  font-family: NotoSansCJKjp-Light;
-  color: 000000;
+  margin-top:20px;
+  font-family: YuGo;
+  color: ${color.LightBlack.hex};
   text-align: right;
   font-size: 24px;
+  letter-spacing: 2px;
+  ${pc(`
+      margin-top:56px;
+  `)}
 `;
 
 const Sns = styled.div`
-  width: 100%;
   text-align: right;
-  margin-top: 10px;
+  margin-right: 8px;
 `;
 
 const SnsLink = styled.a`
   margin-left: 15px;
 
   & svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
   }
 `;
 
 const Description = styled.div`
   width: 100%;
-  margin-top: 25px;
-  font-family: NotoSansCJKjp-Regular;
+  margin-top: 56px;
+  font-family: YuGo;
   color: #505050;
   font-size: 16px;
   line-height: 32px;
