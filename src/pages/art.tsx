@@ -173,7 +173,7 @@ const Title = styled.div`
   padding-right: 24px;
   margin-bottom: 32px;
   font-size: 20px;
-  color: ${color.MidGray.hex};
+  color: ${color.LightBlack.hex};
   font-family: NotoSansCJKjp-Light;
   line-height: 20px;
   letter-spacing: 2px;
@@ -223,7 +223,7 @@ const Description = styled.div`
 const BuyButton = styled.button`
   display: block;
   width: 100%;
-  height: 48px;
+  height: 42px;
   margin: 0 auto;
   margin-top: 40px;
   border-radius: 2px;

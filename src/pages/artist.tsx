@@ -10,6 +10,7 @@ import { Artist } from "models/artist";
 import { RootState } from "services/index";
 import { getArtistByName } from "services/artist";
 import Header from "../components/header";
+import Footer from "../components/footer";
 import { pc } from "components/responsive";
 
 import ProfileComponent from "./artist/components/profile";
@@ -49,6 +50,7 @@ const ArtistPage: React.FC<ArtistPageProps> = ({ artistUrlName }) => {
             <ArtsComponent artist={artist} arts={arts} />
           </Container>
         </Fade>
+        <Footer />
       </>
     );
   }
@@ -62,6 +64,7 @@ const ArtistLoadingPage: React.FC<{ artistName: string }> = ({
     <ProgressContainer>
       <CircularProgress size={50} thickness={2} />
     </ProgressContainer>
+    <Footer />
   </>
 );
 
@@ -75,6 +78,7 @@ const ArtistNotFoundPage: React.FC<{ artistName: string }> = ({
       align="center"
       color="textSecondary"
     >{`作家 「${artistName}」 さんが見つかりませんでした。`}</NotFoundMessage>
+    <Footer />
   </>
 );
 

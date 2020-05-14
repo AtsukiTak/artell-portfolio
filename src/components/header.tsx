@@ -13,7 +13,7 @@ const Header: FC<HeaderProps> = ({title}) => {
   return (
     <Container>
       <FlexBox>
-        <Title to="/">ARTELL</Title>
+        <Title to="/">#40326d</Title>
         <SnsLink href="https://www.instagram.com/artell_gallery/" target="_blank">
           <ArtellInstagram />
         </SnsLink>
@@ -40,9 +40,9 @@ const FlexBox = styled.div`
 
 const Title = styled(Link)`
   display: inline-block;
-  font-family: Roboto-Light;
+  font-family: "Avenir Next Ultra Light";
   font-size: 18px;
-  letter-spacing: 1.6px;
+  letter-spacing: 2px;
   color: ${color.LightBlack.hex};
   text-decoration: none;
 
