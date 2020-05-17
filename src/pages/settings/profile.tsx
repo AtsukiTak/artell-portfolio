@@ -30,13 +30,6 @@ const ProfileSettingPage: React.FC<UserProps> = ({ user }) => {
     setUpdating(true);
 
     const artistRepo = new ArtistRepository(firebase.app());
-    // まず同名アーティストがいないか確認
-    if (await artistRepo.checkExistenceByName(attrs.name)) {
-      alert("同名の作家が既に登録されています");
-      setUpdating(false);
-      return;
-    }
-
     // 作家情報を更新
     const newArtist = new Artist(artist.uid, attrs, thumbnail);
     if (newArtist.attrs !== artist.attrs) {
