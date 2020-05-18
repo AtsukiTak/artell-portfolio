@@ -12,12 +12,14 @@ import { pc } from "components/responsive";
 import Header from "components/header";
 import { PrimaryButton } from "components/button";
 import SelectImageComponent from "components/select_image";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import AttributesComponent from "./components/edit_attributes";
 
 const AddArtPage: FC<UserProps> = ({ user }) => {
   const { history } = useRouter();
   const [thumbnail, setThumbnail] = useState<UploadImage | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [attrs, setAttrs] = useState<ArtAttributes>({
     title: "",
     widthMM: 0,
@@ -34,30 +36,40 @@ const AddArtPage: FC<UserProps> = ({ user }) => {
     if (thumbnail === null) {
       alert("作品の画像が選択されていません。");
     } else {
+      setIsLoading(true);
       const newArt = await new ArtRepository(firebase.app()).create(
         user.artist,
         attrs,
         thumbnail
       );
+      setIsLoading(false);
       alert("新しい作品を追加しました！");
       dispatch(setUser(user.artist, [...user.arts, newArt]));
       history.push("/settings/arts");
     }
   };
 
-  return (
-    <>
-      <Header title="作品追加" />
-      <Container>
-        <SelectImageComponent
-          image={thumbnail || AddArtThumbnail}
-          setImage={img => setThumbnail(img)}
-        />
-        <AttributesComponent attrs={attrs} setAttrs={setAttrs} />
-        <SubmitButton onClick={onSubmitClick}>追加</SubmitButton>
-      </Container>
-    </>
-  );
+  if (isLoading) {
+    return (
+      <ProgressContainer>
+        <CircularProgress size={50} thickness={2} />
+      </ProgressContainer>
+    )
+  } else {
+    return (
+      <>
+        <Header title="作品追加" />
+        <Container>
+          <SelectImageComponent
+            image={thumbnail || AddArtThumbnail}
+            setImage={img => setThumbnail(img)}
+          />
+          <AttributesComponent attrs={attrs} setAttrs={setAttrs} />
+          <SubmitButton onClick={onSubmitClick}>追加</SubmitButton> 
+        </Container>
+      </>
+    )
+  };
 };
 
 export default withUser(AddArtPage);
@@ -77,4 +89,14 @@ const Container = styled.div`
 const SubmitButton = styled(PrimaryButton)`
   display: block;
   margin: 0 auto;
+`;
+
+const ProgressContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(0%) translateX(-50%);
+  -webkit-transform: translateY(0%) translateX(-50%);
+  width: 50px;
+  margin: 40vh auto;
 `;
