@@ -72,23 +72,23 @@ const StyledSumbnail = styled(Sumbnail)`
   max-width: 400px;
   margin: 0 auto;
 
-  ${pc(`
-    display: inline-block;
-    width: 400px;
-  `)}
+  // ${pc(`
+  //   display: inline-block;
+  //   width: 400px;
+  // `)}
 `;
 
 const TextContent = styled.div`
-  display: inline-block;
   vertical-align: top;
   width: 100%;
-  margin-top: 18px;
+  max-width: 400px;
+  margin: 24px auto;
 
-  ${pc(`
-    width: 290px;
-    margin-top: 0;
-    margin-left: 110px;
-  `)}
+  // ${pc(`
+  //   width: 290px;
+  //   margin-top: 0;
+  //   margin-left: 110px;
+  // `)}
 `;
 
 const Name = styled.div`
@@ -96,17 +96,13 @@ const Name = styled.div`
   margin-top:20px;
   font-family: YuGo;
   color: ${color.LightBlack.hex};
-  text-align: right;
+  text-align: left;
   font-size: 24px;
   letter-spacing: 2px;
-  ${pc(`
-      margin-top:56px;
-  `)}
 `;
 
 const Sns = styled.div`
   text-align: right;
-  margin-right: 8px;
 `;
 
 const SnsLink = styled.a`
@@ -120,7 +116,7 @@ const SnsLink = styled.a`
 
 const Description = styled.div`
   width: 100%;
-  margin-top: 56px;
+  margin-top: 20px;
   font-family: YuGo;
   color: #505050;
   font-size: 16px;
