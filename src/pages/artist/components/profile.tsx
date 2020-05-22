@@ -34,6 +34,7 @@ const ProfileComponent: FC<{ artist: Artist }> = ({ artist }) => {
           </>
           : null
         }
+        {/* snsリンクがない場合はnullを返す */}
         {!!artist.attrs.facebook || !!artist.attrs.twitter || !!artist.attrs.instagram ? 
           <Tag>- Social Links</Tag>
           : null
