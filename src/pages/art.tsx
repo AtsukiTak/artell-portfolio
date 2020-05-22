@@ -64,10 +64,10 @@ const ArtPage: FC<ArtPageProps> = ({ artistUrlName, artId }) => {
         <Fade in timeout={2000}>
           <Grid container alignItems="flex-end">
             <Hidden only={["lg", "xl"]}>
-              <MobileCloseButton to={`/${artistUrlName}/`} />
+              <MobileCloseButton to={`/${artistUrlName}/`}>{artist.attrs.name}｜作品一覧を見る →</MobileCloseButton>
             </Hidden>
             <Hidden only={["xs", "sm", "md"]}>
-              <PcCloseButton to={`/${artistUrlName}/`} />
+              <PcCloseButton to={`/${artistUrlName}/`}>{artist.attrs.name}｜作品一覧を見る →</PcCloseButton>
             </Hidden>
             <Grid item xs={12} md={9}>
               <ArtContainer src={art.thumbnail.getUrl()} />
@@ -109,36 +109,22 @@ function toPriceDisplay(priceYen: number): string {
   return priceYen.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-const CloseButton = styled(Link)`
+const PcCloseButton = styled(Link)`
   position: absolute;
-  width: 40px;
-  height: 40px;
-
-  &:before,
-  &:after {
-    position: absolute;
-    left: 30px;
-    content: " ";
-    height: 41px;
-    width: 2px;
-    background-color: #d8d8d8;
-  }
-  &:before {
-    transform: rotate(45deg);
-  }
-  &:after {
-    transform: rotate(-45deg);
-  }
+  right: 20px;
+  bottom: 12px;
+  font-size: 12px;
+  text-decoration: none;
+  color: ${color.LightGray.hex};
 `;
 
-const PcCloseButton = styled(CloseButton)`
-  right: 60px;
-  top: calc(100vh - 40px - 40px);
-`;
-
-const MobileCloseButton = styled(CloseButton)`
+const MobileCloseButton = styled(Link)`
+  position: absolute;
   right: 24px;
   top: 24px;
+  font-size: 12px;
+  text-decoration: none;
+  color: ${color.LightGray.hex};
 `;
 
 const ArtContainer = styled("div")<{ src: string }>`
