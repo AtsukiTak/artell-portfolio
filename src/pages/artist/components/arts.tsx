@@ -36,6 +36,7 @@ export default ArtsComponent;
 const Container = styled.div`
   width: 100%;
   margin-bottom: 50px;
+  padding 0 24px;
 `;
 
 const ArtComponent = styled.div`
