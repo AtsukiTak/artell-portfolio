@@ -42,7 +42,7 @@ const ArtistPage: React.FC<ArtistPageProps> = ({ artistUrlName }) => {
     const { artist, arts } = artistArts;
     return (
       <>
-        <Header title={artistName} />
+        <Header />
         <Fade in timeout={2000}>
           <Container>
             <ProfileComponent artist={artist} />
@@ -60,7 +60,7 @@ const ArtistLoadingPage: React.FC<{ artistName: string }> = ({
   artistName
 }) => (
   <>
-    <Header title={artistName} />
+    <Header />
     <ProgressContainer>
       <CircularProgress size={50} thickness={2} />
     </ProgressContainer>
@@ -72,7 +72,7 @@ const ArtistNotFoundPage: React.FC<{ artistName: string }> = ({
   artistName
 }) => (
   <>
-    <Header title={artistName} />
+    <Header />
     <NotFoundMessage
       variant="body2"
       align="center"

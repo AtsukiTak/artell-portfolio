@@ -13,7 +13,7 @@ const ProfileSettingPage: React.FC<UserProps> = ({user}) => {
 
   return (
     <>
-      <Header title="Settings" />
+      <Header />
       <SettingTab selected="tab2" />
       <Container>
         <ArtsComponent arts={arts} />

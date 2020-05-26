@@ -58,7 +58,7 @@ const AddArtPage: FC<UserProps> = ({ user }) => {
   } else {
     return (
       <>
-        <Header title="作品追加" />
+        <Header />
         <Container>
           <SelectImageComponent
             image={thumbnail || AddArtThumbnail}

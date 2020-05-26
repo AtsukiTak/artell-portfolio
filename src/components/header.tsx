@@ -1,20 +1,19 @@
-import React, {FC} from 'react';
-import styled from 'styled-components';
-import {Link} from 'react-router-dom';
+import React, { FC } from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 import * as color from "./color";
 import { ArtellInstagram } from "./logo";
 
-interface HeaderProps {
-  title: string;
-}
-
-const Header: FC<HeaderProps> = ({title}) => {
+const Header: FC = () => {
   return (
     <Container>
       <FlexBox>
         <Title to="/">#40326d</Title>
-        <SnsLink href="https://www.instagram.com/artell_gallery/" target="_blank">
+        <SnsLink
+          href="https://www.instagram.com/artell_gallery/"
+          target="_blank"
+        >
           <ArtellInstagram />
         </SnsLink>
       </FlexBox>

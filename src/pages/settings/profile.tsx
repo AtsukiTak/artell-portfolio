@@ -45,7 +45,7 @@ const ProfileSettingPage: React.FC<UserProps> = ({ user }) => {
 
   return (
     <>
-      <Header title="Settings" />
+      <Header />
       <SettingTab selected="tab1" />
       <Container>
         <LinkToArtistPage to={`/${artist.urlName()}`}>

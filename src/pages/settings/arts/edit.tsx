@@ -74,7 +74,7 @@ const ArtEditPage: React.FC<{
 
   return (
     <>
-      <Header title="Settings" />
+      <Header />
       <Container>
         <LinkToArtPage to={`/${user.artist.urlName()}/${art.id}`}>
           作品ページへ →

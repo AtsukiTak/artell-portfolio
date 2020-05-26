@@ -30,7 +30,7 @@ const SigninPage: React.FC = () => {
 
   return (
     <>
-      <Header title="ログイン / 新規登録" />
+      <Header />
       <Container>
         <StyledFirebaseAuth
           uiConfig={uiConfig}
