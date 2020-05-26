@@ -29,7 +29,7 @@ const Container = styled.footer`
 `;
 
 const HR = styled.hr`
-  width: 60%;
+  width: 10%;
   margin-top: 65px;
   margin-bottom: 65px;
   border: 0.5px solid #979797;
