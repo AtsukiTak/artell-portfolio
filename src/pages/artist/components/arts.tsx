@@ -19,7 +19,7 @@ const ArtsComponent: FC<{ artist: Artist; arts: Art[] }> = ({
         {arts.map(art => (
           <Grid item xs={12}>
             <ArtComponent key={art.attrs.title}>
-              <Link to={`/${artist.urlName()}/${art.id}/`}>
+              <Link to={`/${artist.uid}/${art.id}/`}>
                 <StyledSumbnail src={art.thumbnail.getUrl()} />
               </Link>
               <Title>{art.attrs.title}</Title>

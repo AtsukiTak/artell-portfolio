@@ -8,33 +8,31 @@ import Hidden from "@material-ui/core/Hidden";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 
-import { Artist, buyArt } from "models/artist";
+import { buyArt } from "models/artist";
 import { RootState } from "services/index";
-import { getArtistByName } from "services/artist";
+import { getArtistById } from "services/artist";
 import { pc } from "components/responsive";
 
 import * as color from "components/color";
 
 interface ArtPageProps {
-  artistUrlName: string;
+  artistId: string;
   artId: string;
 }
 
-const ArtPage: FC<ArtPageProps> = ({ artistUrlName, artId }) => {
-  const artistName = Artist.decodeArtistUrlName(artistUrlName);
-
+const ArtPage: FC<ArtPageProps> = ({ artistId, artId }) => {
   const [buying, setBuying] = useState(false);
 
   const artistArts = useSelector((state: RootState) =>
-    state.artist.map.get(artistName)
+    state.artist.map.get(artistId)
   );
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (artistArts === undefined) {
-      dispatch(getArtistByName(artistName));
+      dispatch(getArtistById(artistId));
     }
-  }, [artistName, artistArts, dispatch]);
+  }, [artistId, artistArts, dispatch]);
 
   if (artistArts === undefined) {
     // Loading page
@@ -46,7 +44,7 @@ const ArtPage: FC<ArtPageProps> = ({ artistUrlName, artId }) => {
   } else if (artistArts === null) {
     return (
       <NotFoundMessage variant="body2" align="center" color="textSecondary">
-        `作家「${artistName}」さんが見つかりませんでした。`
+        `作家さんが見つかりませんでした。`
       </NotFoundMessage>
     );
   } else {
@@ -64,10 +62,14 @@ const ArtPage: FC<ArtPageProps> = ({ artistUrlName, artId }) => {
         <Fade in timeout={2000}>
           <Grid container alignItems="flex-end">
             <Hidden only={["lg", "xl"]}>
-              <MobileCloseButton to={`/${artistUrlName}/`}>{artist.attrs.name}｜作品一覧を見る →</MobileCloseButton>
+              <MobileCloseButton to={`/${artistId}/`}>
+                {artist.attrs.name}｜作品一覧を見る →
+              </MobileCloseButton>
             </Hidden>
             <Hidden only={["xs", "sm", "md"]}>
-              <PcCloseButton to={`/${artistUrlName}/`}>{artist.attrs.name}｜作品一覧を見る →</PcCloseButton>
+              <PcCloseButton to={`/${artistId}/`}>
+                {artist.attrs.name}｜作品一覧を見る →
+              </PcCloseButton>
             </Hidden>
             <Grid item xs={12} md={9}>
               <ArtContainer src={art.thumbnail.getUrl()} />

@@ -13,10 +13,6 @@ export class Artist {
     readonly thumbnail: Image | null
   ) {}
 
-  urlName(): string {
-    return Artist.encodeArtistName(this.attrs.name);
-  }
-
   static encodeArtistName(name: string): string {
     const regex = /\//gi;
     return name.replace(regex, "%2F");
@@ -72,17 +68,6 @@ export class ArtistRepository {
     const url = await this.storage.queryArtistThumbnailUrl(uid);
     const thumbnail = url ? await DownloadImage.download(url) : null;
     return new Artist(uid, doc, thumbnail);
-  }
-
-  async queryByName(name: string): Promise<Artist | null> {
-    const res = await this.firestore.queryArtistDocByName(name);
-    if (res === null) {
-      return null;
-    }
-    const { id, doc } = res;
-    const url = await this.storage.queryArtistThumbnailUrl(id);
-    const thumbnail = url ? await DownloadImage.download(url) : null;
-    return new Artist(id, doc, thumbnail);
   }
 
   async queryList(): Promise<Artist[]> {

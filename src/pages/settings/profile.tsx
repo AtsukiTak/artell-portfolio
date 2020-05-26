@@ -29,7 +29,6 @@ const ProfileSettingPage: React.FC<UserProps> = ({ user }) => {
   const onSubmit = async () => {
     setUpdating(true);
 
-    const artistRepo = new ArtistRepository(firebase.app());
     // 作家情報を更新
     const newArtist = new Artist(artist.uid, attrs, thumbnail);
     if (newArtist.attrs !== artist.attrs) {
@@ -48,7 +47,7 @@ const ProfileSettingPage: React.FC<UserProps> = ({ user }) => {
       <Header />
       <SettingTab selected="tab1" />
       <Container>
-        <LinkToArtistPage to={`/${artist.urlName()}`}>
+        <LinkToArtistPage to={`/${artist.uid}`}>
           自分の作家ページを確認する →
         </LinkToArtistPage>
         <SelectImageComponent

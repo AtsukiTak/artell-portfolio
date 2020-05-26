@@ -6,9 +6,8 @@ import Container from "@material-ui/core/Container";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 
-import { Artist } from "models/artist";
 import { RootState } from "services/index";
-import { getArtistByName } from "services/artist";
+import { getArtistById } from "services/artist";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import { pc } from "components/responsive";
@@ -17,27 +16,25 @@ import ProfileComponent from "./artist/components/profile";
 import ArtsComponent from "./artist/components/arts";
 
 interface ArtistPageProps {
-  artistUrlName: string;
+  artistId: string;
 }
 
-const ArtistPage: React.FC<ArtistPageProps> = ({ artistUrlName }) => {
-  const artistName = Artist.decodeArtistUrlName(artistUrlName);
-
+const ArtistPage: React.FC<ArtistPageProps> = ({ artistId }) => {
   const artistArts = useSelector((state: RootState) =>
-    state.artist.map.get(artistName)
+    state.artist.map.get(artistId)
   );
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (artistArts === undefined) {
-      dispatch(getArtistByName(artistName));
+      dispatch(getArtistById(artistId));
     }
-  }, [artistName, artistArts, dispatch]);
+  }, [artistId, artistArts, dispatch]);
 
   if (artistArts === undefined) {
-    return <ArtistLoadingPage artistName={artistName} />;
+    return <ArtistLoadingPage />;
   } else if (artistArts === null) {
-    return <ArtistNotFoundPage artistName={artistName} />;
+    return <ArtistNotFoundPage />;
   } else {
     const { artist, arts } = artistArts;
     return (
@@ -56,9 +53,7 @@ const ArtistPage: React.FC<ArtistPageProps> = ({ artistUrlName }) => {
   }
 };
 
-const ArtistLoadingPage: React.FC<{ artistName: string }> = ({
-  artistName
-}) => (
+const ArtistLoadingPage: React.FC = () => (
   <>
     <Header />
     <ProgressContainer>
@@ -68,16 +63,14 @@ const ArtistLoadingPage: React.FC<{ artistName: string }> = ({
   </>
 );
 
-const ArtistNotFoundPage: React.FC<{ artistName: string }> = ({
-  artistName
-}) => (
+const ArtistNotFoundPage: React.FC = () => (
   <>
     <Header />
     <NotFoundMessage
       variant="body2"
       align="center"
       color="textSecondary"
-    >{`作家 「${artistName}」 さんが見つかりませんでした。`}</NotFoundMessage>
+    >{`作家さんが見つかりませんでした`}</NotFoundMessage>
     <Footer />
   </>
 );

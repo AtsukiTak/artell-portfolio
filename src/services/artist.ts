@@ -11,7 +11,7 @@ import { Artist, ArtistRepository } from "models/artist";
 export type ArtistArts = { artist: Artist; arts: Art[] };
 
 export interface State {
-  // mapping artist name and data.
+  // mapping artist id and data.
   map: Map<string, ArtistArts | null>;
 }
 
@@ -32,7 +32,7 @@ export enum ActionType {
 
 export type Action =
   | AppAction<ActionType.addArtist, { artist: Artist; arts: Art[] }>
-  | AppAction<ActionType.notFoundArtist, { artistName: string }>;
+  | AppAction<ActionType.notFoundArtist, { artistId: string }>;
 
 const addArtist = (artist: Artist, arts: Art[]): Action => ({
   type: ActionType.addArtist,
@@ -40,18 +40,18 @@ const addArtist = (artist: Artist, arts: Art[]): Action => ({
   arts
 });
 
-const notFoundArtist = (artistName: string): Action => ({
+const notFoundArtist = (artistId: string): Action => ({
   type: ActionType.notFoundArtist,
-  artistName
+  artistId
 });
 
-export function getArtistByName(
-  name: string
+export function getArtistById(
+  id: string
 ): ThunkAction<Promise<void>, State, null, Action> {
   return async dispatch => {
-    const artist = await new ArtistRepository(firebase.app()).queryByName(name);
+    const artist = await new ArtistRepository(firebase.app()).queryByUid(id);
     if (artist === null) {
-      dispatch(notFoundArtist(name));
+      dispatch(notFoundArtist(id));
     } else {
       const arts = await new ArtRepository(
         firebase.app()
@@ -68,14 +68,14 @@ export function reducer(state: State = InitialState, action: Action): State {
   switch (action.type) {
     case ActionType.addArtist:
       return {
-        map: cloneMap(state.map).set(action.artist.attrs.name, {
+        map: cloneMap(state.map).set(action.artist.uid, {
           artist: action.artist,
           arts: action.arts
         })
       };
     case ActionType.notFoundArtist:
       return {
-        map: cloneMap(state.map).set(action.artistName, null)
+        map: cloneMap(state.map).set(action.artistId, null)
       };
     default:
       return state;
