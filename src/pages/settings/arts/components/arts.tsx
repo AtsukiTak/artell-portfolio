@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import { Art } from "models/art";
+import { DownloadImage } from "models/image";
 import { pc } from "components/responsive";
 import Sumbnail from "components/sumbnail";
 
@@ -15,14 +16,14 @@ const ArtsComponent: FC<Props> = ({ arts }) => {
     <Container>
       <ArtContainer key="new">
         <Link to={`/settings/arts/add`}>
-          <Sumbnail src="/img/add-art-thumbnail.png" />
+          <Sumbnail image={DefaultArtThumbnail} />
         </Link>
         <ArtTitle>作品を追加する</ArtTitle>
       </ArtContainer>
       {arts.map(art => (
         <ArtContainer key={art.id}>
           <Link to={`/settings/arts/edit/${art.id}`}>
-            <Sumbnail src={art.thumbnail.getUrl()} />
+            <Sumbnail image={art.thumbnail} />
           </Link>
           <ArtTitle>{art.attrs.title}</ArtTitle>
         </ArtContainer>
@@ -30,6 +31,10 @@ const ArtsComponent: FC<Props> = ({ arts }) => {
     </Container>
   );
 };
+
+const DefaultArtThumbnail = DownloadImage.download(
+  "/img/add-art-thumbnail.png"
+);
 
 export default ArtsComponent;
 

@@ -68,7 +68,7 @@ const ProfileSettingPage: React.FC<UserProps> = ({ user }) => {
 
 export default withUser(ProfileSettingPage);
 
-const ArtistDefaultThumbnail = new DownloadImage(
+const ArtistDefaultThumbnail = DownloadImage.download(
   "/img/artist-default-thumbnail.jpg"
 );
 

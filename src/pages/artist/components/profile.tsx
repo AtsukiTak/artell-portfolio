@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import styled from "styled-components";
 
 import { Artist } from "models/artist";
+import { DownloadImage } from "models/image";
 
 import Sumbnail from "components/sumbnail";
 import * as logo from "components/logo";
@@ -12,33 +13,26 @@ import * as color from "components/color";
 const ProfileComponent: FC<{ artist: Artist }> = ({ artist }) => {
   return (
     <Container>
-      <StyledSumbnail
-        src={
-          artist.thumbnail
-            ? artist.thumbnail.getUrl()
-            : "/img/artist-default-thumbnail.jpg"
-        }
-      />
+      <StyledSumbnail image={artist.thumbnail || DefaultArtistThumbnail} />
       <TextContent>
-        {!!artist.attrs.name ? 
+        {!!artist.attrs.name ? (
           <>
             <Tag>- Artist</Tag>
             <Name>{artist.attrs.name}</Name>
           </>
-          : null
-        }
-        {!!artist.attrs.description ? 
+        ) : null}
+        {!!artist.attrs.description ? (
           <>
             <Tag>- Description</Tag>
             <Description>{artist.attrs.description}</Description>
           </>
-          : null
-        }
+        ) : null}
         {/* snsリンクがない場合はnullを返す */}
-        {!!artist.attrs.facebook || !!artist.attrs.twitter || !!artist.attrs.instagram ? 
+        {!!artist.attrs.facebook ||
+        !!artist.attrs.twitter ||
+        !!artist.attrs.instagram ? (
           <Tag>- Social Links</Tag>
-          : null
-        }
+        ) : null}
         <Sns>
           {artist.attrs.facebook !== "" ? (
             <SnsLink
@@ -69,6 +63,10 @@ const ProfileComponent: FC<{ artist: Artist }> = ({ artist }) => {
     </Container>
   );
 };
+
+const DefaultArtistThumbnail = DownloadImage.download(
+  "/img/artist-default-thumbnail.jpg"
+);
 
 export default ProfileComponent;
 

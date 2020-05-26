@@ -8,7 +8,8 @@ import Hidden from "@material-ui/core/Hidden";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 
-import { buyArt } from "models/artist";
+import { Artist, buyArt } from "models/artist";
+import { Art } from "models/art";
 import { RootState } from "services/index";
 import { getArtistById } from "services/artist";
 import { pc } from "components/responsive";
@@ -21,8 +22,6 @@ interface ArtPageProps {
 }
 
 const ArtPage: FC<ArtPageProps> = ({ artistId, artId }) => {
-  const [buying, setBuying] = useState(false);
-
   const artistArts = useSelector((state: RootState) =>
     state.artist.map.get(artistId)
   );
@@ -58,54 +57,71 @@ const ArtPage: FC<ArtPageProps> = ({ artistId, artId }) => {
       );
     } else {
       // 作品ページ
-      return (
-        <Fade in timeout={2000}>
-          <Grid container alignItems="flex-end">
-            <Hidden only={["lg", "xl"]}>
-              <MobileCloseButton to={`/${artistId}/`}>
-                {artist.attrs.name}｜作品一覧を見る →
-              </MobileCloseButton>
-            </Hidden>
-            <Hidden only={["xs", "sm", "md"]}>
-              <PcCloseButton to={`/${artistId}/`}>
-                {artist.attrs.name}｜作品一覧を見る →
-              </PcCloseButton>
-            </Hidden>
-            <Grid item xs={12} md={9}>
-              <ArtContainer src={art.thumbnail.getUrl()} />
-            </Grid>
-            <Grid item xs={12} md={3}>
-              <CaptionContainer>
-                <Title>{art.attrs.title}</Title>
-                <ArtistName>{artist.attrs.name}</ArtistName>
-                <Materials>{art.attrs.materials}</Materials>
-                <Size>{`${art.attrs.widthMM} x ${art.attrs.heightMM} mm`}</Size>
-                <Description>{art.attrs.description}</Description>
-                {art.attrs.salesPriceYen ? (
-                  buying ? (
-                    <BuyButton>Loading...</BuyButton>
-                  ) : (
-                    <BuyButton
-                      onClick={() => {
-                        setBuying(true);
-                        buyArt(artist.uid, art.id);
-                      }}
-                    >
-                      Buy &nbsp; / &nbsp; &yen;{" "}
-                      {toPriceDisplay(art.attrs.salesPriceYen)}
-                    </BuyButton>
-                  )
-                ) : null}
-              </CaptionContainer>
-            </Grid>
-          </Grid>
-        </Fade>
-      );
+      return <InternalArtPage artist={artist} art={art} />;
     }
   }
 };
 
 export default ArtPage;
+
+const InternalArtPage: FC<{ artist: Artist; art: Art }> = ({ artist, art }) => {
+  const [buying, setBuying] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    art.thumbnail.getUrl().then(url => setImageUrl(url));
+  }, [art]);
+
+  return (
+    <Grid container alignItems="flex-end">
+      <Hidden only={["lg", "xl"]}>
+        <MobileCloseButton to={`/${artist.uid}/`}>
+          {artist.attrs.name}｜作品一覧を見る →
+        </MobileCloseButton>
+      </Hidden>
+      <Hidden only={["xs", "sm", "md"]}>
+        <PcCloseButton to={`/${artist.uid}/`}>
+          {artist.attrs.name}｜作品一覧を見る →
+        </PcCloseButton>
+      </Hidden>
+      <Grid item xs={12} md={9}>
+        {imageUrl !== null ? (
+          <Fade in timeout={2000}>
+            <ArtContainer src={imageUrl} />
+          </Fade>
+        ) : (
+          <ArtProgressContainer>
+              <CircularProgress size={50} thickness={2} />
+          </ArtProgressContainer>
+        )}
+      </Grid>
+      <Grid item xs={12} md={3}>
+        <CaptionContainer>
+          <Title>{art.attrs.title}</Title>
+          <ArtistName>{artist.attrs.name}</ArtistName>
+          <Materials>{art.attrs.materials}</Materials>
+          <Size>{`${art.attrs.widthMM} x ${art.attrs.heightMM} mm`}</Size>
+          <Description>{art.attrs.description}</Description>
+          {art.attrs.salesPriceYen ? (
+            buying ? (
+              <BuyButton>Loading...</BuyButton>
+            ) : (
+              <BuyButton
+                onClick={() => {
+                  setBuying(true);
+                  buyArt(artist.uid, art.id);
+                }}
+              >
+                Buy &nbsp; / &nbsp; &yen;{" "}
+                {toPriceDisplay(art.attrs.salesPriceYen)}
+              </BuyButton>
+            )
+          ) : null}
+        </CaptionContainer>
+      </Grid>
+    </Grid>
+  );
+};
 
 function toPriceDisplay(priceYen: number): string {
   return priceYen.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -142,6 +158,20 @@ const ArtContainer = styled("div")<{ src: string }>`
     height: 94vh;
     margin: 0;
     margin-top: 3vh;
+  `)}
+`;
+
+const ArtProgressContainer = styled.div`
+  width: 90%;
+  height: 150vw;
+  margin: 20px auto;
+
+  ${pc(`
+    height: 94vh;
+    margin: 0;
+    margin-top: 3vh;
+    padding-left: calc(45% - 25px);
+    padding-top: 40vh;
   `)}
 `;
 

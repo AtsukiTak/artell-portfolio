@@ -74,7 +74,7 @@ const AddArtPage: FC<UserProps> = ({ user }) => {
 
 export default withUser(AddArtPage);
 
-const AddArtThumbnail = new DownloadImage("/img/add-art-thumbnail.png");
+const AddArtThumbnail = DownloadImage.download("/img/add-art-thumbnail.png");
 
 const Container = styled.div`
   width: 80%;

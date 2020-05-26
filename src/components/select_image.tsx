@@ -24,7 +24,7 @@ export default ({ image, setImage }: Props) => {
 
   return (
     <Container>
-      <Sumbnail src={image.getUrl()} />
+      <Sumbnail image={image} />
       <SelectImageRect>Select</SelectImageRect>
       <HiddenFileInput
         type="file"

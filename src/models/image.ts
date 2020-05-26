@@ -1,25 +1,26 @@
 import Jimp from "jimp";
 
 export interface Image {
-  getUrl(): string;
+  getUrl(): Promise<string>;
   clone(): Image;
 }
 
 export class DownloadImage {
-  constructor(private url: string) {}
+  constructor(private asyncUrl: Promise<string>) {}
 
-  static async download(externalUrl: string): Promise<DownloadImage> {
-    const res = await fetch(externalUrl);
-    const blob = await res.blob();
-    return new DownloadImage(window.URL.createObjectURL(blob));
+  static download(externalUrl: string): DownloadImage {
+    const asyncUrl = fetch(externalUrl)
+      .then(res => res.blob())
+      .then(blob => window.URL.createObjectURL(blob));
+    return new DownloadImage(asyncUrl);
   }
 
-  getUrl(): string {
-    return this.url;
+  getUrl(): Promise<string> {
+    return this.asyncUrl;
   }
 
   clone(): Image {
-    return new DownloadImage(this.url);
+    return new DownloadImage(this.asyncUrl);
   }
 }
 
@@ -40,8 +41,8 @@ export class UploadImage {
     return new UploadImage(new DataURI(dataURI));
   }
 
-  getUrl(): string {
-    return this.uri.uri;
+  getUrl(): Promise<string> {
+    return Promise.resolve(this.uri.uri);
   }
 
   getBase64(): string {
