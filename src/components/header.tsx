@@ -9,7 +9,7 @@ const Header: FC = () => {
   return (
     <Container>
       <FlexBox>
-        <Title to="/">#40326d</Title>
+        <Title to="/">PORTFOLIO</Title>
         <SnsLink
           href="https://www.instagram.com/artell_gallery/"
           target="_blank"
@@ -47,7 +47,7 @@ const Title = styled(Link)`
 
   @media (min-width: 700px) {
     left: 100px;
-    font-size: 24px;
+    font-size: 20px;
   }
 `;
 
