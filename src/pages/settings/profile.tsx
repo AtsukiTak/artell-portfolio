@@ -48,7 +48,7 @@ const ProfileSettingPage: React.FC<UserProps> = ({ user }) => {
       <SettingTab selected="tab1" />
       <Container>
         <LinkToArtistPage to={`/${artist.uid}`}>
-          自分の作家ページを確認する →
+          自分の作家ページをプレビューする →
         </LinkToArtistPage>
         <SelectImageComponent
           image={thumbnail || ArtistDefaultThumbnail}
@@ -58,7 +58,7 @@ const ProfileSettingPage: React.FC<UserProps> = ({ user }) => {
         {updating ? (
           <UpdateButton disabled>Updating...</UpdateButton>
         ) : (
-          <UpdateButton onClick={onSubmit}>Update</UpdateButton>
+          <UpdateButton onClick={onSubmit}>プロフィールを更新する</UpdateButton>
         )}
       </Container>
       <Footer />
@@ -73,9 +73,10 @@ const ArtistDefaultThumbnail = DownloadImage.download(
 );
 
 const Container = styled.div`
-  width: 80%;
+  width: 86%;
   margin: 0px auto;
   padding: 50px 0;
+  font-family: YuGo, 'Noto Sans JP';
 
   ${pc(`
     margin-top: 90px;
@@ -85,15 +86,32 @@ const Container = styled.div`
 const LinkToArtistPage = styled(Link)`
   display: block;
   margin-bottom: 20px;
+  font-size: 12px;
+  line-height: 1.45;
+  letter-spacing: 0.46px;
   text-decoration: underline;
-  color: #586069;
+  text-align: right;
+  color: #333333;
 
   &:visited {
     color: #586069;
   }
+
+  ${pc(`
+    font-size: 16px;
+    text-align: left;
+  `)}
 `;
 
-const UpdateButton = styled(PrimaryButton)`
+const UpdateButton = styled.button`
   display: block;
+  width: 100%;
+  height: 51px;
   margin: 30px auto 0 auto;
+  background: white;
+  border-radius: 2px;
+  border: solid 1.5px #666666;
+  font-size: 13px;
+  letter-spacing: 1.18px;
+  color: #333333;
 `;

@@ -2,6 +2,8 @@ import React, {FC} from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 
+import { pc } from "components/responsive";
+
 interface Props {
   selected: 'tab1' | 'tab2';
 }
@@ -36,18 +38,24 @@ const TabItem: FC<{selected: boolean; to: string}> = ({
 const Container = styled.div`
   width: 100%;
   height: 55px;
-  background-color: #fafbfc;
+  background-color: #fafafa;
   border-bottom: 1px solid #e1e4e8;
 `;
 
 const TabItemBase = styled(Link)`
   display: inline-block;
   width: 50%;
-  height: 50px;
-  margin-top: 5px;
+  height: 55px;
+  font-size: 14px;
   text-align: center;
-  line-height: 50px;
+  line-height: 55px;
+  letter-spacing: 1.37px;
+  text-decoration: none;
   border-radius: 4px 4px 0px 0px;
+
+  ${pc(`
+    font-size: 16px;
+  `)}
 `;
 
 const SelectedTab = styled(TabItemBase)`
