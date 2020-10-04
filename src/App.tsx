@@ -18,7 +18,7 @@ import ArtPage from "pages/art";
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
-    font-family: YuGo, 'Noto Sans JP', sans-serif, Robot-Light,;
+    font-family: YuGo, 'Noto Sans JP', sans-serif, Robot-Light;
   }
   * {
     box-sizing: border-box;
