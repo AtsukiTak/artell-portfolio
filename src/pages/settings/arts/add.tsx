@@ -8,9 +8,7 @@ import { ArtAttributes, ArtRepository } from "models/art";
 import { setUser } from "services/login";
 import { withUser, UserProps } from "components/with-user";
 import { useRouter } from "components/router";
-import { pc } from "components/responsive";
 import Header from "components/header";
-import { PrimaryButton } from "components/button";
 import SelectImageComponent from "components/select_image";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -60,12 +58,13 @@ const AddArtPage: FC<UserProps> = ({ user }) => {
       <>
         <Header />
         <Container>
+          <AttributeName>作品の写真 / Picture of the piece</AttributeName>
           <SelectImageComponent
             image={thumbnail || AddArtThumbnail}
             setImage={img => setThumbnail(img)}
           />
           <AttributesComponent attrs={attrs} setAttrs={setAttrs} />
-          <SubmitButton onClick={onSubmitClick}>追加</SubmitButton> 
+          <SubmitButton onClick={onSubmitClick}>作品を登録</SubmitButton> 
         </Container>
       </>
     )
@@ -77,18 +76,29 @@ export default withUser(AddArtPage);
 const AddArtThumbnail = DownloadImage.download("/img/add-art-thumbnail.png");
 
 const Container = styled.div`
-  width: 80%;
+  width: 86%
   margin: 0px auto;
-  padding: 50px 0;
-
-  ${pc(`
-    margin-top: 90px;
-  `)}
+  padding: 20px 0;
 `;
 
-const SubmitButton = styled(PrimaryButton)`
+const AttributeName = styled.div`
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333333;
+`;
+
+const SubmitButton = styled.button`
   display: block;
-  margin: 0 auto;
+  width: 100%;
+  height: 51px;
+  margin: 30px auto 0 auto;
+  background: white;
+  border-radius: 2px;
+  border: solid 1.5px #666666;
+  font-size: 13px;
+  letter-spacing: 1.18px;
+  color: #333333;
 `;
 
 const ProgressContainer = styled.div`
