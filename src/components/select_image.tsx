@@ -25,7 +25,7 @@ export default ({ image, setImage }: Props) => {
   return (
     <Container>
       <Sumbnail image={image} />
-      <SelectImageRect>プロフィール写真を変更する</SelectImageRect>
+      <SelectImageRect>画像を選択する</SelectImageRect>
       <HiddenFileInput
         type="file"
         accept="image/*"
@@ -48,21 +48,12 @@ const Container = styled.label`
 `;
 
 const SelectImageRect = styled.div`
-  position: absolute;
-  right: 0;
-  bottom: 10px;
   width: 100%;
-  height: 30px;
-  color: #333;
-  border-radius: 4px;
-  text-align: right;
+  margin-top: 4px;
+  color: #acacac;
+  text-align: left;
   font-size: 12px;
   letter-spacing: 0.46px;
-  ${pc(`
-    bottom: 0px;
-    left: 0;
-    text-align: left;
-  `)}
 `;
 
 const HiddenFileInput = styled.input`

@@ -31,10 +31,6 @@ const ArtsComponent: FC<Props> = ({ arts }) => {
   );
 };
 
-const DefaultArtThumbnail = DownloadImage.download(
-  "/img/add-art-thumbnail.png"
-);
-
 export default ArtsComponent;
 
 const Container = styled.div`

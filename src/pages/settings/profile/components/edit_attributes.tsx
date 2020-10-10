@@ -84,7 +84,7 @@ const EditAttributeElement = styled.div`
 `;
 
 const AttributeName = styled.div`
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   margin-bottom: 8px;
   color: #333333;
@@ -98,7 +98,7 @@ const InputField = styled.input`
   border: 0;
   border-radius: 0;
   border-bottom: 1px solid #acacac;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 20px;
   color: #acacac;
 `;
@@ -111,7 +111,7 @@ const TextField = styled.textarea`
   background-color: white;
   border: 1px solid #acacac;
   border-radius: 2px;
-  font-size: 12px;
+  font-size: 16px;
   line-height: 20px;
   color: #acacac;
 `;
