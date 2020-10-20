@@ -1,20 +1,20 @@
-import React, {FC} from 'react';
-import styled from 'styled-components';
-import {Link} from 'react-router-dom';
+import React, { FC } from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 import { pc } from "components/responsive";
 
 interface Props {
-  selected: 'tab1' | 'tab2';
+  selected: "tab1" | "tab2";
 }
 
-const Tab: FC<Props> = ({selected}) => {
+const Tab: FC<Props> = ({ selected }) => {
   return (
     <Container>
-      <TabItem selected={selected === 'tab1'} to="/settings/profile">
+      <TabItem selected={selected === "tab1"} to="/settings/profile">
         プロフィール
       </TabItem>
-      <TabItem selected={selected === 'tab2'} to="/settings/arts">
+      <TabItem selected={selected === "tab2"} to="/settings/arts">
         作品
       </TabItem>
     </Container>
@@ -23,7 +23,7 @@ const Tab: FC<Props> = ({selected}) => {
 
 export default Tab;
 
-const TabItem: FC<{selected: boolean; to: string}> = ({
+const TabItem: FC<{ selected: boolean; to: string }> = ({
   selected,
   to,
   children,

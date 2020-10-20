@@ -84,7 +84,7 @@ const HR = styled.hr`
   height: 1px;
   margin-top: 65px;
   margin-bottom: 65px;
-  background: #c9c9c9;;
+  background: #c9c9c9;
   border: 0;
 
   ${pc(`

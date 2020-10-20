@@ -1,13 +1,13 @@
-import React, {FC, useState, useCallback} from 'react';
-import styled from 'styled-components';
+import React, { FC, useState, useCallback } from "react";
+import styled from "styled-components";
 
-export const SquareBasedWidth: FC<{className?: string}> = ({
+export const SquareBasedWidth: FC<{ className?: string }> = ({
   children,
   className,
 }) => {
   const [width, setWidth] = useState(0);
 
-  const containerRef = useCallback(node => {
+  const containerRef = useCallback((node) => {
     if (node !== null) {
       setWidth(node.getBoundingClientRect().width);
     }
@@ -20,7 +20,7 @@ export const SquareBasedWidth: FC<{className?: string}> = ({
   );
 };
 
-const Container = styled('div')<{height: number}>`
+const Container = styled("div")<{ height: number }>`
   width: 100%;
-  height: ${props => props.height}px;
+  height: ${(props) => props.height}px;
 `;

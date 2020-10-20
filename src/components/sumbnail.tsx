@@ -15,7 +15,7 @@ const Sumbnail: FC<SumbnailProps> = ({ image, shade, className }) => {
   const [srcUrl, setSrcUrl] = React.useState<string | null>(null);
 
   React.useEffect(() => {
-    image.getUrl().then(url => setSrcUrl(url));
+    image.getUrl().then((url) => setSrcUrl(url));
   }, [image]);
 
   if (srcUrl === null) {
@@ -36,11 +36,11 @@ const ProgressContainer = styled.div`
 `;
 
 const Container = styled(SquareBasedWidth)<{ src: string; shade?: boolean }>`
-  background-image: url(${props => props.src});
+  background-image: url(${(props) => props.src});
   background-size: cover;
   background-position: center;
   box-shadow: 0 1px 4px 0
-    ${props => (props.shade ? "rgba(0,0,0,0.5)" : "rgba(0,0,0,0)")};
+    ${(props) => (props.shade ? "rgba(0,0,0,0.5)" : "rgba(0,0,0,0)")};
 `;
 
 export default Sumbnail;

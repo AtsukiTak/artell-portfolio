@@ -17,41 +17,33 @@ export class Firestore {
    */
   async addArtistDoc(artistUid: string, data: ArtistDocument) {
     const formatedData = Firestore.formatAddData(data);
-    await this.firestore()
-      .doc(`artists/${artistUid}`)
-      .set(formatedData);
+    await this.firestore().doc(`artists/${artistUid}`).set(formatedData);
   }
 
   async updateArtistDoc(artistUid: string, data: ArtistDocument) {
     const formatedData = Firestore.formatUpdateData(data);
-    await this.firestore()
-      .doc(`artists/${artistUid}`)
-      .set(formatedData);
+    await this.firestore().doc(`artists/${artistUid}`).set(formatedData);
   }
 
   async queryArtistDocList(): Promise<{ id: string; doc: ArtistDocument }[]> {
-    const collection = await this.firestore()
-      .collection("artists")
-      .get();
-    return collection.docs.map(doc => ({
+    const collection = await this.firestore().collection("artists").get();
+    return collection.docs.map((doc) => ({
       id: doc.id,
-      doc: ArtistDocumentDecoder.runWithException(doc.data())
+      doc: ArtistDocumentDecoder.runWithException(doc.data()),
     }));
   }
 
   async queryArtistDoc(
     id: string
   ): Promise<{ id: string; doc: ArtistDocument } | null> {
-    const doc = await this.firestore()
-      .doc(`artists/${id}`)
-      .get();
+    const doc = await this.firestore().doc(`artists/${id}`).get();
     const data = doc.data();
     if (data === undefined) {
       return null;
     } else {
       return {
         id,
-        doc: ArtistDocumentDecoder.runWithException(data)
+        doc: ArtistDocumentDecoder.runWithException(data),
       };
     }
   }
@@ -68,7 +60,7 @@ export class Firestore {
       const doc = collection.docs[0];
       return {
         id: doc.id,
-        doc: ArtistDocumentDecoder.runWithException(doc.data())
+        doc: ArtistDocumentDecoder.runWithException(doc.data()),
       };
     } else {
       return null;
@@ -95,9 +87,9 @@ export class Firestore {
       .collection(`artists/${artistUid}/arts`)
       .where("showPublic", "==", true)
       .get();
-    return collection.docs.map(doc => ({
+    return collection.docs.map((doc) => ({
       id: doc.id,
-      doc: ArtDocumentDecoder.runWithException(doc.data())
+      doc: ArtDocumentDecoder.runWithException(doc.data()),
     }));
   }
 
@@ -107,9 +99,9 @@ export class Firestore {
     const collection = await this.firestore()
       .collection(`artists/${artistUid}/arts`)
       .get();
-    return collection.docs.map(doc => ({
+    return collection.docs.map((doc) => ({
       id: doc.id,
-      doc: ArtDocumentDecoder.runWithException(doc.data())
+      doc: ArtDocumentDecoder.runWithException(doc.data()),
     }));
   }
 
@@ -126,7 +118,7 @@ export class Firestore {
       const doc = collection.docs[0];
       return {
         id: doc.id,
-        doc: ArtDocumentDecoder.runWithException(doc.data())
+        doc: ArtDocumentDecoder.runWithException(doc.data()),
       };
     } else {
       return null;
@@ -141,9 +133,7 @@ export class Firestore {
   }
 
   async deleteArtDoc(artistUid: string, artId: string) {
-    await this.firestore()
-      .doc(`artists/${artistUid}/arts/${artId}`)
-      .delete();
+    await this.firestore().doc(`artists/${artistUid}/arts/${artId}`).delete();
   }
 
   static formatAddData<T extends {}>(data: T): { [key: string]: any } {
@@ -186,7 +176,7 @@ const ArtistDocumentDecoder: D.Decoder<ArtistDocument> = D.object({
   description: D.string(),
   twitter: D.string(),
   facebook: D.string(),
-  instagram: D.string()
+  instagram: D.string(),
 });
 
 export interface ArtDocument {
@@ -208,7 +198,7 @@ const ArtDocumentDecoder: D.Decoder<ArtDocument> = D.object({
   materials: D.string(),
   showPublic: D.boolean(),
   salesPriceYen: D.optional(D.number()),
-  rentalPriceYen: D.optional(D.number())
+  rentalPriceYen: D.optional(D.number()),
 });
 
 export class Storage {

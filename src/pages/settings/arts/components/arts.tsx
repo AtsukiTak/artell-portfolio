@@ -18,7 +18,7 @@ const ArtsComponent: FC<Props> = ({ arts }) => {
           <AddArtButton>作品を追加する</AddArtButton>
         </Link>
       </ArtContainer>
-      {arts.map(art => (
+      {arts.map((art) => (
         <ArtContainer key={art.id}>
           <Link to={`/settings/arts/edit/${art.id}`}>
             <Sumbnail image={art.thumbnail} />
@@ -67,7 +67,6 @@ const ArtTitle = styled.p`
   color: #333333;
   font-family: YuGo, sans-serif;
 `;
-
 
 const AddArtButton = styled.button`
   display: block;

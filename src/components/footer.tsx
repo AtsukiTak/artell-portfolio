@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 import * as color from "./color";
 
 import { pc } from "components/responsive";
@@ -9,14 +9,29 @@ const Footer = () => {
     <Container>
       <HR />
       <FooterList>
-        <FooterListItem><Link href="/terms.pdf" target="_blank">利用規約</Link></FooterListItem>
-        <FooterListItem><Link href="/privacy-policy.pdf" target="_blank">プライバシーポリシー</Link></FooterListItem>
-        <FooterListItem><Link href="/specified-commercial-transaction-act.pdf" target="_blank">特定商取引法に基づく表示</Link></FooterListItem>
+        <FooterListItem>
+          <Link href="/terms.pdf" target="_blank">
+            利用規約
+          </Link>
+        </FooterListItem>
+        <FooterListItem>
+          <Link href="/privacy-policy.pdf" target="_blank">
+            プライバシーポリシー
+          </Link>
+        </FooterListItem>
+        <FooterListItem>
+          <Link
+            href="/specified-commercial-transaction-act.pdf"
+            target="_blank"
+          >
+            特定商取引法に基づく表示
+          </Link>
+        </FooterListItem>
       </FooterList>
       <CopyRight>©ARTELL, Inc.</CopyRight>
     </Container>
   );
-}
+};
 
 export default Footer;
 
@@ -33,7 +48,7 @@ const HR = styled.hr`
   height: 1px;
   margin-top: 65px;
   margin-bottom: 65px;
-  background: #c9c9c9;;
+  background: #c9c9c9;
   border: 0;
 
   ${pc(`
@@ -67,7 +82,6 @@ const Link = styled.a`
   text-decoration: none;
   color: ${color.LightBlack.hex};
 `;
-
 
 const CopyRight = styled.div`
   font-family: Roboto-Light;

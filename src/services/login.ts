@@ -19,7 +19,7 @@ export interface State {
 }
 
 export const InitialState = {
-  user: "checking" as const
+  user: "checking" as const,
 };
 
 export type AppAction<T extends string, Extra extends {} = {}> = ReduxAction<
@@ -30,7 +30,7 @@ export type AppAction<T extends string, Extra extends {} = {}> = ReduxAction<
 export enum ActionType {
   setUser = "SET_USER",
   clearUser = "CLEAR_USER",
-  clearUserIfChecking = "CLEAR_USER_IF_CHECKING"
+  clearUserIfChecking = "CLEAR_USER_IF_CHECKING",
 }
 
 export type Action =
@@ -41,24 +41,24 @@ export type Action =
 export const setUser = (artist: Artist, arts: Art[]): Action => ({
   type: ActionType.setUser,
   artist,
-  arts
+  arts,
 });
 
 export const clearUser = (): Action => ({
-  type: ActionType.clearUser
+  type: ActionType.clearUser,
 });
 
 export const clearUserIfChecking = (): Action => ({
-  type: ActionType.clearUserIfChecking
+  type: ActionType.clearUserIfChecking,
 });
 
 export function startObserving(): ThunkAction<void, State, null, Action> {
-  return dispatch => {
+  return (dispatch) => {
     setTimeout(() => {
       dispatch(clearUserIfChecking());
     }, MAX_CHECKING_MILLIS);
 
-    firebase.auth().onAuthStateChanged(async fbuser => {
+    firebase.auth().onAuthStateChanged(async (fbuser) => {
       if (fbuser) {
         let artist = await new ArtistRepository(firebase.app()).queryByUid(
           fbuser.uid
@@ -94,17 +94,17 @@ export function reducer(state: State = InitialState, action: Action): State {
       return {
         user: {
           artist: action.artist,
-          arts: action.arts
-        }
+          arts: action.arts,
+        },
       };
     case ActionType.clearUser:
       return {
-        user: null
+        user: null,
       };
     case ActionType.clearUserIfChecking:
       if (state.user === "checking") {
         return {
-          user: null
+          user: null,
         };
       } else {
         return state;

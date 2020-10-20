@@ -16,7 +16,7 @@ export interface State {
 }
 
 export const InitialState = {
-  map: new Map()
+  map: new Map(),
 };
 
 /*
@@ -27,7 +27,7 @@ type AppAction<T extends string, Extra extends {} = {}> = ReduxAction<T> &
 
 export enum ActionType {
   addArtist = "ADD_ARTIST",
-  notFoundArtist = "NOT_FOUND_ARTIST"
+  notFoundArtist = "NOT_FOUND_ARTIST",
 }
 
 export type Action =
@@ -37,18 +37,18 @@ export type Action =
 const addArtist = (artist: Artist, arts: Art[]): Action => ({
   type: ActionType.addArtist,
   artist,
-  arts
+  arts,
 });
 
 const notFoundArtist = (artistId: string): Action => ({
   type: ActionType.notFoundArtist,
-  artistId
+  artistId,
 });
 
 export function getArtistById(
   id: string
 ): ThunkAction<Promise<void>, State, null, Action> {
-  return async dispatch => {
+  return async (dispatch) => {
     const artist = await new ArtistRepository(firebase.app()).queryByUid(id);
     if (artist === null) {
       dispatch(notFoundArtist(id));
@@ -70,12 +70,12 @@ export function reducer(state: State = InitialState, action: Action): State {
       return {
         map: cloneMap(state.map).set(action.artist.uid, {
           artist: action.artist,
-          arts: action.arts
-        })
+          arts: action.arts,
+        }),
       };
     case ActionType.notFoundArtist:
       return {
-        map: cloneMap(state.map).set(action.artistId, null)
+        map: cloneMap(state.map).set(action.artistId, null),
       };
     default:
       return state;

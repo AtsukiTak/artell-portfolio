@@ -13,7 +13,7 @@ export const Route: React.FC<RouteProps> = ({ children, path, exact }) => (
   <OriginalRoute
     path={path}
     exact={exact}
-    render={routeProps => (
+    render={(routeProps) => (
       <RouterContext.Provider value={routeProps}>
         {isReactElement(children) ? children : children(routeProps)}
       </RouterContext.Provider>

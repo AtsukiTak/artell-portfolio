@@ -16,7 +16,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
         <InputField
           type="text"
           value={attrs.name}
-          onChange={e => setAttrs({ ...attrs, name: e.target.value })}
+          onChange={(e) => setAttrs({ ...attrs, name: e.target.value })}
         />
       </EditAttributeElement>
       <EditAttributeElement>
@@ -24,14 +24,14 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
         <InputField
           type="text"
           value={attrs.comment}
-          onChange={e => setAttrs({ ...attrs, comment: e.target.value })}
+          onChange={(e) => setAttrs({ ...attrs, comment: e.target.value })}
         />
       </EditAttributeElement>
       <EditAttributeElement>
         <AttributeName>プロフィール / Profile</AttributeName>
         <TextField
           value={attrs.description}
-          onChange={e => setAttrs({ ...attrs, description: e.target.value })}
+          onChange={(e) => setAttrs({ ...attrs, description: e.target.value })}
         />
       </EditAttributeElement>
       <EditAttributeElement>
@@ -39,7 +39,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
         <InputField
           type="text"
           value={"@" + attrs.twitter}
-          onChange={e =>
+          onChange={(e) =>
             setAttrs({ ...attrs, twitter: e.target.value.slice(1) })
           }
         />
@@ -50,7 +50,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
           type="text"
           placeholder="artell.life.42"
           value={attrs.facebook}
-          onChange={e => setAttrs({ ...attrs, facebook: e.target.value })}
+          onChange={(e) => setAttrs({ ...attrs, facebook: e.target.value })}
         />
       </EditAttributeElement>
       <EditAttributeElement>
@@ -59,7 +59,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
           type="text"
           placeholder="artell.gallery"
           value={attrs.instagram}
-          onChange={e => setAttrs({ ...attrs, instagram: e.target.value })}
+          onChange={(e) => setAttrs({ ...attrs, instagram: e.target.value })}
         />
       </EditAttributeElement>
     </Container>

@@ -48,7 +48,7 @@ const ArtPage: FC<ArtPageProps> = ({ artistId, artId }) => {
     );
   } else {
     const artist = artistArts.artist;
-    const art = artistArts.arts.find(art => art.id === artId);
+    const art = artistArts.arts.find((art) => art.id === artId);
     if (!art) {
       return (
         <NotFoundMessage variant="body2" align="center" color="textSecondary">
@@ -69,7 +69,7 @@ const InternalArtPage: FC<{ artist: Artist; art: Art }> = ({ artist, art }) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    art.thumbnail.getUrl().then(url => setImageUrl(url));
+    art.thumbnail.getUrl().then((url) => setImageUrl(url));
   }, [art]);
 
   return (
@@ -91,7 +91,7 @@ const InternalArtPage: FC<{ artist: Artist; art: Art }> = ({ artist, art }) => {
           </Fade>
         ) : (
           <ArtProgressContainer>
-              <CircularProgress size={50} thickness={2} />
+            <CircularProgress size={50} thickness={2} />
           </ArtProgressContainer>
         )}
       </Grid>

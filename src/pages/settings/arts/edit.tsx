@@ -22,7 +22,7 @@ interface Props {
 }
 
 const ArtEditPageWrapper: React.FC<UserProps & Props> = ({ user, artId }) => {
-  const art = user.arts.find(art => art.id === artId);
+  const art = user.arts.find((art) => art.id === artId);
   if (!art) {
     return null;
   } else {
@@ -54,7 +54,9 @@ const ArtEditPage: React.FC<{
         newArt
       );
     }
-    const newArts = user.arts.map(art => (art.id === newArt.id ? newArt : art));
+    const newArts = user.arts.map((art) =>
+      art.id === newArt.id ? newArt : art
+    );
     dispatch(setUser(user.artist, newArts));
     setRequesting(false);
   };
@@ -65,7 +67,7 @@ const ArtEditPage: React.FC<{
       const artRepo = new ArtRepository(firebase.app());
       console.log(artRepo);
       await artRepo.deleteArt(user.artist, art);
-      const newUserArts = user.arts.filter(a => a.id !== art.id);
+      const newUserArts = user.arts.filter((a) => a.id !== art.id);
       dispatch(setUser(user.artist, newUserArts));
       history.push("/settings/arts");
     }

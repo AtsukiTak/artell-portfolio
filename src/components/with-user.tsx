@@ -25,7 +25,7 @@ export interface UserProps {
 export function withUser<P extends UserProps>(
   WrappedComponent: React.FC<P>
 ): React.FC<Omit<P, keyof UserProps>> {
-  const WithUser: React.FC<Omit<P, keyof UserProps>> = props => {
+  const WithUser: React.FC<Omit<P, keyof UserProps>> = (props) => {
     const user = useSelector((state: RootState) => state.login.user);
 
     if (user === "checking") {

@@ -1,7 +1,7 @@
-import {combineReducers, Store as ReduxStore} from 'redux';
+import { combineReducers, Store as ReduxStore } from "redux";
 
-import * as artist from './artist';
-import * as login from './login';
+import * as artist from "./artist";
+import * as login from "./login";
 
 /*
  * Store

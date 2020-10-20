@@ -26,7 +26,7 @@ const AddArtPage: FC<UserProps> = ({ user }) => {
     materials: "",
     showPublic: true,
     salesPriceYen: 29800,
-    rentalPriceYen: 4980
+    rentalPriceYen: 4980,
   });
   const dispatch = useDispatch();
 
@@ -52,7 +52,7 @@ const AddArtPage: FC<UserProps> = ({ user }) => {
       <ProgressContainer>
         <CircularProgress size={50} thickness={2} />
       </ProgressContainer>
-    )
+    );
   } else {
     return (
       <>
@@ -61,14 +61,14 @@ const AddArtPage: FC<UserProps> = ({ user }) => {
           <AttributeName>作品の写真 / Picture of the piece</AttributeName>
           <SelectImageComponent
             image={thumbnail || AddArtThumbnail}
-            setImage={img => setThumbnail(img)}
+            setImage={(img) => setThumbnail(img)}
           />
           <AttributesComponent attrs={attrs} setAttrs={setAttrs} />
-          <SubmitButton onClick={onSubmitClick}>作品を登録</SubmitButton> 
+          <SubmitButton onClick={onSubmitClick}>作品を登録</SubmitButton>
         </Container>
       </>
-    )
-  };
+    );
+  }
 };
 
 export default withUser(AddArtPage);

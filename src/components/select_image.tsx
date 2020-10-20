@@ -12,7 +12,7 @@ interface Props {
 
 export default ({ image, setImage }: Props) => {
   const onImageSelected = useCallback(
-    async e => {
+    async (e) => {
       if (e.target.files && e.target.files.length > 0) {
         const file = e.target.files[0];
         const image = await UploadImage.fromFile(file);

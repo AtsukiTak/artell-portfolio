@@ -10,8 +10,8 @@ export class DownloadImage {
 
   static download(externalUrl: string): DownloadImage {
     const asyncUrl = fetch(externalUrl)
-      .then(res => res.blob())
-      .then(blob => window.URL.createObjectURL(blob));
+      .then((res) => res.blob())
+      .then((blob) => window.URL.createObjectURL(blob));
     return new DownloadImage(asyncUrl);
   }
 

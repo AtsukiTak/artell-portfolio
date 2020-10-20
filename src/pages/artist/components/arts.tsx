@@ -11,12 +11,12 @@ import * as color from "components/color";
 
 const ArtsComponent: FC<{ artist: Artist; arts: Art[] }> = ({
   artist,
-  arts
+  arts,
 }) => {
   return (
     <Container>
       <Grid container>
-        {arts.map(art => (
+        {arts.map((art) => (
           <Grid item xs={12}>
             <ArtComponent key={art.attrs.title}>
               <Link to={`/${artist.uid}/${art.id}/`}>

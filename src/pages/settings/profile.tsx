@@ -75,7 +75,7 @@ const Container = styled.div`
   width: 86%;
   margin: 0px auto;
   padding: 50px 0;
-  font-family: YuGo, 'Noto Sans JP';
+  font-family: YuGo, "Noto Sans JP";
 
   ${pc(`
     margin-top: 90px;

@@ -53,9 +53,7 @@ const App: React.FC<{ store: Store }> = ({ store }) => {
               <ThanksPage />
             </Route>
             <Route path="/:artistId" exact>
-              {({ match }) => (
-                <ArtistPage artistId={match.params.artistId} />
-              )}
+              {({ match }) => <ArtistPage artistId={match.params.artistId} />}
             </Route>
             <Route path="/:artistId/:artId" exact>
               {({ match }) => (

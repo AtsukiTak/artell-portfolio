@@ -48,7 +48,7 @@ export class ArtistRepository {
       description: "",
       twitter: "",
       facebook: "",
-      instagram: ""
+      instagram: "",
     };
     await this.firestore.addArtistDoc(uid, doc);
     return new Artist(uid, doc, null);
@@ -132,18 +132,18 @@ export function buyArt(artistUid: string, artId: string): Promise<void> {
     url: createSessionUrl,
     body: {
       artistUid,
-      artId
+      artId,
     },
-    decoder: BuyArtDecoder
+    decoder: BuyArtDecoder,
   })
-    .then(sessionId =>
+    .then((sessionId) =>
       stripe.redirectToCheckout({
-        sessionId
+        sessionId,
       })
     )
-    .then(res => console.log(res));
+    .then((res) => console.log(res));
 }
 
 const BuyArtDecoder: D.Decoder<string> = D.object({
-  id: D.string()
+  id: D.string(),
 }).map(({ id }) => id);

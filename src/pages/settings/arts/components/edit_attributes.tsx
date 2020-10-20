@@ -17,7 +17,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
           type="text"
           value={attrs.title}
           placeholder="作品のタイトルを入力してください。"
-          onChange={e => setAttrs({ ...attrs, title: e.target.value })}
+          onChange={(e) => setAttrs({ ...attrs, title: e.target.value })}
         />
       </EditAttributeElement>
       <EditAttributeElement>
@@ -26,7 +26,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
           type="tel"
           value={attrs.widthMM || ""}
           placeholder="mm(ミリ)単位で入力してください。"
-          onChange={e =>
+          onChange={(e) =>
             setAttrs({ ...attrs, widthMM: validateNum(e.target.value) })
           }
         />
@@ -37,7 +37,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
           type="tel"
           value={attrs.heightMM || ""}
           placeholder="mm(ミリ)単位で入力してください。"
-          onChange={e =>
+          onChange={(e) =>
             setAttrs({ ...attrs, heightMM: validateNum(e.target.value) })
           }
         />
@@ -47,7 +47,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
         <TextField
           value={attrs.description}
           placeholder="制作の中で考えたことや制作動機を記入ください"
-          onChange={e => setAttrs({ ...attrs, description: e.target.value })}
+          onChange={(e) => setAttrs({ ...attrs, description: e.target.value })}
         />
       </EditAttributeElement>
       <EditAttributeElement>
@@ -56,7 +56,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
           type="text"
           placeholder="Oil on canvas"
           value={attrs.materials}
-          onChange={e => setAttrs({ ...attrs, materials: e.target.value })}
+          onChange={(e) => setAttrs({ ...attrs, materials: e.target.value })}
         />
       </EditAttributeElement>
       <EditAttributeElement>
@@ -64,10 +64,10 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
         <InputCheckbox
           type="checkbox"
           checked={attrs.salesPriceYen !== undefined}
-          onChange={e =>
+          onChange={(e) =>
             setAttrs({
               ...attrs,
-              salesPriceYen: e.target.checked ? 29800 : undefined
+              salesPriceYen: e.target.checked ? 29800 : undefined,
             })
           }
         />
@@ -79,7 +79,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
           <InputField
             type="tel"
             value={attrs.salesPriceYen}
-            onChange={e =>
+            onChange={(e) =>
               setAttrs({ ...attrs, salesPriceYen: validateNum(e.target.value) })
             }
           />
@@ -90,10 +90,10 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
         <InputCheckbox
           type="checkbox"
           checked={attrs.rentalPriceYen !== undefined}
-          onChange={e =>
+          onChange={(e) =>
             setAttrs({
               ...attrs,
-              rentalPriceYen: e.target.checked ? 4900 : undefined
+              rentalPriceYen: e.target.checked ? 4900 : undefined,
             })
           }
         />
@@ -104,7 +104,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
         <InputCheckbox
           type="checkbox"
           checked={attrs.showPublic}
-          onChange={e => setAttrs({ ...attrs, showPublic: e.target.checked })}
+          onChange={(e) => setAttrs({ ...attrs, showPublic: e.target.checked })}
         />
         <Desc>
           {attrs.showPublic
