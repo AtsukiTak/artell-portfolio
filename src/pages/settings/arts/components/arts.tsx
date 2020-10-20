@@ -16,9 +16,8 @@ const ArtsComponent: FC<Props> = ({ arts }) => {
     <Container>
       <ArtContainer key="new">
         <Link to={`/settings/arts/add`}>
-          <Sumbnail image={DefaultArtThumbnail} />
+          <AddArtButton>作品を追加する</AddArtButton>
         </Link>
-        <ArtTitle>作品を追加する</ArtTitle>
       </ArtContainer>
       {arts.map(art => (
         <ArtContainer key={art.id}>
@@ -32,15 +31,12 @@ const ArtsComponent: FC<Props> = ({ arts }) => {
   );
 };
 
-const DefaultArtThumbnail = DownloadImage.download(
-  "/img/add-art-thumbnail.png"
-);
-
 export default ArtsComponent;
 
 const Container = styled.div`
   width: 100%;
   padding-bottom: 50px;
+  font-family: YuGo, sans-serif;
 
   ${pc(`
     justify-content: start;
@@ -50,17 +46,40 @@ const Container = styled.div`
 
 const ArtContainer = styled.div`
   display: block;
-  width: 50vw;
+  width: 80vw;
   margin: 50px auto 0 auto;
 
+  & a {
+    text-decoration: none;
+  }
+
   ${pc(`
-    width: 280px;
-    margin: 25px 70px;
+    margin: 50px auto;
   `)}
 `;
 
-const ArtTitle = styled.h4`
+const ArtTitle = styled.p`
   margin: 0;
   margin-top: 5px;
-  color: gray;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  line-height: 2;
+  color: #333333;
+  font-family: YuGo, sans-serif;
+`;
+
+
+const AddArtButton = styled.button`
+  display: block;
+  width: 100%;
+  height: 51px;
+  margin: 30px auto 0 auto;
+  background: white;
+  border-radius: 2px;
+  border: solid 1.5px #666666;
+  font-size: 13px;
+  letter-spacing: 1.18px;
+  color: #333333;
+  font-family: YuGo, sans-serif;
 `;

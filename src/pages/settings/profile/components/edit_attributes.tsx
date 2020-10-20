@@ -12,7 +12,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
   return (
     <Container>
       <EditAttributeElement>
-        <AttributeName>Name</AttributeName>
+        <AttributeName>名前 / Name</AttributeName>
         <InputField
           type="text"
           value={attrs.name}
@@ -20,7 +20,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
         />
       </EditAttributeElement>
       <EditAttributeElement>
-        <AttributeName>Status Message</AttributeName>
+        <AttributeName>ヒトコト / Status Message</AttributeName>
         <InputField
           type="text"
           value={attrs.comment}
@@ -28,7 +28,7 @@ const EditAttributesComponent: React.FC<Props> = ({ attrs, setAttrs }) => {
         />
       </EditAttributeElement>
       <EditAttributeElement>
-        <AttributeName>Profile</AttributeName>
+        <AttributeName>プロフィール / Profile</AttributeName>
         <TextField
           value={attrs.description}
           onChange={e => setAttrs({ ...attrs, description: e.target.value })}
@@ -71,6 +71,7 @@ export default EditAttributesComponent;
 const Container = styled.div`
   width: 100%;
   padding: 30px 0;
+  font-family: YuGo, sans-serif;
 `;
 
 const EditAttributeElement = styled.div`
@@ -83,9 +84,10 @@ const EditAttributeElement = styled.div`
 `;
 
 const AttributeName = styled.div`
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
+  color: #333333;
 `;
 
 const InputField = styled.input`
@@ -93,23 +95,23 @@ const InputField = styled.input`
   height: 34px;
   margin-right: 5px;
   padding: 6px 8px;
-  background-color: #fafbfc;
-  border: 1px solid #d1d5da;
-  border-radius: 3px;
-  box-shadow: inset 0 1px 2px rgba(27, 31, 35, 0.075);
-  font-size: 14px;
+  border: 0;
+  border-radius: 0;
+  border-bottom: 1px solid #acacac;
+  font-size: 16px;
   line-height: 20px;
+  color: #acacac;
 `;
 
 const TextField = styled.textarea`
   width: 100%;
-  height: 74px;
+  height: 162px;
   margin-right: 5px;
   padding: 6px 8px;
-  background-color: #fafbfc;
-  border: 1px solid #d1d5da;
-  border-radius: 3px;
-  box-shadow: inset 0 1px 2px rgba(27, 31, 35, 0.075);
-  font-size: 14px;
+  background-color: white;
+  border: 1px solid #acacac;
+  border-radius: 2px;
+  font-size: 16px;
   line-height: 20px;
+  color: #acacac;
 `;

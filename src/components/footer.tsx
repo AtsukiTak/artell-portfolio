@@ -30,11 +30,14 @@ const Container = styled.footer`
 
 const HR = styled.hr`
   width: 10%;
+  height: 1px;
   margin-top: 65px;
   margin-bottom: 65px;
-  border: 0.5px solid #979797;
+  background: #c9c9c9;;
+  border: 0;
 
   ${pc(`
+    width: 5%;
     margin-top: 130px;
     margin-bottom: 100px;
   `)}
