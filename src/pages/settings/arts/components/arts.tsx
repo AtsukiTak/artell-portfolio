@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import { Art } from "models/art";
-import { DownloadImage } from "models/image";
 import { pc } from "components/responsive";
 import Sumbnail from "components/sumbnail";
 

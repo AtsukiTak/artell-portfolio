@@ -12,7 +12,6 @@ import { withUser, UserProps } from "components/with-user";
 import { pc } from "components/responsive";
 import Header from "components/header";
 import Footer from "components/footer";
-import { PrimaryButton } from "components/button";
 import SelectImageComponent from "components/select_image";
 
 import SettingTab from "./components/tab";
