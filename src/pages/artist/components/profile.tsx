@@ -74,6 +74,7 @@ const Container = styled.div`
   width: 100%;
   margin-top: 50px;
   padding: 0 24px;
+  font-family: YuGo, sans-serif;
   ${pc(`
     width: 800px;
     height: 100%;
@@ -111,7 +112,6 @@ const TextContent = styled.div`
 `;
 
 const Tag = styled.div`
-  font-family: YuGo;
   color: ${color.LightGray.hex};
   text-align: left;
   font-size: 12px;
@@ -122,10 +122,9 @@ const Name = styled.div`
   width: 100%;
   margin-top: 12px;
   margin-bottom: 32px;
-  font-family: YuGo;
   color: ${color.LightBlack.hex};
   text-align: left;
-  font-size: 20px;
+  font-size: 16px;
   letter-spacing: 2px;
 `;
 
@@ -133,10 +132,9 @@ const Description = styled.div`
   width: 100%;
   margin-top: 12px;
   margin-bottom: 32px;
-  font-family: YuGo;
-  color: #505050;
+  color: ${color.LightBlack.hex};
   font-size: 16px;
-  line-height: 32px;
+  line-height: 26px;
   word-break: break-all;
 
   ${pc(`
