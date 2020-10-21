@@ -112,6 +112,6 @@ const TextField = styled.textarea`
   border: 1px solid #acacac;
   border-radius: 2px;
   font-size: 16px;
-  line-height: 20px;
+  line-height: 28px;
   color: #acacac;
 `;
