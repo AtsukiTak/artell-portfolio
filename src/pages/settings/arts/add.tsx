@@ -76,7 +76,7 @@ export default withUser(AddArtPage);
 const AddArtThumbnail = DownloadImage.download("/img/add-art-thumbnail.png");
 
 const Container = styled.div`
-  width: 86%
+  width: 90%;
   margin: 0px auto;
   padding: 20px 0;
 `;
