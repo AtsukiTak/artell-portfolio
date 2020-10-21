@@ -72,13 +72,15 @@ const ArtistDefaultThumbnail = DownloadImage.download(
 );
 
 const Container = styled.div`
-  width: 90%;
+  width: 100%;
   margin: 0px auto;
-  padding: 50px 0;
+  padding: 50px 20px;
   font-family: YuGo, "Noto Sans JP";
 
   ${pc(`
+    width: 86%;
     margin-top: 90px;
+    padding: 50px 0px;
   `)}
 `;
 

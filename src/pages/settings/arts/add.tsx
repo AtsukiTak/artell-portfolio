@@ -10,6 +10,7 @@ import { withUser, UserProps } from "components/with-user";
 import { useRouter } from "components/router";
 import Header from "components/header";
 import SelectImageComponent from "components/select_image";
+import { pc } from "components/responsive";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import AttributesComponent from "./components/edit_attributes";
@@ -76,9 +77,13 @@ export default withUser(AddArtPage);
 const AddArtThumbnail = DownloadImage.download("/img/add-art-thumbnail.png");
 
 const Container = styled.div`
-  width: 90%;
+  width: 100%;
   margin: 0px auto;
-  padding: 20px 0;
+  padding: 20px;
+  ${pc(`
+    width: 86%;
+    padding: 20px 0;
+  `)}
 `;
 
 const AttributeName = styled.div`
