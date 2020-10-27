@@ -12,6 +12,7 @@ import { Artist, buyArt } from "models/artist";
 import { Art } from "models/art";
 import { RootState } from "services/index";
 import { getArtistById } from "services/artist";
+import { useScrollToTop } from "hooks/scrollToTop";
 import { pc } from "components/responsive";
 
 import * as color from "components/color";
@@ -26,6 +27,8 @@ const ArtPage: FC<ArtPageProps> = ({ artistId, artId }) => {
     state.artist.map.get(artistId)
   );
   const dispatch = useDispatch();
+
+  useScrollToTop();
 
   useEffect(() => {
     if (artistArts === undefined) {
