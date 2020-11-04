@@ -192,7 +192,6 @@ const Title = styled.div`
   margin-bottom: 32px;
   font-size: 20px;
   color: ${color.LightBlack.hex};
-  font-family: NotoSansCJKjp-Light;
   line-height: 20px;
   letter-spacing: 2px;
 `;
@@ -200,7 +199,6 @@ const Title = styled.div`
 const ArtistName = styled.div`
   padding-right: 24px;
   margin-bottom: 4px;
-  font-family: NotoSansCJKjp-Light;
   font-size: 12px;
   color: ${color.LightGray.hex};
   line-height: 12px;
@@ -213,7 +211,6 @@ const Materials = styled.div`
   font-size: 12px;
   color: ${color.LightGray.hex};
   margin-top: 8px;
-  font-family: NotoSansCJKjp-Light;
   line-height: 12px;
 `;
 
@@ -223,7 +220,6 @@ const Size = styled.div`
   font-size: 12px;
   color: ${color.LightGray.hex};
   margin-top: 8px;
-  font-family: NotoSansCJKjp-Light;
   line-height: 12px;
   letter-spacing: 0.5px;
 `;
@@ -233,7 +229,6 @@ const Description = styled.div`
   font-size: 12px;
   color: ${color.LightGray.hex};
   margin-top: 8px;
-  font-family: NotoSansCJKjp-Light;
   line-height: 16px;
   letter-spacing: 0.8px;
 `;
@@ -247,7 +242,6 @@ const BuyButton = styled.button`
   border-radius: 2px;
   border: 1px solid ${color.MidGray.hex};
   background-color: white;
-  font-family: NotoSansCJKjp-Light;
   font-size: 12px;
   letter-spacing: 1.57px;
   color: ${color.MidGray.hex};

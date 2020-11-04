@@ -75,7 +75,6 @@ const Container = styled.div`
   width: 100%;
   margin: 0px auto;
   padding: 50px 20px;
-  font-family: YuGo, "Noto Sans JP";
 
   ${pc(`
     width: 86%;
@@ -111,8 +110,13 @@ const UpdateButton = styled.button`
   margin: 30px auto 0 auto;
   background: white;
   border-radius: 2px;
-  border: solid 1.5px #666666;
+  border: solid 1px #333;
   font-size: 13px;
   letter-spacing: 1.18px;
   color: #333333;
+  font-family: YuGothic, "Yu Gothic", "Hiragino Kaku Gothic ProN", Roboto,
+    sans-serif;
+  ${pc(`
+    font-size: 14px;
+  `)}
 `;

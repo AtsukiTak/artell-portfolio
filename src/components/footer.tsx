@@ -64,9 +64,8 @@ const FooterList = styled.ul`
 `;
 
 const FooterListItem = styled.li`
-  margin-bottom: 16px;
-  font-family: Roboto-Light;
-  font-size: 16px;
+  margin-bottom: 12px;
+  font-size: 14px;
   letter-spacing: 1.6px;
   &:last-child {
     margin-bottom: 65px;
@@ -84,7 +83,6 @@ const Link = styled.a`
 `;
 
 const CopyRight = styled.div`
-  font-family: Roboto-Light;
   font-size: 12px;
   letter-spacing: 1.6px;
   text-decoration: none;

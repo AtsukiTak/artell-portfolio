@@ -71,7 +71,6 @@ export default EditAttributesComponent;
 const Container = styled.div`
   width: 100%;
   padding: 30px 0;
-  font-family: YuGo, sans-serif;
 `;
 
 const EditAttributeElement = styled.div`
@@ -101,6 +100,11 @@ const InputField = styled.input`
   font-size: 16px;
   line-height: 20px;
   color: #acacac;
+  &::placeholder {
+    font-size: 12px;
+    font-family: YuGothic, "Yu Gothic", "Hiragino Kaku Gothic ProN", Roboto,
+      sans-serif;
+  }
 `;
 
 const TextField = styled.textarea`
@@ -114,4 +118,9 @@ const TextField = styled.textarea`
   font-size: 16px;
   line-height: 28px;
   color: #acacac;
+  &::placeholder {
+    font-size: 12px;
+    font-family: YuGothic, "Yu Gothic", "Hiragino Kaku Gothic ProN", Roboto,
+      sans-serif;
+  }
 `;
