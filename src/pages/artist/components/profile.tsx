@@ -74,7 +74,6 @@ const Container = styled.div`
   width: 100%;
   margin-top: 50px;
   padding: 0 24px;
-  font-family: YuGo, sans-serif;
   ${pc(`
     width: 800px;
     height: 100%;
@@ -124,7 +123,7 @@ const Name = styled.div`
   margin-bottom: 32px;
   color: ${color.LightBlack.hex};
   text-align: left;
-  font-size: 16px;
+  font-size: 14px;
   letter-spacing: 2px;
 `;
 
@@ -133,8 +132,8 @@ const Description = styled.div`
   margin-top: 12px;
   margin-bottom: 32px;
   color: ${color.LightBlack.hex};
-  font-size: 16px;
-  line-height: 26px;
+  font-size: 14px;
+  line-height: 32px;
   word-break: break-all;
 
   ${pc(`

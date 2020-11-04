@@ -35,7 +35,6 @@ export default ArtsComponent;
 const Container = styled.div`
   width: 100%;
   padding-bottom: 50px;
-  font-family: YuGo, sans-serif;
 
   ${pc(`
     justify-content: start;
@@ -65,7 +64,6 @@ const ArtTitle = styled.p`
   letter-spacing: 1.2px;
   line-height: 2;
   color: #333333;
-  font-family: YuGo, sans-serif;
 `;
 
 const AddArtButton = styled.button`
@@ -75,9 +73,13 @@ const AddArtButton = styled.button`
   margin: 30px auto 0 auto;
   background: white;
   border-radius: 2px;
-  border: solid 1.5px #666666;
+  border: solid 1px #333;
   font-size: 13px;
   letter-spacing: 1.18px;
   color: #333333;
-  font-family: YuGo, sans-serif;
+  font-family: YuGothic, "Yu Gothic", "Hiragino Kaku Gothic ProN", Roboto,
+    sans-serif;
+  ${pc(`
+    font-size: 14px;
+  `)}
 `;
