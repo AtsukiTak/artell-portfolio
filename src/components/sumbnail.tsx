@@ -1,20 +1,27 @@
 import React, { FC } from "react";
 import styled from "styled-components";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import LazyLoad from "react-lazyload";
 
 import { SquareBasedWidth } from "./square";
 import { Image } from "models/image";
 
-interface SumbnailProps {
+interface ThumbnailProps {
   image: Image;
   shade?: boolean;
   className?: string;
 }
 
-const Sumbnail: FC<SumbnailProps> = ({ image, shade, className }) => {
+export default (props: ThumbnailProps) => (
+  <LazyLoad height={200}>
+    <Thumbnail {...props} />
+  </LazyLoad>
+);
+
+const Thumbnail: FC<ThumbnailProps> = ({ image, shade, className }) => {
   const [srcUrl, setSrcUrl] = React.useState<string | null>(null);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     image.getUrl().then((url) => setSrcUrl(url));
   }, [image]);
 
@@ -42,5 +49,3 @@ const Container = styled(SquareBasedWidth)<{ src: string; shade?: boolean }>`
   box-shadow: 0 1px 4px 0
     ${(props) => (props.shade ? "rgba(0,0,0,0.5)" : "rgba(0,0,0,0)")};
 `;
-
-export default Sumbnail;

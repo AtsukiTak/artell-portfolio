@@ -6,7 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import { Art } from "models/art";
 import { Artist } from "models/artist";
 
-import Sumbnail from "components/sumbnail";
+import Thumbnail from "components/sumbnail";
 import * as color from "components/color";
 
 const ArtsComponent: FC<{ artist: Artist; arts: Art[] }> = ({
@@ -20,7 +20,7 @@ const ArtsComponent: FC<{ artist: Artist; arts: Art[] }> = ({
           <Grid item xs={12}>
             <ArtComponent key={art.attrs.title}>
               <Link to={`/${artist.uid}/${art.id}/`}>
-                <StyledSumbnail image={art.thumbnail} />
+                <StyledThumbnail image={art.thumbnail} />
               </Link>
               <Title>{art.attrs.title}</Title>
             </ArtComponent>
@@ -46,7 +46,7 @@ const ArtComponent = styled.div`
   margin-top: 120px;
 `;
 
-const StyledSumbnail = styled(Sumbnail)`
+const StyledThumbnail = styled(Thumbnail)`
   width: 100%;
 `;
 
