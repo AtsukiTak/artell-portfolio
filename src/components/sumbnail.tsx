@@ -13,7 +13,7 @@ interface ThumbnailProps {
 }
 
 export default (props: ThumbnailProps) => (
-  <LazyLoad height={200}>
+  <LazyLoad height={200} once>
     <Thumbnail {...props} />
   </LazyLoad>
 );
