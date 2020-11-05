@@ -6,21 +6,29 @@ export interface Image {
 }
 
 export class DownloadImage {
-  constructor(private asyncUrl: Promise<string>) {}
+  constructor(private externalUrl: string, private objectUrl: string | null) {}
 
   static download(externalUrl: string): DownloadImage {
-    const asyncUrl = fetch(externalUrl)
-      .then((res) => res.blob())
-      .then((blob) => window.URL.createObjectURL(blob));
-    return new DownloadImage(asyncUrl);
+    return new DownloadImage(externalUrl, null);
   }
 
   getUrl(): Promise<string> {
-    return this.asyncUrl;
+    if (this.objectUrl === null) {
+      const self = this;
+      return fetch(this.externalUrl)
+        .then((res) => res.blob())
+        .then((blob) => window.URL.createObjectURL(blob))
+        .then((url) => {
+          self.objectUrl = url;
+          return url;
+        });
+    } else {
+      return Promise.resolve(this.objectUrl);
+    }
   }
 
   clone(): Image {
-    return new DownloadImage(this.asyncUrl);
+    return new DownloadImage(this.externalUrl, this.objectUrl);
   }
 }
 
