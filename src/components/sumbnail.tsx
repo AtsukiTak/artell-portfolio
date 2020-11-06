@@ -13,7 +13,11 @@ interface ThumbnailProps {
 }
 
 export default (props: ThumbnailProps) => (
-  <LazyLoad height={200} once>
+  <LazyLoad
+    height={200}
+    once
+    style={{ width: "fit-content", display: "inline-block" }}
+  >
     <Thumbnail {...props} />
   </LazyLoad>
 );
