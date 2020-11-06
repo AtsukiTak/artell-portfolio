@@ -13,13 +13,11 @@ interface ThumbnailProps {
 }
 
 export default (props: ThumbnailProps) => (
-  <LazyLoad
-    height={200}
-    once
-    style={{ width: "fit-content", display: "inline-block" }}
-  >
-    <Thumbnail {...props} />
-  </LazyLoad>
+  <div className={props.className}>
+    <LazyLoad height={200} once>
+      <Thumbnail {...props} />
+    </LazyLoad>
+  </div>
 );
 
 const Thumbnail: FC<ThumbnailProps> = ({ image, shade, className }) => {
