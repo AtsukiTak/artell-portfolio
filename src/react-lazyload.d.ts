@@ -7,4 +7,3 @@ declare module "react-lazyload" {
 
   export default LazyLoad;
 }
-
