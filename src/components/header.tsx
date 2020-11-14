@@ -3,19 +3,19 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import * as color from "./color";
-import { ArtellInstagram } from "./logo";
+import { ReactComponent as LogoMenuIcon } from "./nav-menu.svg";
+import Menu from "components/menu";
 
 const Header: FC = () => {
+  const [isOpenMenuModal, setIsOpenMenuModal] = React.useState<boolean>(false);
+  const closeMenuModal = () => setIsOpenMenuModal(false);
+
   return (
     <Container>
       <FlexBox>
         <Title to="/">PORTFOLIO</Title>
-        <SnsLink
-          href="https://www.instagram.com/artell_gallery/"
-          target="_blank"
-        >
-          <ArtellInstagram />
-        </SnsLink>
+        <IconMenu onClick={() => setIsOpenMenuModal(!isOpenMenuModal)} />
+        {isOpenMenuModal ? <Menu onCloseMenuModal={closeMenuModal} /> : null}
       </FlexBox>
     </Container>
   );
@@ -30,11 +30,15 @@ const Container = styled.header`
   @media (min-width: 700px) {
     font-size: 24px;
   }
+  & body {
+    overflow: hidden;
+  }
 `;
 
 const FlexBox = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const Title = styled(Link)`
@@ -51,9 +55,9 @@ const Title = styled(Link)`
   }
 `;
 
-const SnsLink = styled.a`
-  & svg {
-    width: 20px;
-    height: 20px;
-  }
+const IconMenu = styled(LogoMenuIcon)`
+  width: 24px;
+  height: 24px;
+  margin-bottom: 2px;
+  fill: ${color.LightBlack4.hex};
 `;
