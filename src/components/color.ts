@@ -37,5 +37,6 @@ function fromHex(hex: string): number {
 export const White = Color.fromHex("#ffffff");
 export const Black = Color.fromHex("#000000");
 export const LightBlack = Color.fromHex("#333333");
+export const LightBlack4 = Color.fromHex("#444444");
 export const MidGray = Color.fromHex("#666666");
 export const LightGray = Color.fromHex("#a1a1a1");
