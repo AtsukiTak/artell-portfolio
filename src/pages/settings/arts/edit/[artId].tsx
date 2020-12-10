@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import * as firebase from "firebase/app";
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 import { Image } from "models/image";
 import { Art, ArtAttributes, ArtRepository } from "models/art";
 import { Artist } from "models/artist";
 import { setUser } from "services/login";
 import { withUser, UserProps } from "components/with-user";
-import { useRouter } from "components/router";
 import { pc } from "components/responsive";
 import Header from "components/header";
 import { PrimaryButton, DangerButton } from "components/button";
@@ -36,7 +36,7 @@ const ArtEditPage: React.FC<{
   user: { artist: Artist; arts: Art[] };
   art: Art;
 }> = ({ user, art }) => {
-  const { history } = useRouter();
+  const router = useRouter();
   const [thumbnail, setThumbnail] = useState<Image>(art.thumbnail);
   const [attrs, setAttrs] = useState<ArtAttributes>(art.attrs);
   const [requesting, setRequesting] = useState(false);
@@ -69,7 +69,7 @@ const ArtEditPage: React.FC<{
       await artRepo.deleteArt(user.artist, art);
       const newUserArts = user.arts.filter((a) => a.id !== art.id);
       dispatch(setUser(user.artist, newUserArts));
-      history.push("/settings/arts");
+      router.push("/settings/arts");
     }
     setRequesting(false);
   };
@@ -78,9 +78,9 @@ const ArtEditPage: React.FC<{
     <>
       <Header />
       <Container>
-        <LinkToArtPage to={`/${user.artist.uid}/${art.id}`}>
-          作品ページへ →
-        </LinkToArtPage>
+        <Link href={`/${user.artist.uid}/${art.id}`} passHref>
+          <LinkToArtPage>作品ページへ →</LinkToArtPage>
+        </Link>
         <SelectImageComponent image={thumbnail} setImage={setThumbnail} />
         <EditAttributesComponent attrs={attrs} setAttrs={setAttrs} />
         <Buttons>
@@ -111,7 +111,7 @@ const Container = styled.div`
   `)}
 `;
 
-const LinkToArtPage = styled(Link)`
+const LinkToArtPage = styled.a`
   display: block;
   margin-bottom: 20px;
   text-decoration: underline;

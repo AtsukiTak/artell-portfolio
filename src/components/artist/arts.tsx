@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import Grid from "@material-ui/core/Grid";
 
 import { Art } from "models/art";
@@ -19,8 +19,10 @@ const ArtsComponent: FC<{ artist: Artist; arts: Art[] }> = ({
         {arts.map((art) => (
           <Grid item xs={12}>
             <ArtComponent key={art.attrs.title}>
-              <Link to={`/${artist.uid}/${art.id}/`}>
-                <StyledThumbnail image={art.thumbnail} />
+              <Link href={`/${artist.uid}/${art.id}/`}>
+                <a>
+                  <StyledThumbnail image={art.thumbnail} />
+                </a>
               </Link>
               <Title>{art.attrs.title}</Title>
             </ArtComponent>

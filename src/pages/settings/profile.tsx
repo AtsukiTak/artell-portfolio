@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import * as firebase from "firebase/app";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 import { Image, DownloadImage } from "models/image";
 import { Artist, ArtistAttributes, ArtistRepository } from "models/artist";
@@ -46,9 +46,11 @@ const ProfileSettingPage: React.FC<UserProps> = ({ user }) => {
       <Header />
       <SettingTab selected="tab1" />
       <Container>
-        <LinkToArtistPage to={`/${artist.uid}`}>
-          自分の作家ページをプレビューする →
-        </LinkToArtistPage>
+        <Link href={`/${artist.uid}`} passHref>
+          <LinkToArtistPage>
+            自分の作家ページをプレビューする →
+          </LinkToArtistPage>
+        </Link>
         <SelectImageComponent
           image={thumbnail || ArtistDefaultThumbnail}
           setImage={setThumbnail}
@@ -83,7 +85,7 @@ const Container = styled.div`
   `)}
 `;
 
-const LinkToArtistPage = styled(Link)`
+const LinkToArtistPage = styled.a`
   display: block;
   margin-bottom: 20px;
   font-size: 12px;

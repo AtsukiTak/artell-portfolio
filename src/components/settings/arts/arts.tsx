@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 import { Art } from "models/art";
 import { pc } from "components/responsive";
@@ -14,14 +14,18 @@ const ArtsComponent: FC<Props> = ({ arts }) => {
   return (
     <Container>
       <ArtContainer key="new">
-        <Link to={`/settings/arts/add`}>
-          <AddArtButton>作品を追加する</AddArtButton>
+        <Link href={`/settings/arts/add`}>
+          <a>
+            <AddArtButton>作品を追加する</AddArtButton>
+          </a>
         </Link>
       </ArtContainer>
       {arts.map((art) => (
         <ArtContainer key={art.id}>
-          <Link to={`/settings/arts/edit/${art.id}`}>
-            <Sumbnail image={art.thumbnail} />
+          <Link href={`/settings/arts/edit/${art.id}`}>
+            <a>
+              <Sumbnail image={art.thumbnail} />
+            </a>
           </Link>
           <ArtTitle>{art.attrs.title}</ArtTitle>
         </ArtContainer>

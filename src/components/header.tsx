@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 import * as color from "./color";
 import { ArtellInstagram } from "./logo";
@@ -9,7 +9,9 @@ const Header: FC = () => {
   return (
     <Container>
       <FlexBox>
-        <Title to="/">PORTFOLIO</Title>
+        <Link href="/" passHref>
+          <Title>PORTFOLIO</Title>
+        </Link>
         <SnsLink
           href="https://www.instagram.com/artell_gallery/"
           target="_blank"
@@ -37,7 +39,7 @@ const FlexBox = styled.div`
   justify-content: space-between;
 `;
 
-const Title = styled(Link)`
+const Title = styled.a`
   display: inline-block;
   font-family: "Avenir Next Ultra Light";
   font-size: 18px;

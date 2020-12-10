@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 import { pc } from "components/responsive";
 
@@ -29,9 +29,17 @@ const TabItem: FC<{ selected: boolean; to: string }> = ({
   children,
 }) => {
   if (selected) {
-    return <SelectedTab to={to}>{children}</SelectedTab>;
+    return (
+      <Link href={to} passHref>
+        <SelectedTab>{children}</SelectedTab>
+      </Link>
+    );
   } else {
-    return <UnselectedTab to={to}>{children}</UnselectedTab>;
+    return (
+      <Link href={to} passHref>
+        <UnselectedTab>{children}</UnselectedTab>
+      </Link>
+    );
   }
 };
 
@@ -42,7 +50,7 @@ const Container = styled.div`
   border-bottom: 1px solid #e1e4e8;
 `;
 
-const TabItemBase = styled(Link)`
+const TabItemBase = styled.a`
   display: inline-block;
   width: 50%;
   height: 55px;

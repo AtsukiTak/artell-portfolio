@@ -4,28 +4,20 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 import { RootState } from "services/index";
 import Header from "components/header";
-import { useRouter } from "components/router";
 
 const SigninPage: React.FC = () => {
-  const { history } = useRouter();
+  const router = useRouter();
   const user = useSelector((state: RootState) => state.login.user);
 
-  if (user) {
-    history.push("/settings/profile");
-  }
-
-  const uiConfig = {
-    signInSuccessUrl: "/settings/profile",
-    signInFlow: "popup",
-    signInOptions: [
-      {
-        provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-      },
-    ],
-  };
+  React.useEffect(() => {
+    if (user) {
+      router.push("/settings/profile");
+    }
+  }, [router, user]);
 
   return (
     <>
@@ -41,6 +33,16 @@ const SigninPage: React.FC = () => {
 };
 
 export default SigninPage;
+
+const uiConfig = {
+  signInSuccessUrl: "/settings/profile",
+  signInFlow: "popup",
+  signInOptions: [
+    {
+      provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+    },
+  ],
+};
 
 const Container = styled.div`
   width: 90%;

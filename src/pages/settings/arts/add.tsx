@@ -2,12 +2,12 @@ import React, { FC, useState } from "react";
 import styled from "styled-components";
 import * as firebase from "firebase/app";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 
 import { DownloadImage, UploadImage } from "models/image";
 import { ArtAttributes, ArtRepository } from "models/art";
 import { setUser } from "services/login";
 import { withUser, UserProps } from "components/with-user";
-import { useRouter } from "components/router";
 import Header from "components/header";
 import SelectImageComponent from "components/select_image";
 import { pc } from "components/responsive";
@@ -16,7 +16,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import AttributesComponent from "components/settings/arts/edit_attributes";
 
 const AddArtPage: FC<UserProps> = ({ user }) => {
-  const { history } = useRouter();
+  const router = useRouter();
   const [thumbnail, setThumbnail] = useState<UploadImage | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [attrs, setAttrs] = useState<ArtAttributes>({
@@ -44,7 +44,7 @@ const AddArtPage: FC<UserProps> = ({ user }) => {
       setIsLoading(false);
       alert("新しい作品を追加しました！");
       dispatch(setUser(user.artist, [...user.arts, newArt]));
-      history.push("/settings/arts");
+      router.push("/settings/arts");
     }
   };
 

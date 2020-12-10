@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 import { Art } from "models/art";
 import { Artist } from "models/artist";
@@ -38,7 +38,10 @@ export function withUser<P extends UserProps>(
       return (
         <div>
           <h3>
-            <Link to="/signin">ログイン</Link>が必要です
+            <Link href="/signin">
+              <a>ログイン</a>
+            </Link>
+            が必要です
           </h3>
         </div>
       );

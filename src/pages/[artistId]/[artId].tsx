@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import Fade from "@material-ui/core/Fade";
 import Grid from "@material-ui/core/Grid";
@@ -78,14 +78,18 @@ const InternalArtPage: FC<{ artist: Artist; art: Art }> = ({ artist, art }) => {
   return (
     <Grid container alignItems="flex-end">
       <Hidden only={["lg", "xl"]}>
-        <MobileCloseButton to={`/${artist.uid}/`}>
-          {artist.attrs.name}｜作品一覧を見る →
-        </MobileCloseButton>
+        <Link href={`/${artist.uid}/`} passHref>
+          <MobileCloseButton>
+            {artist.attrs.name}｜作品一覧を見る →
+          </MobileCloseButton>
+        </Link>
       </Hidden>
       <Hidden only={["xs", "sm", "md"]}>
-        <PcCloseButton to={`/${artist.uid}/`}>
-          {artist.attrs.name}｜作品一覧を見る →
-        </PcCloseButton>
+        <Link href={`/${artist.uid}`} passHref>
+          <PcCloseButton>
+            {artist.attrs.name}｜作品一覧を見る →
+          </PcCloseButton>
+        </Link>
       </Hidden>
       <Grid item xs={12} md={9}>
         {imageUrl !== null ? (
@@ -130,7 +134,7 @@ function toPriceDisplay(priceYen: number): string {
   return priceYen.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-const PcCloseButton = styled(Link)`
+const PcCloseButton = styled.a`
   position: absolute;
   right: 20px;
   bottom: 12px;
@@ -139,7 +143,7 @@ const PcCloseButton = styled(Link)`
   color: ${color.LightGray.hex};
 `;
 
-const MobileCloseButton = styled(Link)`
+const MobileCloseButton = styled.a`
   position: absolute;
   right: 24px;
   top: 24px;
