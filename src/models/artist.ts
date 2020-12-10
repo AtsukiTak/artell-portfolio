@@ -114,9 +114,10 @@ const [stripePubKey, createSessionUrl] = (() => {
   }
 })();
 
-const stripe = Stripe(stripePubKey);
 
 export function buyArt(artistUid: string, artId: string): Promise<void> {
+  const stripe = Stripe(stripePubKey);
+
   return request({
     method: Method.POST,
     url: createSessionUrl,

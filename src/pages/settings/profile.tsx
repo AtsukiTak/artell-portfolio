@@ -14,8 +14,8 @@ import Header from "components/header";
 import Footer from "components/footer";
 import SelectImageComponent from "components/select_image";
 
-import SettingTab from "./components/tab";
-import EditAttributesComponent from "./profile/components/edit_attributes";
+import SettingTab from "components/settings/tab";
+import EditAttributesComponent from "components/settings/profile/edit_attributes";
 
 const ProfileSettingPage: React.FC<UserProps> = ({ user }) => {
   const { artist, arts } = user;

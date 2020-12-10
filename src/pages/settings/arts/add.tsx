@@ -13,7 +13,7 @@ import SelectImageComponent from "components/select_image";
 import { pc } from "components/responsive";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import AttributesComponent from "./components/edit_attributes";
+import AttributesComponent from "components/settings/arts/edit_attributes";
 
 const AddArtPage: FC<UserProps> = ({ user }) => {
   const { history } = useRouter();

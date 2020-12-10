@@ -8,12 +8,12 @@ import Typography from "@material-ui/core/Typography";
 
 import { RootState } from "services/index";
 import { getArtistById } from "services/artist";
-import Header from "../components/header";
-import Footer from "../components/footer";
+import Header from "components/header";
+import Footer from "components/footer";
 import { pc } from "components/responsive";
 
-import ProfileComponent from "./artist/components/profile";
-import ArtsComponent from "./artist/components/arts";
+import ProfileComponent from "components/artist/profile";
+import ArtsComponent from "components/artist/arts";
 
 interface ArtistPageProps {
   artistId: string;
