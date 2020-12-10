@@ -52,7 +52,9 @@ export const clearUserIfChecking = (): Action => ({
   type: ActionType.clearUserIfChecking,
 });
 
-export function startObserving(): ThunkAction<void, State, null, Action> {
+export function startObserving(
+  firebaseApp: firebase.app.App
+): ThunkAction<void, State, null, Action> {
   return (dispatch) => {
     setTimeout(() => {
       dispatch(clearUserIfChecking());
@@ -60,7 +62,7 @@ export function startObserving(): ThunkAction<void, State, null, Action> {
 
     firebase.auth().onAuthStateChanged(async (fbuser) => {
       if (fbuser) {
-        let artist = await new ArtistRepository(firebase.app()).queryByUid(
+        let artist = await new ArtistRepository(firebaseApp).queryByUid(
           fbuser.uid
         );
         if (artist === null) {
@@ -70,16 +72,16 @@ export function startObserving(): ThunkAction<void, State, null, Action> {
             alert("名前、またはメールアドレスを取得できませんでした");
             throw new Error("Can't get user name or email");
           }
-          artist = await new ArtistRepository(firebase.app()).create(
+          artist = await new ArtistRepository(firebaseApp).create(
             fbuser.uid,
             name,
             email
           );
         }
 
-        const arts = await new ArtRepository(
-          firebase.app()
-        ).queryAllListByArtist(artist);
+        const arts = await new ArtRepository(firebaseApp).queryAllListByArtist(
+          artist
+        );
         dispatch(setUser(artist, arts));
       } else {
         dispatch(clearUser());
