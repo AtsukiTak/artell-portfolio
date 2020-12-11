@@ -1,102 +1,36 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
-import Fade from "@material-ui/core/Fade";
-import Container from "@material-ui/core/Container";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Typography from "@material-ui/core/Typography";
+import { Artist } from "models/artist";
 
-import { RootState } from "services/index";
-import { getArtistById } from "services/artist";
-import Header from "components/header";
-import Footer from "components/footer";
-import { pc } from "components/responsive";
+// for SSR
+import { GetServerSideProps } from "next";
+import { getFirebaseApp } from "utils/firebase";
+import { queryArtistById } from "infras/repos/artist";
 
-import ProfileComponent from "components/artist/profile";
-import ArtsComponent from "components/artist/arts";
-
-interface ArtistPageProps {
-  artistId: string;
+interface PageProps {
+  artist: Artist;
 }
 
-const ArtistPage: React.FC<ArtistPageProps> = ({ artistId }) => {
-  const artistArts = useSelector((state: RootState) =>
-    state.artist.map.get(artistId)
-  );
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (artistArts === undefined) {
-      dispatch(getArtistById(artistId));
-    }
-  }, [artistId, artistArts, dispatch]);
-
-  if (artistArts === undefined) {
-    return <ArtistLoadingPage />;
-  } else if (artistArts === null) {
-    return <ArtistNotFoundPage />;
-  } else {
-    const { artist, arts } = artistArts;
-    return (
-      <>
-        <Header />
-        <Fade in timeout={2000}>
-          <Container>
-            <ProfileComponent artist={artist} />
-            <HR />
-            <ArtsComponent artist={artist} arts={arts} />
-          </Container>
-        </Fade>
-        <Footer />
-      </>
-    );
-  }
+const Page: React.FC<PageProps> = ({ artist }) => {
+  return <div>{artist.uid}</div>;
 };
 
-const ArtistLoadingPage: React.FC = () => (
-  <>
-    <Header />
-    <ProgressContainer>
-      <CircularProgress size={50} thickness={2} />
-    </ProgressContainer>
-    <Footer />
-  </>
-);
+export default Page;
 
-const ArtistNotFoundPage: React.FC = () => (
-  <>
-    <Header />
-    <NotFoundMessage
-      variant="body2"
-      align="center"
-      color="textSecondary"
-    >{`作家さんが見つかりませんでした`}</NotFoundMessage>
-    <Footer />
-  </>
-);
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context
+) => {
+  const artistId = context.params!.id as string;
+  const fbApp = getFirebaseApp();
+  const artist = await queryArtistById(artistId, fbApp);
 
-const NotFoundMessage = styled(Typography)`
-  margin-top: 40vh;
-`;
+  if (artist === null) {
+    return {
+      notFound: true,
+    };
+  }
 
-const HR = styled.hr`
-  width: 10%;
-  height: 1px;
-  margin-top: 65px;
-  margin-bottom: 65px;
-  background: #c9c9c9;
-  border: 0;
-
-  ${pc(`
-    width: 5%;
-    margin-top: 130px;
-    margin-bottom: 100px;
-  `)}
-`;
-
-const ProgressContainer = styled.div`
-  width: 50px;
-  margin: 40vh auto;
-`;
-
-export default ArtistPage;
+  return {
+    props: {
+      artist,
+    },
+  };
+};
