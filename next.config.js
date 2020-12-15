@@ -5,7 +5,14 @@ module.exports = {
       issuer: {
         test: /\.(js|ts)x?$/,
       },
-      use: ["@svgr/webpack"],
+      use: [{
+        loader: "@svgr/webpack",
+        options: {
+          svgoConfig: {
+            plugins: [{removeViewBox: false}]
+          }
+        }
+      }],
     });
     config.node.fs = "empty";
 
