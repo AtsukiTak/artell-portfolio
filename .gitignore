@@ -26,6 +26,7 @@ yarn-error.log*
 # Firebase
 .firebase/
 adminsdk-credential.json
+serviceAccountKey.json
 
 # next
 .next/
