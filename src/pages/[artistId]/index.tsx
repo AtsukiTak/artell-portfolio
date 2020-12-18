@@ -8,22 +8,26 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 // internal modules
 import { Artist } from "models/artist";
+import { Art } from "models/art";
 import { downloadImage } from "utils/image";
 import { pc } from "components/Responsive";
 import Header from "components/Header";
 import Footer from "components/Footer";
 import Profile from "components/artist/Profile";
+import Arts from "components/artist/arts";
 
 // for SSR
 import { GetServerSideProps } from "next";
 import { getFirebaseApp } from "infras/firebase";
 import { queryArtistById } from "infras/repos/artist";
+import { queryPublicArtsOfArtist } from "infras/repos/art";
 
 interface PageProps {
   artist: Artist;
+  arts: Art[];
 }
 
-const Page: React.FC<PageProps> = ({ artist }) => {
+const Page: React.FC<PageProps> = ({ artist, arts }) => {
   const [downloadedThumbnail, setDownloadedThumbnail] = React.useState<
     string | null
   >(null);
@@ -39,6 +43,7 @@ const Page: React.FC<PageProps> = ({ artist }) => {
       {downloadedThumbnail ? (
         <ArtistContent
           artist={artist}
+          arts={arts}
           downloadedThumbnail={downloadedThumbnail}
         />
       ) : (
@@ -59,12 +64,14 @@ const LoadingContent: React.FC = () => (
 
 const ArtistContent: React.FC<{
   artist: Artist;
+  arts: Art[];
   downloadedThumbnail: string;
-}> = ({ artist, downloadedThumbnail }) => (
+}> = ({ artist, arts, downloadedThumbnail }) => (
   <Fade in timeout={2000}>
     <Container>
       <Profile artist={artist} downloadedThumbnail={downloadedThumbnail} />
       <HR />
+      <Arts artist={artist} arts={arts} />
     </Container>
   </Fade>
 );
@@ -82,6 +89,7 @@ const ProgressContainer = styled.div`
 export const getServerSideProps: GetServerSideProps<PageProps> = async (
   context
 ) => {
+  // artistの取得
   const artistId = context.params!.artistId as string;
   const fbApp = getFirebaseApp();
   const artist = await queryArtistById(artistId, fbApp);
@@ -92,9 +100,13 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
     };
   }
 
+  // artsの取得
+  const arts = await queryPublicArtsOfArtist(artistId, fbApp);
+
   return {
     props: {
       artist,
+      arts,
     },
   };
 };
