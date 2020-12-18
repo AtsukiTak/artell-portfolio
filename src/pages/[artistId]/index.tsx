@@ -9,6 +9,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 // internal modules
 import { Artist } from "models/artist";
 import { downloadImage } from "utils/image";
+import { pc } from "components/Responsive";
 import Header from "components/Header";
 import Footer from "components/Footer";
 import Profile from "components/artist/Profile";
@@ -63,6 +64,7 @@ const ArtistContent: React.FC<{
   <Fade in timeout={2000}>
     <Container>
       <Profile artist={artist} downloadedThumbnail={downloadedThumbnail} />
+      <HR />
     </Container>
   </Fade>
 );
@@ -96,3 +98,23 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
     },
   };
 };
+
+/*
+ * ================
+ * StyledComponents
+ * ================
+ */
+const HR = styled.hr`
+  width: 10%;
+  height: 1px;
+  margin-top: 65px;
+  margin-bottom: 65px;
+  background: #c9c9c9;
+  border: 0;
+
+  ${pc(`
+    width: 5%;
+    margin-top: 130px;
+    margin-bottom: 100px;
+  `)}
+`;
