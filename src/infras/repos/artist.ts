@@ -1,6 +1,4 @@
-import firebase from "firebase/app";
-import "firebase/firestore";
-import "firebase/storage";
+import firebase from "firebase-admin";
 import * as D from "@mojotech/json-type-validation";
 
 import { Artist } from "models/artist";
@@ -19,11 +17,18 @@ export const queryArtistById = async (
   const decoded = ArtistDocumentDecoder.runWithException(data);
 
   // storageからデータを取得する
-  const storage = firebase.storage(app);
-  const thumbnailUrl = await storage
-    .ref(`artists/${uid}/sumbnail.jpg`)
-    .getDownloadURL()
-    .catch(() => "");
+  // TODO
+  // fileのupload時にmakePublicする
+  firebase
+    .storage(app)
+    .bucket("artell-portfolio.appspot.com")
+    .file(`artists/${uid}/sumbnail.jpg`)
+    .makePublic();
+  const thumbnailUrl = firebase
+    .storage(app)
+    .bucket("artell-portfolio.appspot.com")
+    .file(`artists/${uid}/sumbnail.jpg`)
+    .publicUrl();
 
   return {
     ...decoded,

@@ -7,5 +7,5 @@ export interface Artist {
   twitter: string;
   facebook: string;
   instagram: string;
-  thumbnailUrl: string;
+  thumbnailUrl: string | null;
 }

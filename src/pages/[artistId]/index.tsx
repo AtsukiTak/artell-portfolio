@@ -11,10 +11,11 @@ import { Artist } from "models/artist";
 import { downloadImage } from "utils/image";
 import Header from "components/Header";
 import Footer from "components/Footer";
+import Profile from "components/artist/Profile";
 
 // for SSR
 import { GetServerSideProps } from "next";
-import { getFirebaseApp } from "utils/firebase";
+import { getFirebaseApp } from "infras/firebase";
 import { queryArtistById } from "infras/repos/artist";
 
 interface PageProps {
@@ -22,17 +23,23 @@ interface PageProps {
 }
 
 const Page: React.FC<PageProps> = ({ artist }) => {
-  const [thumbnail, setThumbnail] = React.useState<string | null>(null);
+  const [downloadedThumbnail, setDownloadedThumbnail] = React.useState<
+    string | null
+  >(null);
 
   React.useEffect(() => {
-    downloadImage(artist.thumbnailUrl).then((url) => setThumbnail(url));
+    const url = artist.thumbnailUrl || "/img/artist-default-thumbnail.jpg";
+    downloadImage(url).then((url) => setDownloadedThumbnail(url));
   }, [artist.thumbnailUrl]);
 
   return (
     <>
       <Header />
-      {thumbnail ? (
-        <ArtistContent artist={artist} thumbnail={thumbnail} />
+      {downloadedThumbnail ? (
+        <ArtistContent
+          artist={artist}
+          downloadedThumbnail={downloadedThumbnail}
+        />
       ) : (
         <LoadingContent />
       )}
@@ -49,12 +56,14 @@ const LoadingContent: React.FC = () => (
   </ProgressContainer>
 );
 
-const ArtistContent: React.FC<{ artist: Artist; thumbnail: string }> = ({
-  artist,
-  thumbnail,
-}) => (
+const ArtistContent: React.FC<{
+  artist: Artist;
+  downloadedThumbnail: string;
+}> = ({ artist, downloadedThumbnail }) => (
   <Fade in timeout={2000}>
-    <Container>{/* <ProfileComponent artist={artist} /> */}</Container>
+    <Container>
+      <Profile artist={artist} downloadedThumbnail={downloadedThumbnail} />
+    </Container>
   </Fade>
 );
 
@@ -71,7 +80,7 @@ const ProgressContainer = styled.div`
 export const getServerSideProps: GetServerSideProps<PageProps> = async (
   context
 ) => {
-  const artistId = context.params!.id as string;
+  const artistId = context.params!.artistId as string;
   const fbApp = getFirebaseApp();
   const artist = await queryArtistById(artistId, fbApp);
 

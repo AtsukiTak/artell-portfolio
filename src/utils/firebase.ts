@@ -1,6 +1,7 @@
 import React from "react";
 import firebase from "firebase/app";
 
+// Clientでfirebaseを使う場合
 export const getFirebaseApp = (): firebase.app.App => {
   if (firebase.apps.length === 0) {
     firebase.initializeApp(firebaseConfig);
