@@ -14,7 +14,7 @@ import { pc } from "components/Responsive";
 import Header from "components/Header";
 import Footer from "components/Footer";
 import Profile from "components/artist/Profile";
-import Arts from "components/artist/arts";
+import Arts from "components/artist/Arts";
 
 // for SSR
 import { GetServerSideProps } from "next";
