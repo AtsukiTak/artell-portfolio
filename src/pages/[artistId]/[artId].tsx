@@ -13,7 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import { Artist } from "models/artist";
 import { Art } from "models/art";
 import { useScrollToTop } from "utils/scrollToTop";
-import { downloadImage } from "utils/image";
+import { useObjectURL } from "utils/image";
 import { pc } from "components/Responsive";
 import * as color from "components/color";
 
@@ -33,15 +33,7 @@ const ArtPage: FC<PageProps> = ({ artist, art }) => {
 
   const [buying, setBuying] = useState(false);
 
-  // TODO
-  // useImageDownload hooksをつくる
-  const [downloadedThumbnail, setDownloadedThumbnail] = React.useState<
-    string | null
-  >(null);
-
-  React.useEffect(() => {
-    downloadImage(art.thumbnailUrl).then(setDownloadedThumbnail);
-  }, [art.thumbnailUrl]);
+  const downloadedThumbnail = useObjectURL(art.thumbnailUrl);
 
   if (downloadedThumbnail === null) {
     // Loading page

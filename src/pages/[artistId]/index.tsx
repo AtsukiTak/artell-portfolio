@@ -9,7 +9,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 // internal modules
 import { Artist } from "models/artist";
 import { Art } from "models/art";
-import { downloadImage } from "utils/image";
+import { useObjectURL } from "utils/image";
 import { pc } from "components/Responsive";
 import Header from "components/Header";
 import Footer from "components/Footer";
@@ -28,14 +28,8 @@ interface PageProps {
 }
 
 const Page: React.FC<PageProps> = ({ artist, arts }) => {
-  const [downloadedThumbnail, setDownloadedThumbnail] = React.useState<
-    string | null
-  >(null);
-
-  React.useEffect(() => {
-    const url = artist.thumbnailUrl || "/img/artist-default-thumbnail.jpg";
-    downloadImage(url).then((url) => setDownloadedThumbnail(url));
-  }, [artist.thumbnailUrl]);
+  const url = artist.thumbnailUrl || "/img/artist-default-thumbnail.jpg";
+  const downloadedThumbnail = useObjectURL(url);
 
   return (
     <>
