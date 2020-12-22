@@ -14,6 +14,7 @@ import { Artist } from "models/artist";
 import { Art } from "models/art";
 import { useScrollToTop } from "utils/scrollToTop";
 import { useObjectURL } from "utils/image";
+import { buyArt } from "utils/stripe";
 import { pc } from "components/Responsive";
 import * as color from "components/color";
 

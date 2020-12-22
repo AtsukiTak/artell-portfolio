@@ -7,19 +7,13 @@ import Stripe from "stripe";
 const liveSecretKey = process.env.STRIPE_SK!;
 const testSecretKey = process.env.STRIPE_TEST_SK!;
 
-interface ReqData {
+export interface ReqData {
   artistUid: string;
   artId: string;
   mode: "live" | "test";
 }
 
-const ReqDataDecoder: D.Decoder<ReqData> = D.object({
-  artistUid: D.string(),
-  artId: D.string(),
-  mode: D.union(D.constant<"live">("live"), D.constant<"test">("test")),
-});
-
-type ResData =
+export type ResData =
   | {
       ok: true;
       id: string;
@@ -75,3 +69,9 @@ export default async (req: NextApiRequest, res: NextApiResponse<ResData>) => {
   // response
   res.json({ ok: true, id: session.id });
 };
+
+const ReqDataDecoder: D.Decoder<ReqData> = D.object({
+  artistUid: D.string(),
+  artId: D.string(),
+  mode: D.union(D.constant<"live">("live"), D.constant<"test">("test")),
+});
