@@ -30,6 +30,12 @@ type ResData =
     };
 
 export default async (req: NextApiRequest, res: NextApiResponse<ResData>) => {
+  // POSTのみ受付
+  if (req.method !== "POST") {
+    res.status(404).end();
+    return;
+  }
+
   // requestのdecode
   const decoded = await ReqDataDecoder.runPromise(req.body).catch(() => null);
   if (decoded === null) {
