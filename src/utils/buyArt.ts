@@ -1,8 +1,7 @@
 import * as D from "@mojotech/json-type-validation";
+import { loadStripe } from "@stripe/stripe-js";
 import { ReqData, ResData } from "pages/api/stripe/session";
 import { request, Method } from "infras/http";
-
-declare const Stripe: any;
 
 // - これらの値は頻繁に更新されない
 // - 外部に晒しても問題ない
@@ -17,7 +16,10 @@ export const buyArt = async (
   const mode = process.env.NODE_ENV === "production" ? "live" : "test";
 
   const pubkey = mode === "live" ? livePubKey : testPubKey;
-  const stripe = Stripe(pubkey);
+  const stripe = await loadStripe(pubkey).then((stripe) => {
+    // serverで実行された時nullになる
+    return stripe!;
+  });
 
   const body: ReqData = {
     artistUid,

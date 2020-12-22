@@ -21,7 +21,7 @@ export const queryArtistById = async (
     .bucket("artell-portfolio.appspot.com")
     .file(`artists/${uid}/sumbnail.jpg`);
 
-  const exists = await file.exists()[0];
+  const exists = await file.exists().then(([res]) => res);
 
   // TODO
   // fileのupload時にmakePublicする
