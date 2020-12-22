@@ -16,18 +16,20 @@ export const queryArtistById = async (
   const decoded = ArtistDocumentDecoder.runWithException(data);
 
   // storageからデータを取得する
+  const file = admin
+    .storage(app)
+    .bucket("artell-portfolio.appspot.com")
+    .file(`artists/${uid}/sumbnail.jpg`);
+
+  const exists = await file.exists()[0];
+
   // TODO
   // fileのupload時にmakePublicする
-  admin
-    .storage(app)
-    .bucket("artell-portfolio.appspot.com")
-    .file(`artists/${uid}/sumbnail.jpg`)
-    .makePublic();
-  const thumbnailUrl = admin
-    .storage(app)
-    .bucket("artell-portfolio.appspot.com")
-    .file(`artists/${uid}/sumbnail.jpg`)
-    .publicUrl();
+  if (exists) {
+    await file.makePublic();
+  }
+
+  const thumbnailUrl = exists ? file.publicUrl() : null;
 
   return {
     ...decoded,

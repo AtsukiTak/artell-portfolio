@@ -17,8 +17,8 @@ const ArtsComponent: FC<{ artist: Artist; arts: Art[] }> = ({
     <Container>
       <Grid container>
         {arts.map((art) => (
-          <Grid item xs={12}>
-            <ArtComponent key={art.title}>
+          <Grid key={art.id} item xs={12}>
+            <ArtComponent>
               <Link href={`/${artist.uid}/${art.id}/`}>
                 <a>
                   <StyledLazyThumbnail src={art.thumbnailUrl} />
