@@ -35,12 +35,24 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint --ext tsx,ts src && prettier -c src",
-    "format": "prettier src -w",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lintcheck": "eslint --ext tsx,ts src",
+    "formatcheck": "prettier -c src",
+    "check": "yarn typecheck && yarn lintcheck && yarn formatcheck",
+    "format": "prettier src -w"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+      "@typescript-eslint/no-explicit-any": "error"
+    }
   },
   "browserslist": {
     "production": [
@@ -55,6 +67,9 @@
     ]
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.14.1",
+    "@typescript-eslint/parser": "^4.14.1",
+    "eslint": "^7.18.0",
     "prettier": "^2.1.2"
   }
 }
