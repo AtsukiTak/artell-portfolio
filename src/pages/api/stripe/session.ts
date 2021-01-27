@@ -4,13 +4,11 @@ import { getFirebaseApp } from "infras/firebase";
 import { queryPublicArtsOfArtist } from "infras/repos/art";
 import Stripe from "stripe";
 
-const liveSecretKey = process.env.STRIPE_SK!;
-const testSecretKey = process.env.STRIPE_TEST_SK!;
+const stripeSK = process.env.STRIPE_SK!;
 
 export interface ReqData {
   artistUid: string;
   artId: string;
-  mode: "live" | "test";
 }
 
 export type ResData =
@@ -36,7 +34,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<ResData>) => {
     res.status(400).json({ ok: false, msg: "Invalid Request Format" });
     return;
   }
-  const { artistUid, artId, mode } = decoded;
+  const { artistUid, artId } = decoded;
 
   // art情報の取得
   const fbApp = getFirebaseApp();
@@ -48,8 +46,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<ResData>) => {
   }
 
   // stripe sessionの作成
-  const sk = mode === "live" ? liveSecretKey : testSecretKey;
-  const stripe = new Stripe(sk, { apiVersion: "2020-08-27" });
+  const stripe = new Stripe(stripeSK, { apiVersion: "2020-08-27" });
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     billing_address_collection: "required",
@@ -73,5 +70,4 @@ export default async (req: NextApiRequest, res: NextApiResponse<ResData>) => {
 const ReqDataDecoder: D.Decoder<ReqData> = D.object({
   artistUid: D.string(),
   artId: D.string(),
-  mode: D.union(D.constant<"live">("live"), D.constant<"test">("test")),
 });

@@ -3,12 +3,11 @@ ARTELL Portfolio
 
 https://portfolio.artell.life
 
-## Develop
+## Start Development Server
 
-### Start Development Server
+`yarn dev`
 
-`yarn start`
+## Environment Variables
 
-### Build & Deploy
-
-`firebase deploy`
+- STRIPE_SK : stripeのシークレットキー
+- NEXT_PUBLIC_STRIPE_PK : stripeのパブリックキー
