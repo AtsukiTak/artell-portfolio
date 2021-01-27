@@ -4,7 +4,9 @@ import styled from "styled-components";
 // internal modules
 import { Artist } from "models/artist";
 import { Thumbnail } from "components/Thumbnail";
-import * as logo from "components/svg";
+import FacebookIcon from "components/icons/FacebookIcon";
+import TwitterIcon from "components/icons/TwitterIcon";
+import InstagramIcon from "components/icons/InstagramIcon";
 import { pc } from "components/Responsive";
 import * as color from "components/color";
 
@@ -38,7 +40,7 @@ const Profile: FC<{ artist: Artist; downloadedThumbnail: string }> = ({
               href={`https://www.facebook.com/${artist.facebook}`}
               target="_blank"
             >
-              <logo.Facebook />
+              <FacebookIcon />
             </SnsLink>
           )}
           {!!artist.twitter && (
@@ -46,7 +48,7 @@ const Profile: FC<{ artist: Artist; downloadedThumbnail: string }> = ({
               href={`https://twitter.com/${artist.twitter}`}
               target="_blank"
             >
-              <logo.Twitter />
+              <TwitterIcon />
             </SnsLink>
           )}
           {!!artist.instagram && (
@@ -54,7 +56,7 @@ const Profile: FC<{ artist: Artist; downloadedThumbnail: string }> = ({
               href={`https://www.instagram.com/${artist.instagram}/`}
               target="_blank"
             >
-              <logo.Instagram />
+              <InstagramIcon />
             </SnsLink>
           )}
         </Sns>

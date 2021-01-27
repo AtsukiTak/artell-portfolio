@@ -3,14 +3,22 @@ import { loadStripe } from "@stripe/stripe-js";
 import { ReqData, ResData } from "pages/api/stripe/session";
 import { request, Method } from "infras/http";
 
+const stripePK = process.env.NEXT_PUBLIC_STRIPE_PK;
+if (!stripePK) {
+  throw new Error("NEXT_PUBLIC_STRIPE_PK is not set!!!");
+}
+
 export const buyArt = async (
   artistUid: string,
   artId: string
 ): Promise<void> => {
-  const pubkey = process.env.NEXT_PUBLIC_STRIPE_PK!;
+  const pubkey = stripePK;
   const stripe = await loadStripe(pubkey).then((stripe) => {
     // serverで実行された時パニックする(stripeがnullになるので）
-    return stripe!;
+    if (stripe === null) {
+      throw new Error("Never call buyArt function on server side");
+    }
+    return stripe;
   });
 
   const body: ReqData = {

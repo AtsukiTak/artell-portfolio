@@ -38,7 +38,7 @@
     "typecheck": "tsc --noEmit",
     "lintcheck": "eslint --ext tsx,ts src",
     "formatcheck": "prettier -c src",
-    "check": "yarn typecheck && yarn lintcheck && yarn formatcheck",
+    "allcheck": "yarn typecheck && yarn lintcheck && yarn formatcheck",
     "format": "prettier src -w"
   },
   "eslintConfig": {

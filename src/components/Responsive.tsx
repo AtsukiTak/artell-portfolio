@@ -24,7 +24,7 @@ export function pc(css: string): string {
   }`;
 }
 
-export const MobileContent: FC<{}> = ({ children }) => {
+export const MobileContent: FC = ({ children }) => {
   const Container = styled.div`
     display: none;
     ${mobile(`
@@ -35,7 +35,7 @@ export const MobileContent: FC<{}> = ({ children }) => {
   return <Container>{children}</Container>;
 };
 
-export const TabletContent: FC<{}> = ({ children }) => {
+export const TabletContent: FC = ({ children }) => {
   const Container = styled.div`
     display: none;
     ${tablet(`
@@ -46,7 +46,7 @@ export const TabletContent: FC<{}> = ({ children }) => {
   return <Container>{children}</Container>;
 };
 
-export const PcContent: FC<{}> = ({ children }) => {
+export const PcContent: FC = ({ children }) => {
   const Container = styled.div`
     display: none;
     ${pc(`

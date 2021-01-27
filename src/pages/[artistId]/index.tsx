@@ -84,6 +84,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   context
 ) => {
   // artistの取得
+  /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
   const artistId = context.params!.artistId as string;
   const fbApp = getFirebaseApp();
   const artist = await queryArtistById(artistId, fbApp);

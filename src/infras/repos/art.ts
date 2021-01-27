@@ -16,7 +16,9 @@ export const queryPublicArtsOfArtist = async (
   const bucket = admin.storage(app).bucket("artell-portfolio.appspot.com");
 
   return collection.docs.map((doc) => {
-    const file = bucket.file(`artists/${artistUid}/arts/${doc.id}/sumbnail.jpg`);
+    const file = bucket.file(
+      `artists/${artistUid}/arts/${doc.id}/sumbnail.jpg`
+    );
     // TODO
     // fileのupload時にshowPublicならmakePublicする
     file.makePublic();

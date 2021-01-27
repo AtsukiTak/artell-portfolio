@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Link from "next/link";
 
 import * as color from "./color";
-import { ArtellInstagram } from "./svg";
+import ArtellInstagramIcon from "./icons/ArtellInstagramIcon";
 
 const Header: React.FC = () => {
   return (
@@ -16,7 +16,7 @@ const Header: React.FC = () => {
           href="https://www.instagram.com/artell_gallery/"
           target="_blank"
         >
-          <ArtellInstagram />
+          <ArtellInstagramIcon />
         </SnsLink>
       </FlexBox>
     </Container>

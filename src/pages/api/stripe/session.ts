@@ -4,12 +4,15 @@ import { getFirebaseApp } from "infras/firebase";
 import { queryPublicArtsOfArtist } from "infras/repos/art";
 import Stripe from "stripe";
 
-const stripeSK = process.env.STRIPE_SK!;
+const stripeSK = process.env.STRIPE_SK;
+if (!stripeSK) {
+  throw new Error("STRIPE_SK is not set!!!!");
+}
 
-export interface ReqData {
+export type ReqData = {
   artistUid: string;
   artId: string;
-}
+};
 
 export type ResData =
   | {
@@ -21,7 +24,10 @@ export type ResData =
       msg: string;
     };
 
-export default async (req: NextApiRequest, res: NextApiResponse<ResData>) => {
+export default async (
+  req: NextApiRequest,
+  res: NextApiResponse<ResData>
+): Promise<void> => {
   // POSTのみ受付
   if (req.method !== "POST") {
     res.status(404).end();

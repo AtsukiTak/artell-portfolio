@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 
@@ -7,7 +7,6 @@ import Fade from "@material-ui/core/Fade";
 import Grid from "@material-ui/core/Grid";
 import Hidden from "@material-ui/core/Hidden";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Typography from "@material-ui/core/Typography";
 
 // internal modules
 import { Artist } from "models/artist";
@@ -104,8 +103,10 @@ function toPriceDisplay(priceYen: number): string {
 export const getServerSideProps: GetServerSideProps<PageProps> = async (
   context
 ) => {
+  /* eslint-disable @typescript-eslint/no-non-null-assertion */
   const artistId = context.params!.artistId as string;
   const artId = context.params!.artId as string;
+  /* eslint-enable */
 
   // TODO
   // getFirebaseAppをinfra層の内部でやる
@@ -172,20 +173,6 @@ const ArtContainer = styled("div")<{ src: string }>`
     height: 94vh;
     margin: 0;
     margin-top: 3vh;
-  `)}
-`;
-
-const ArtProgressContainer = styled.div`
-  width: 90%;
-  height: 150vw;
-  margin: 20px auto;
-
-  ${pc(`
-    height: 94vh;
-    margin: 0;
-    margin-top: 3vh;
-    padding-left: calc(45% - 25px);
-    padding-top: 40vh;
   `)}
 `;
 
@@ -273,8 +260,4 @@ const BuyButton = styled.button`
 const ProgressContainer = styled.div`
   width: 50px;
   margin: 40vh auto;
-`;
-
-const NotFoundMessage = styled(Typography)`
-  margin-top: 40vh;
 `;

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import * as color from "./color";
 import { pc } from "components/Responsive";
 
-const Footer = () => {
+const Footer: React.FC = () => {
   return (
     <Container>
       <HR />

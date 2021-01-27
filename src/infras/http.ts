@@ -7,7 +7,7 @@ export enum Method {
 export interface RequestArgs<T> {
   method: Method;
   url: string;
-  body?: object;
+  body?: Record<string, unknown>;
   decoder: D.Decoder<T>;
 }
 
