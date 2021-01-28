@@ -1,6 +1,9 @@
 import firebase from "firebase/app";
 
-// Clientでfirebaseを使う場合
+// Clientでfirebaseを使う場合はこの関数経由でfirebase.app.App
+// を取得する。
+// Appは使用する前に初期化する必要があるため、今関数を経由
+// する必要がある。
 export const getFirebaseApp = (): firebase.app.App => {
   if (firebase.apps.length === 0) {
     firebase.initializeApp(firebaseConfig);

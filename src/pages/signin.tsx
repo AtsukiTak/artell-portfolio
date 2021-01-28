@@ -6,27 +6,29 @@ import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 
-import { RootState } from "services/index";
-import Header from "components/header";
-import { setSigninCookie } from "utils/signin";
+import Header from "components/Header";
+import { request } from "pages/api/auth";
 
 const SigninPage: React.FC = () => {
   const router = useRouter();
 
   const uiConfig = React.useMemo(() => {
-    const callback = () => {
-      // signinの結果をサーバーのに通知
-      // 成功したらリダイレクト
-      setSigninCookie().then(() => router.push("/settings"));
-
-      // firebaseによる認証が完了しただけではリダイレクトはしない
-      return false;
-    };
-
     return {
       ...baseUIConfig,
       callbacks: {
-        signInSuccessWithAuthResult: callback,
+        signInSuccessWithAuthResult: (res: firebase.auth.UserCredential) => {
+          if (res.user) {
+            res.user
+              .getIdToken()
+              // IdTokenをサーバーのに通知
+              .then((token) => request(token))
+              // 成功したらリダイレクト
+              .then(() => router.push("/settings"));
+          }
+
+          // firebaseによる認証が完了しただけではリダイレクトはしない
+          return false;
+        },
       },
     };
   }, [router]);

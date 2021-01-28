@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import * as D from "@mojotech/json-type-validation";
-import { getFirebaseApp } from "infras/firebase";
+import { getFirebaseApp } from "server-lib/firebase";
 import { queryPublicArtsOfArtist } from "infras/repos/art";
 import Stripe from "stripe";
 
