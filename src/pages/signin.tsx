@@ -6,6 +6,7 @@ import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 
+import { getFirebaseApp } from "utils/firebase";
 import Header from "components/Header";
 import { request } from "pages/api/auth";
 
@@ -39,7 +40,7 @@ const SigninPage: React.FC = () => {
       <Container>
         <StyledFirebaseAuth
           uiConfig={uiConfig}
-          firebaseAuth={firebase.auth()}
+          firebaseAuth={getFirebaseApp().auth()}
         />
       </Container>
     </>
