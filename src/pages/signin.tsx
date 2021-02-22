@@ -1,66 +1,105 @@
 import React from "react";
 import styled from "styled-components";
-import * as firebase from "firebase/app";
-import "firebase/auth";
-import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import * as D from "@mojotech/json-type-validation";
+import TextField from "@material-ui/core/TextField";
 
+import { request as req, Method } from "infras/http";
 import { getFirebaseApp } from "utils/firebase";
+import * as colors from "utils/colors";
 import Header from "components/Header";
-import { request } from "pages/api/auth";
+import Container from "components/atoms/Container";
+import Spacer from "components/atoms/Spacer";
+import Button from "components/atoms/Button";
+import { TextArea, Text } from "components/atoms/Text";
 
 const SigninPage: React.FC = () => {
+  const [email, setEmail] = React.useState("");
+  const [pass, setPass] = React.useState("");
+  const [isInvalidCred, setIsInvalidCred] = React.useState(false);
+
   const router = useRouter();
 
-  const uiConfig = React.useMemo(() => {
-    return {
-      ...baseUIConfig,
-      callbacks: {
-        signInSuccessWithAuthResult: (res: firebase.auth.UserCredential) => {
-          if (res.user) {
-            res.user
-              .getIdToken()
-              // IdTokenをサーバーのに通知
-              .then((token) => request(token))
-              // 成功したらリダイレクト
-              .then(() => router.push("/settings"));
-          }
+  const onEmailInput = React.useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setEmail(e.target.value);
+      setIsInvalidCred(false);
+    },
+    []
+  );
 
-          // firebaseによる認証が完了しただけではリダイレクトはしない
-          return false;
-        },
-      },
-    };
-  }, [router]);
+  const onPasswordInput = React.useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setPass(e.target.value);
+      setIsInvalidCred(false);
+    },
+    []
+  );
+
+  const onSubmit = React.useCallback(() => {
+    requestSignin(email, pass)
+      .then(() => router.push("/settings"))
+      .catch((e) => {
+        console.log(e);
+        setIsInvalidCred(true);
+      });
+  }, [email, pass, router]);
 
   return (
     <>
       <Header />
-      <Container>
-        <StyledFirebaseAuth
-          uiConfig={uiConfig}
-          firebaseAuth={getFirebaseApp().auth()}
+      <Spacer size="20vh" />
+      <Container size="sm">
+        <StyledTextField label="email" onChange={onEmailInput} />
+        <Spacer size="50px" />
+        <StyledTextField
+          label="password"
+          type="password"
+          onChange={onPasswordInput}
         />
+        <Spacer size="80px" />
+        <Button bg={colors.gray90} onClick={onSubmit}>
+          <Text color={colors.white}>Sign In</Text>
+        </Button>
+        {isInvalidCred && (
+          <>
+            <Spacer size="20px" />
+            <TextArea align="left">
+              <Text color={colors.tomato}>
+                メールアドレスまたはパスワードが違います。
+              </Text>
+            </TextArea>
+          </>
+        )}
       </Container>
     </>
   );
 };
 
-export default SigninPage;
+const StyledTextField = styled(TextField)`
+  width: 100%;
+`;
 
-const baseUIConfig = {
-  signInFlow: "popup",
-  signInOptions: [
-    {
-      provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+const requestSignin = async (
+  email: string,
+  password: string
+): Promise<ResData> =>
+  req({
+    method: Method.POST,
+    url: "/api/signin",
+    body: {
+      email,
+      password,
     },
-  ],
+    decoder: ResDataDecoder,
+  });
+
+type ResData = {
+  msg: string;
 };
 
-const Container = styled.div`
-  width: 90%;
-  max-width: 980px;
-  margin: 0 auto;
-  padding-top: 20vh;
-`;
+const ResDataDecoder: D.Decoder<ResData> = D.object({
+  msg: D.string(),
+});
+
+export default SigninPage;

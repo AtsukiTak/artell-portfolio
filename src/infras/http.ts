@@ -31,15 +31,12 @@ export function request<T>(args: RequestArgs<T>): Promise<T> {
       return res.json().then((json) => args.decoder.runPromise(json));
     } else {
       return res
-        .json()
-        .then((json) => failureDecoder.runPromise(json))
-        .then(({ msg }) => {
-          throw new Error(`Request is failed : ${msg}`);
-        });
+        .text()
+        .then((text) =>
+          Promise.reject(
+            new Error(`Request is failed with ${res.status} : ${text}`)
+          )
+        );
     }
   });
 }
-
-const failureDecoder: D.Decoder<Failure> = D.object({
-  msg: D.string(),
-});

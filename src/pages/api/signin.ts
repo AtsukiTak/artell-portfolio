@@ -1,29 +1,24 @@
-// for client
-import { request as req, Method } from "infras/http";
-
-// for server
 import type { NextApiRequest, NextApiResponse } from "next";
 import { serialize } from "cookie";
 import * as D from "@mojotech/json-type-validation";
-import { getFirebaseApp } from "server-lib/firebase";
+import "firebase/auth";
+import { getFirebase, getFirebaseAdmin } from "server-lib/firebase";
 
-// クライアントコード
-export const request = async (token: string): Promise<string> =>
-  req({
-    method: Method.POST,
-    url: "/api/auth",
-    body: {
-      token,
-    },
-    decoder: D.string(),
-  });
+// 本当はClientコードもここに書きたかったんだけど、TreeShaking
+// がうまく動いてないっぽくてServerコードがクライアントに含まれて
+// しまうようになったのでClientコードと分離する
 
 type ReqData = {
-  token: string;
+  email: string;
+  password: string;
 };
 
-// サーバーのAPIコード
-export default async (
+const ReqDataDecoder: D.Decoder<ReqData> = D.object({
+  email: D.string(),
+  password: D.string(),
+});
+
+const SigninHandler = async (
   req: NextApiRequest,
   res: NextApiResponse<string>
 ): Promise<void> => {
@@ -40,11 +35,22 @@ export default async (
       res.status(400).send("Invalid Request Format");
       return;
     }
-    const { token } = decoded;
+    const { email, password } = decoded;
+
+    const firebase = getFirebase();
+    const firebaseAdmin = getFirebaseAdmin();
+
+    // signin
+    const cred = await firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password);
+
+    if (cred.user === null) throw new Error("Unreachable");
+
+    const token = await cred.user.getIdToken(true);
 
     // session cookieの生成
-    const firebase = getFirebaseApp();
-    const cookie = await firebase
+    const cookie = await firebaseAdmin
       .auth()
       // 有効期限は1週間
       .createSessionCookie(token, { expiresIn: 1000 * 60 * 60 * 24 * 7 });
@@ -58,12 +64,11 @@ export default async (
       path: "/",
     };
     res.setHeader("Set-Cookie", serialize("session", cookie, cookieOptions));
-    res.status(200).send("Success");
-  } catch {
+    res.status(200).json({ msg: "Success" });
+  } catch (e) {
+    console.log(e);
     res.status(401).send("Unauthorized");
   }
 };
 
-const ReqDataDecoder: D.Decoder<ReqData> = D.object({
-  token: D.string(),
-});
+export default SigninHandler;
