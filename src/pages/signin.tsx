@@ -15,35 +15,41 @@ import { TextArea, Text } from "components/atoms/Text";
 
 const SigninPage: React.FC = () => {
   const [email, setEmail] = React.useState("");
-  const [pass, setPass] = React.useState("");
-  const [isInvalidCred, setIsInvalidCred] = React.useState(false);
+  const [password, setPassword] = React.useState("");
+  const [isUnauthorized, setIsUnauthorized] = React.useState(false);
+  const [isSending, setIsSending] = React.useState(false);
 
   const router = useRouter();
 
   const onEmailInput = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setEmail(e.target.value);
-      setIsInvalidCred(false);
+      setIsUnauthorized(false);
     },
     []
   );
 
   const onPasswordInput = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setPass(e.target.value);
-      setIsInvalidCred(false);
+      setPassword(e.target.value);
+      setIsUnauthorized(false);
     },
     []
   );
 
   const onSubmit = React.useCallback(() => {
-    requestSignin(email, pass)
+    setIsSending(true);
+    requestSignin(email, password)
       .then(() => router.push("/settings"))
       .catch((e) => {
         console.log(e);
-        setIsInvalidCred(true);
+        setIsUnauthorized(true);
+        setIsSending(false);
       });
-  }, [email, pass, router]);
+  }, [email, password, router]);
+
+  const isInputValid = email !== "" && password !== "";
+  const isSubmittable = isInputValid && !isSending;
 
   return (
     <>
@@ -58,10 +64,14 @@ const SigninPage: React.FC = () => {
           onChange={onPasswordInput}
         />
         <Spacer size="80px" />
-        <Button bg={colors.gray90} onClick={onSubmit}>
+        <Button
+          bg={isSubmittable ? colors.gray90 : colors.gray30}
+          disabled={!isSubmittable}
+          onClick={onSubmit}
+        >
           <Text color={colors.white}>Sign In</Text>
         </Button>
-        {isInvalidCred && (
+        {isUnauthorized && (
           <>
             <Spacer size="20px" />
             <TextArea align="left">

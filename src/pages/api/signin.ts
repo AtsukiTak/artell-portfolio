@@ -8,7 +8,7 @@ import { getFirebase, getFirebaseAdmin } from "server-lib/firebase";
 // がうまく動いてないっぽくてServerコードがクライアントに含まれて
 // しまうようになったのでClientコードと分離する
 
-type ReqData = {
+export type ReqData = {
   email: string;
   password: string;
 };
@@ -18,9 +18,14 @@ const ReqDataDecoder: D.Decoder<ReqData> = D.object({
   password: D.string(),
 });
 
+export type ResData = {
+  success: boolean;
+  msg: string;
+};
+
 const SigninHandler = async (
   req: NextApiRequest,
-  res: NextApiResponse<string>
+  res: NextApiResponse<ResData>
 ): Promise<void> => {
   // POSTのみ受付
   if (req.method !== "POST") {
@@ -32,7 +37,10 @@ const SigninHandler = async (
     // requestのdecode
     const decoded = await ReqDataDecoder.runPromise(req.body).catch(() => null);
     if (decoded === null) {
-      res.status(400).send("Invalid Request Format");
+      res.status(400).json({
+        success: false,
+        msg: "Invalid Request Format",
+      });
       return;
     }
     const { email, password } = decoded;
@@ -41,13 +49,17 @@ const SigninHandler = async (
     const firebaseAdmin = getFirebaseAdmin();
 
     // signin
-    const cred = await firebase
+    const user = await firebase
       .auth()
-      .signInWithEmailAndPassword(email, password);
+      .signInWithEmailAndPassword(email, password)
+      // firebase SDKの奇妙な振る舞いでerrorがinvalid-email
+      // のときにアプリがcrashしてしまうのでcatchする必要がある
+      .then((cred) => cred.user)
+      .catch((e) => null);
 
-    if (cred.user === null) throw new Error("Unreachable");
+    if (user === null) throw new Error("failed to signInWithEmailAndPassword");
 
-    const token = await cred.user.getIdToken(true);
+    const token = await user.getIdToken(true);
 
     // session cookieの生成
     const cookie = await firebaseAdmin
@@ -64,10 +76,10 @@ const SigninHandler = async (
       path: "/",
     };
     res.setHeader("Set-Cookie", serialize("session", cookie, cookieOptions));
-    res.status(200).json({ msg: "Success" });
+    res.status(200).json({ success: true, msg: "Success" });
   } catch (e) {
     console.log(e);
-    res.status(401).send("Unauthorized");
+    res.status(401).json({ success: false, msg: "Unauthorized" });
   }
 };
 
