@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
 
-import * as color from "./color";
-import ArtellInstagramIcon from "./icons/ArtellInstagramIcon";
+import * as color from "utils/colors";
+import ArtellInstagramIcon from "components/icons/ArtellInstagramIcon";
 
 const Header: React.FC = () => {
   return (
@@ -44,7 +44,7 @@ const Title = styled.a`
   font-family: "Avenir Next Ultra Light";
   font-size: 18px;
   letter-spacing: 2px;
-  color: ${color.LightBlack.hex};
+  color: ${color.gray80.hex};
   text-decoration: none;
 
   @media (min-width: 700px) {
