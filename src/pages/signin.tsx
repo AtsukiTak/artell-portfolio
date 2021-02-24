@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import * as D from "@mojotech/json-type-validation";
-import TextField from "@material-ui/core/TextField";
 
 import { request as req, Method } from "infras/http";
 import { getFirebaseApp } from "utils/firebase";
@@ -11,6 +10,7 @@ import Container from "components/atoms/Container";
 import Spacer from "components/atoms/Spacer";
 import Button from "components/atoms/Button";
 import { Paragraph, Text } from "components/atoms/Text";
+import TextField from "components/atoms/TextField";
 import Header from "components/organisms/Header";
 
 const SigninPage: React.FC = () => {
@@ -56,9 +56,9 @@ const SigninPage: React.FC = () => {
       <Header />
       <Spacer size="20vh" />
       <Container size="sm">
-        <StyledTextField label="email" onChange={onEmailInput} />
+        <TextField label="email" onChange={onEmailInput} />
         <Spacer size="50px" />
-        <StyledTextField
+        <TextField
           label="password"
           type="password"
           onChange={onPasswordInput}
@@ -85,10 +85,6 @@ const SigninPage: React.FC = () => {
     </>
   );
 };
-
-const StyledTextField = styled(TextField)`
-  width: 100%;
-`;
 
 const requestSignin = async (
   email: string,
