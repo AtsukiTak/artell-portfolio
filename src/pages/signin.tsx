@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import * as D from "@mojotech/json-type-validation";
 
 import { request as req, Method } from "infras/http";
-import { getFirebaseApp } from "utils/firebase";
 import * as colors from "utils/colors";
 import Container from "components/atoms/Container";
 import Spacer from "components/atoms/Spacer";
@@ -81,6 +81,14 @@ const SigninPage: React.FC = () => {
             </Paragraph>
           </>
         )}
+        <Spacer size="20px" />
+        <Link href="/send_password_reset">
+          <a>
+            <Text size={0.8} color={colors.gray50}>
+              パスワードを忘れた方
+            </Text>
+          </a>
+        </Link>
       </Container>
     </>
   );

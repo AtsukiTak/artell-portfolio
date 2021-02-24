@@ -11,7 +11,7 @@ import { Artist } from "models/artist";
 import { Art } from "models/art";
 import { useObjectURL } from "utils/image";
 import { pc } from "components/Responsive";
-import Header from "components/Header";
+import Header from "components/organisms/Header";
 import Footer from "components/Footer";
 import Profile from "components/artist/Profile";
 import Arts from "components/artist/Arts";

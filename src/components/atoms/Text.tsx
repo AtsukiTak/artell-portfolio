@@ -1,12 +1,12 @@
 import React from "react";
 import { Color } from "utils/colors";
 
-interface TextAreaProps {
+interface ParagraphProps {
   align?: "left" | "center" | "right";
   nowrap?: boolean;
 }
 
-export const Paragraph: React.FC<TextAreaProps> = React.memo(
+export const Paragraph: React.FC<ParagraphProps> = React.memo(
   ({ align, nowrap, children }) => (
     <p
       style={{

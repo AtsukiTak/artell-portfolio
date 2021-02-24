@@ -7,6 +7,7 @@ import { getFirebase, getFirebaseAdmin } from "server-lib/firebase";
 // 本当はClientコードもここに書きたかったんだけど、TreeShaking
 // がうまく動いてないっぽくてServerコードがクライアントに含まれて
 // しまうようになったのでClientコードと分離する
+// たぶんfirebase関連のimportがsideEffectを持ってるのが原因
 
 export type ReqData = {
   email: string;
