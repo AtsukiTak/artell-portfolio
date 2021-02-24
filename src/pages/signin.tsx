@@ -11,7 +11,7 @@ import Header from "components/Header";
 import Container from "components/atoms/Container";
 import Spacer from "components/atoms/Spacer";
 import Button from "components/atoms/Button";
-import { TextArea, Text } from "components/atoms/Text";
+import { Paragraph, Text } from "components/atoms/Text";
 
 const SigninPage: React.FC = () => {
   const [email, setEmail] = React.useState("");
@@ -74,11 +74,11 @@ const SigninPage: React.FC = () => {
         {isUnauthorized && (
           <>
             <Spacer size="20px" />
-            <TextArea align="left">
+            <Paragraph align="left">
               <Text color={colors.tomato}>
                 メールアドレスまたはパスワードが違います。
               </Text>
-            </TextArea>
+            </Paragraph>
           </>
         )}
       </Container>

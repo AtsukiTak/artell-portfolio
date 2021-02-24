@@ -6,7 +6,7 @@ interface TextAreaProps {
   nowrap?: boolean;
 }
 
-export const TextArea: React.FC<TextAreaProps> = React.memo(
+export const Paragraph: React.FC<TextAreaProps> = React.memo(
   ({ align, nowrap, children }) => (
     <p
       style={{
@@ -21,7 +21,7 @@ export const TextArea: React.FC<TextAreaProps> = React.memo(
   )
 );
 
-TextArea.displayName = "TextArea";
+Paragraph.displayName = "Paragraph";
 
 type TextProps = {
   size?: number;
