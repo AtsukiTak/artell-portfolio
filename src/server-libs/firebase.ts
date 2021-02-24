@@ -1,7 +1,7 @@
 import firebase from "firebase/app";
 import admin from "firebase-admin";
 
-import { getFirebaseApp } from "../utils/firebase";
+import { getFirebaseApp } from "../libs/firebase";
 import serviceAccount from "../../serviceAccountKey.json";
 
 export const getFirebase = (): firebase.app.App => {

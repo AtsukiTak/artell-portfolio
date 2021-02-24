@@ -1,7 +1,7 @@
 import * as D from "@mojotech/json-type-validation";
 import { loadStripe } from "@stripe/stripe-js";
 import { ReqData, ResData } from "pages/api/stripe/session";
-import { request, Method } from "infras/http";
+import { request, Method } from "libs/http";
 
 const stripePK = process.env.NEXT_PUBLIC_STRIPE_PK;
 if (!stripePK) {

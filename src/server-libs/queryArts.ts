@@ -2,18 +2,23 @@ import admin from "firebase-admin";
 import * as D from "@mojotech/json-type-validation";
 import { Art } from "models/art";
 
+/*
+ * =======================
+ * queryPublicArtsOfArtist
+ * =======================
+ */
 export const queryPublicArtsOfArtist = async (
   artistUid: string,
-  app: admin.app.App
+  admin: admin.app.App
 ): Promise<Art[]> => {
   // firestoreからデータを取得する
   const collection = await admin
-    .firestore(app)
+    .firestore()
     .collection(`artists/${artistUid}/arts`)
     .where("showPublic", "==", true)
     .get();
 
-  const bucket = admin.storage(app).bucket("artell-portfolio.appspot.com");
+  const bucket = admin.storage().bucket("artell-portfolio.appspot.com");
 
   return collection.docs.map((doc) => {
     const file = bucket.file(
@@ -31,6 +36,45 @@ export const queryPublicArtsOfArtist = async (
   });
 };
 
+/*
+ * ====================
+ * queryAllArtsOfArtist
+ * ====================
+ */
+export const queryAllArtsOfArtist = async (
+  artistUid: string,
+  admin: admin.app.App
+): Promise<Art[]> => {
+  // firestoreからデータを取得する
+  const collection = await admin
+    .firestore()
+    .collection(`artists/${artistUid}/arts`)
+    .get();
+
+  const bucket = admin.storage().bucket("artell-portfolio.appspot.com");
+
+  return collection.docs.map((doc) => {
+    const file = bucket.file(
+      `artists/${artistUid}/arts/${doc.id}/sumbnail.jpg`
+    );
+    // TODO
+    // fileのupload時にshowPublicならmakePublicする
+    // （ここで毎回makePublicしないようにする）
+    file.makePublic();
+
+    return {
+      id: doc.id,
+      ...ArtDocumentDecoder.runWithException(doc.data()),
+      thumbnailUrl: file.publicUrl(),
+    };
+  });
+};
+
+/*
+ * ===================
+ * Interface & Decoder
+ * ===================
+ */
 interface ArtDocument {
   title: string;
   widthMM: number;

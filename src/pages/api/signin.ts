@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { serialize } from "cookie";
 import * as D from "@mojotech/json-type-validation";
 import "firebase/auth";
-import { getFirebase, getFirebaseAdmin } from "server-lib/firebase";
+import { getFirebase, getFirebaseAdmin } from "server-libs/firebase";
+import { generateSessionCookieHeaderValue } from "server-libs/sessionCookie";
 
 // 本当はClientコードもここに書きたかったんだけど、TreeShaking
 // がうまく動いてないっぽくてServerコードがクライアントに含まれて
@@ -63,20 +63,8 @@ const SigninHandler = async (
     const token = await user.getIdToken(true);
 
     // session cookieの生成
-    const cookie = await firebaseAdmin
-      .auth()
-      // 有効期限は1週間
-      .createSessionCookie(token, { expiresIn: 1000 * 60 * 60 * 24 * 7 });
-
-    // cookieのセット
-    const cookieOptions = {
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-      httpOnly: true,
-      // localhostではsecure: trueが効かないため、本番環境でのみ有効化する
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-    };
-    res.setHeader("Set-Cookie", serialize("session", cookie, cookieOptions));
+    const cookieHeaderVal = await generateSessionCookieHeaderValue(token);
+    res.setHeader("Set-Cookie", cookieHeaderVal);
     res.status(200).json({ success: true, msg: "Success" });
   } catch (e) {
     console.log(e);

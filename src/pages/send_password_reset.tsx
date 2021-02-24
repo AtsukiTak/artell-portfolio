@@ -1,8 +1,8 @@
 import React from "react";
 import * as D from "@mojotech/json-type-validation";
 
-import { request as req, Method } from "infras/http";
-import * as colors from "utils/colors";
+import { request as req, Method } from "libs/http";
+import * as colors from "libs/colors";
 import Spacer from "components/atoms/Spacer";
 import Container from "components/atoms/Container";
 import Button from "components/atoms/Button";

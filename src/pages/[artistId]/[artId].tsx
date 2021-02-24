@@ -11,17 +11,17 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 // internal modules
 import { Artist } from "models/artist";
 import { Art } from "models/art";
-import { useScrollToTop } from "utils/scrollToTop";
-import { useObjectURL } from "utils/image";
-import { buyArt } from "utils/buyArt";
+import { useScrollToTop } from "libs/scrollToTop";
+import { useObjectURL } from "libs/image";
+import { buyArt } from "libs/buyArt";
 import { pc } from "components/Responsive";
 import * as color from "components/color";
 
 // SSR
 import { GetServerSideProps } from "next";
-import { getFirebaseApp } from "infras/firebase";
-import { queryArtistById } from "infras/repos/artist";
-import { queryPublicArtsOfArtist } from "infras/repos/art";
+import { getFirebaseAdmin } from "server-libs/firebase";
+import { queryArtistById } from "server-libs/queryArtists";
+import { queryPublicArtsOfArtist } from "server-libs/queryArts";
 
 interface PageProps {
   artist: Artist;
@@ -108,12 +108,10 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   const artId = context.params!.artId as string;
   /* eslint-enable */
 
-  // TODO
-  // getFirebaseAppをinfra層の内部でやる
-  const fbApp = getFirebaseApp();
+  const admin = getFirebaseAdmin();
 
   // artistの取得
-  const artist = await queryArtistById(artistId, fbApp);
+  const artist = await queryArtistById(artistId, admin);
   if (artist === null) {
     return {
       notFound: true,
@@ -121,7 +119,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   }
 
   // artの取得
-  const arts = await queryPublicArtsOfArtist(artistId, fbApp);
+  const arts = await queryPublicArtsOfArtist(artistId, admin);
   const art = arts.find((art) => art.id === artId);
   if (art === undefined) {
     return {

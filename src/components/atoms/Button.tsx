@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Button.module.scss";
-import Color from "utils/colors";
+import Color from "libs/colors";
 
 type Props = {
   bg: Color;

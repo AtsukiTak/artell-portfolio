@@ -9,7 +9,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 // internal modules
 import { Artist } from "models/artist";
 import { Art } from "models/art";
-import { useObjectURL } from "utils/image";
+import { useObjectURL } from "libs/image";
 import { pc } from "components/Responsive";
 import Header from "components/organisms/Header";
 import Footer from "components/Footer";
@@ -18,9 +18,9 @@ import Arts from "components/artist/Arts";
 
 // for SSR
 import { GetServerSideProps } from "next";
-import { getFirebaseApp } from "infras/firebase";
-import { queryArtistById } from "infras/repos/artist";
-import { queryPublicArtsOfArtist } from "infras/repos/art";
+import { getFirebaseAdmin } from "server-libs/firebase";
+import { queryArtistById } from "server-libs/queryArtists";
+import { queryPublicArtsOfArtist } from "server-libs/queryArts";
 
 interface PageProps {
   artist: Artist;
@@ -86,7 +86,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   // artistの取得
   /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
   const artistId = context.params!.artistId as string;
-  const fbApp = getFirebaseApp();
+  const fbApp = getFirebaseAdmin();
   const artist = await queryArtistById(artistId, fbApp);
 
   if (artist === null) {

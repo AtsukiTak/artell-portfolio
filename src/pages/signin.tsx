@@ -4,8 +4,8 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import * as D from "@mojotech/json-type-validation";
 
-import { request as req, Method } from "infras/http";
-import * as colors from "utils/colors";
+import { request as req, Method } from "libs/http";
+import * as colors from "libs/colors";
 import Container from "components/atoms/Container";
 import Spacer from "components/atoms/Spacer";
 import Button from "components/atoms/Button";
@@ -13,6 +13,8 @@ import { Paragraph, Text } from "components/atoms/Text";
 import TextField from "components/atoms/TextField";
 import Header from "components/organisms/Header";
 
+// ## TODO
+// redirectの処理
 const SigninPage: React.FC = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");

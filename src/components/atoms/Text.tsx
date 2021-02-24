@@ -1,5 +1,5 @@
 import React from "react";
-import { Color } from "utils/colors";
+import { Color } from "libs/colors";
 
 interface ParagraphProps {
   align?: "left" | "center" | "right";
