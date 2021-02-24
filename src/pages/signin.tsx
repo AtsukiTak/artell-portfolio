@@ -7,11 +7,11 @@ import TextField from "@material-ui/core/TextField";
 import { request as req, Method } from "infras/http";
 import { getFirebaseApp } from "utils/firebase";
 import * as colors from "utils/colors";
-import Header from "components/Header";
 import Container from "components/atoms/Container";
 import Spacer from "components/atoms/Spacer";
 import Button from "components/atoms/Button";
 import { Paragraph, Text } from "components/atoms/Text";
+import Header from "components/organisms/Header";
 
 const SigninPage: React.FC = () => {
   const [email, setEmail] = React.useState("");
