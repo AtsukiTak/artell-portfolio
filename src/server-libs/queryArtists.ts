@@ -1,13 +1,13 @@
-import admin from "firebase-admin";
+import { app } from "firebase-admin";
 import * as D from "@mojotech/json-type-validation";
 import { Artist } from "models/artist";
 
 export const queryArtistById = async (
   uid: string,
-  app: admin.app.App
+  admin: app.App
 ): Promise<Artist | null> => {
   // firestoreからデータを取得する
-  const firestore = admin.firestore(app);
+  const firestore = admin.firestore();
   const doc = await firestore.doc(`artists/${uid}`).get();
   const data = doc.data();
   if (data === undefined) {
@@ -17,7 +17,7 @@ export const queryArtistById = async (
 
   // storageからデータを取得する
   const file = admin
-    .storage(app)
+    .storage()
     .bucket("artell-portfolio.appspot.com")
     .file(`artists/${uid}/sumbnail.jpg`);
 

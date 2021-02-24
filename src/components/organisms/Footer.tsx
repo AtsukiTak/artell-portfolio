@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import * as color from "./color";
+import * as color from "libs/colors";
 import { pc } from "components/Responsive";
 
 const Footer: React.FC = () => {
@@ -79,14 +79,14 @@ const FooterListItem = styled.li`
 
 const Link = styled.a`
   text-decoration: none;
-  color: ${color.LightBlack.hex};
+  color: ${color.gray80.hex};
 `;
 
 const CopyRight = styled.div`
   font-size: 12px;
   letter-spacing: 1.6px;
   text-decoration: none;
-  color: ${color.LightBlack.hex};
+  color: ${color.gray80.hex};
 
   ${pc(`
     left: 100px;

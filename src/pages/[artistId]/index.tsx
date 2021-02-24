@@ -12,7 +12,7 @@ import { Art } from "models/art";
 import { useObjectURL } from "libs/image";
 import { pc } from "components/Responsive";
 import Header from "components/organisms/Header";
-import Footer from "components/Footer";
+import Footer from "components/organisms/Footer";
 import Profile from "components/artist/Profile";
 import Arts from "components/artist/Arts";
 

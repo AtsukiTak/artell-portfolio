@@ -1,4 +1,4 @@
-import admin from "firebase-admin";
+import { app } from "firebase-admin";
 import * as D from "@mojotech/json-type-validation";
 import { Art } from "models/art";
 
@@ -9,7 +9,7 @@ import { Art } from "models/art";
  */
 export const queryPublicArtsOfArtist = async (
   artistUid: string,
-  admin: admin.app.App
+  admin: app.App
 ): Promise<Art[]> => {
   // firestoreからデータを取得する
   const collection = await admin
@@ -43,7 +43,7 @@ export const queryPublicArtsOfArtist = async (
  */
 export const queryAllArtsOfArtist = async (
   artistUid: string,
-  admin: admin.app.App
+  admin: app.App
 ): Promise<Art[]> => {
   // firestoreからデータを取得する
   const collection = await admin
