@@ -2,6 +2,7 @@ import * as D from "@mojotech/json-type-validation";
 
 export enum Method {
   POST = "POST",
+  PUT = "PUT",
 }
 
 export interface RequestArgs<T> {

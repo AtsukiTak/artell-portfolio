@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import * as D from "@mojotech/json-type-validation";
@@ -96,10 +95,7 @@ const SigninPage: React.FC = () => {
   );
 };
 
-const requestSignin = async (
-  email: string,
-  password: string
-): Promise<ResData> =>
+const requestSignin = (email: string, password: string): Promise<ResData> =>
   req({
     method: Method.POST,
     url: "/api/signin",

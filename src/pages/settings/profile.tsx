@@ -2,8 +2,11 @@
 import React from "react";
 import { Art } from "models/art";
 import { Artist } from "models/artist";
-import Header from "components/organisms/Header";
-import Footer from "components/organisms/Footer";
+import { DataURI } from "libs/image";
+import ProfileSettingPageTemplate from "components/templates/settings/profile";
+import type { ReqData, ResData } from "pages/api/artist/me";
+import * as D from "@mojotech/json-type-validation";
+import { request, Method } from "libs/http";
 
 // for server side
 import { GetServerSideProps } from "next";
@@ -17,36 +20,51 @@ import { queryArtistById } from "server-libs/queryArtists";
 
 type PageProps = {
   artist: Artist;
-  arts: Art[];
 };
 
-const ProfileSettingPage: React.FC<PageProps> = ({ artist, arts }) => {
-  return (
-    <>
-      <Header />
-      <Footer />
-    </>
-  );
+const ProfileSettingPage: React.FC<PageProps> = ({ artist }) => {
+  const updateArtist = React.useCallback((data) => {
+    console.log(data);
+    return updateArtistInfoRequest(data).then(() => undefined);
+  }, []);
+
+  return <ProfileSettingPageTemplate artist={artist} onSave={updateArtist} />;
 };
 
+/*
+ * ========================
+ * updateArtistInfoRequest
+ * ========================
+ */
+const ResDataDecoder: D.Decoder<ResData> = D.object({
+  msg: D.string(),
+});
+
+const updateArtistInfoRequest = (data: ReqData): Promise<ResData> =>
+  request({
+    method: Method.PUT,
+    url: "/api/artist/me",
+    body: data,
+    decoder: ResDataDecoder,
+  });
+
+/*
+ * ==============
+ * SSR
+ * ==============
+ */
 export const getServerSideProps: GetServerSideProps<PageProps> = async ({
   req,
   res,
 }) => {
   try {
     // cookieからuidを取得
-    const sessionCookie = req.cookies[SessionCookieKey];
-    if (sessionCookie === undefined) return redirectToSigninPage;
-
-    const userInfo = await verifySessionCookie(sessionCookie).catch(() => null);
+    const userInfo = await verifySessionCookie(req);
     if (!userInfo) return redirectToSigninPage;
 
     const uid = userInfo.uid;
 
     const admin = getFirebaseAdmin();
-
-    // firebaseからArt一覧を取得
-    const arts = await queryAllArtsOfArtist(uid, admin);
 
     // firebaseからArtist情報を取得
     const artist = (await queryArtistById(uid, admin))!;
@@ -54,7 +72,6 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
     return {
       props: {
         artist,
-        arts,
       },
     };
   } catch (e) {

@@ -7,3 +7,5 @@ export const Thumbnail = styled(WidthBasedSquare)<{ src: string }>`
   background-size: cover;
   background-position: center;
 `;
+
+export default Thumbnail;

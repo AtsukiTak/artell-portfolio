@@ -1,5 +1,6 @@
 import React from "react";
 import { Color } from "libs/colors";
+import styles from "./Text.module.css";
 
 interface ParagraphProps {
   align?: "left" | "center" | "right";
@@ -32,6 +33,7 @@ type TextProps = {
 export const Text: React.FC<TextProps> = React.memo(
   ({ size, color, bold, children }) => (
     <span
+      className={styles.text}
       style={{
         fontSize: `${size || 1}rem`,
         color: color.hex,

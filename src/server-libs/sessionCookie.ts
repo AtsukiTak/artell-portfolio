@@ -28,9 +28,22 @@ export const generateSessionCookieHeaderValue = (
   );
 };
 
+// SSR時のRequestとAPI時のRequestどちらにも対応するinterface
+type GeneralRequest = {
+  cookies: {
+    [key: string]: string;
+  };
+};
+
 /// Cookieの値からユーザー情報を抽出する
 export const verifySessionCookie = (
-  cookie: string
-): Promise<auth.DecodedIdToken> => {
-  return getFirebaseAdmin().auth().verifySessionCookie(cookie, true);
+  req: GeneralRequest
+): Promise<auth.DecodedIdToken | null> => {
+  const cookie = req.cookies[SessionCookieKey];
+  if (cookie === undefined) return Promise.resolve(null);
+
+  return getFirebaseAdmin()
+    .auth()
+    .verifySessionCookie(cookie, true)
+    .catch(() => null);
 };
