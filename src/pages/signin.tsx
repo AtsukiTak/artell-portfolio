@@ -41,7 +41,10 @@ const SigninPage: React.FC = () => {
   const onSubmit = React.useCallback(() => {
     setIsSending(true);
     requestSignin(email, password)
-      .then(() => router.push("/settings"))
+      .then(() => {
+        const redirect = router.query.redirect || "/settings/profile";
+        router.push(redirect);
+      })
       .catch((e) => {
         console.log(e);
         setIsUnauthorized(true);
