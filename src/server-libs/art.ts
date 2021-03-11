@@ -1,7 +1,9 @@
-import { app } from "firebase-admin";
+import { app, firestore } from "firebase-admin";
 import * as D from "@mojotech/json-type-validation";
 import { Art } from "models/art";
 import { getFirebaseAdmin } from "server-libs/firebase";
+
+const BUCKET_NAME = "artell-portfolio.appspot.com";
 
 /*
  * =======================
@@ -75,6 +77,82 @@ export const queryAllArtsOfArtist = async (
       };
     })
   );
+};
+
+/*
+ * =============
+ * updateArt
+ * =============
+ */
+export type UpdateArtArgs = {
+  artistUid: string;
+  id: string;
+  title: string;
+  widthMM: number;
+  heightMM: number;
+  description: string;
+  materials: string;
+  showPublic: boolean;
+  salesPriceYen?: number;
+  rentalPriceYen?: number;
+  thumbnailData: Buffer | null;
+};
+
+export const upsertArt = async (args: UpdateArtArgs): Promise<void> => {
+  const admin = getFirebaseAdmin();
+
+  let promises = [];
+
+  // firestoreの情報の更新
+  promises.push(
+    admin
+      .firestore()
+      .doc(`artists/${args.artistUid}/arts/${args.id}`)
+      .update(
+        formatUpdateData({
+          title: args.title,
+          widthMM: args.widthMM,
+          heightMM: args.heightMM,
+          description: args.description,
+          materials: args.materials,
+          showPublic: args.showPublic,
+          salesPriceYen: args.salesPriceYen,
+          rentalPriceYen: args.rentalPriceYen,
+        })
+      )
+      .then(() => undefined)
+  );
+
+  // サムネイルの更新
+  if (args.thumbnailData) {
+    promises.push(
+      admin
+        .storage()
+        .bucket(BUCKET_NAME)
+        .file(`artists/${args.artistUid}/arts/${args.id}/sumbnail.jpg`)
+        .save(args.thumbnailData, {
+          contentType: "image/jpeg",
+          public: args.showPublic,
+          resumable: false,
+        })
+    );
+  }
+
+  await Promise.all(promises);
+};
+
+const formatUpdateData = (doc: ArtDocument): { [key: string]: unknown } => {
+  const formatted: { [key: string]: unknown } = {};
+
+  Object.entries(doc).forEach(([key, val]) => {
+    if (val === undefined) {
+      formatted[key] = firestore.FieldValue.delete();
+    } else {
+      formatted[key] = val;
+    }
+  });
+
+  return formatted;
 };
 
 /*
