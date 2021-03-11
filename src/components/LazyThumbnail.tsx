@@ -1,6 +1,6 @@
 import React from "react";
 import LazyLoad from "react-lazyload";
-import { Thumbnail } from "components/Thumbnail";
+import { Thumbnail } from "components/molecules/Thumbnail";
 
 export interface LazyThumbnailProps {
   src: string;

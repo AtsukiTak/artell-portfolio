@@ -1,0 +1,22 @@
+a.link {
+  &.underline-never {
+    text-decoration: none;
+  }
+  &.underline-hover {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  &.underline-always {
+    text-decoration: underline;
+  }
+}
+
+a.button-link {
+  display: block;
+  width: 100%;
+  padding: 13px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+}

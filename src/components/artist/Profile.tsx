@@ -3,10 +3,10 @@ import styled from "styled-components";
 
 // internal modules
 import { Artist } from "models/artist";
-import { Thumbnail } from "components/Thumbnail";
 import FacebookIcon from "components/icons/FacebookIcon";
 import TwitterIcon from "components/icons/TwitterIcon";
 import InstagramIcon from "components/icons/InstagramIcon";
+import { Thumbnail } from "components/molecules/Thumbnail";
 import { pc } from "components/Responsive";
 import * as color from "components/color";
 

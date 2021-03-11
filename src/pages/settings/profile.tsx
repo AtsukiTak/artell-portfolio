@@ -11,11 +11,7 @@ import { request, Method } from "libs/http";
 // for server side
 import { GetServerSideProps } from "next";
 import { getFirebaseAdmin } from "server-libs/firebase";
-import {
-  SessionCookieKey,
-  verifySessionCookie,
-} from "server-libs/sessionCookie";
-import { queryAllArtsOfArtist } from "server-libs/queryArts";
+import { verifySessionCookie } from "server-libs/sessionCookie";
 import { queryArtistById } from "server-libs/queryArtists";
 
 type PageProps = {

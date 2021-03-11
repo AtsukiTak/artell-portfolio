@@ -1,6 +1,7 @@
 import { app } from "firebase-admin";
 import * as D from "@mojotech/json-type-validation";
 import { Art } from "models/art";
+import { getFirebaseAdmin } from "server-libs/firebase";
 
 /*
  * =======================
@@ -42,9 +43,10 @@ export const queryPublicArtsOfArtist = async (
  * ====================
  */
 export const queryAllArtsOfArtist = async (
-  artistUid: string,
-  admin: app.App
+  artistUid: string
 ): Promise<Art[]> => {
+  const admin = getFirebaseAdmin();
+
   // firestoreからデータを取得する
   const collection = await admin
     .firestore()
@@ -53,21 +55,26 @@ export const queryAllArtsOfArtist = async (
 
   const bucket = admin.storage().bucket("artell-portfolio.appspot.com");
 
-  return collection.docs.map((doc) => {
-    const file = bucket.file(
-      `artists/${artistUid}/arts/${doc.id}/sumbnail.jpg`
-    );
-    // TODO
-    // fileのupload時にshowPublicならmakePublicする
-    // （ここで毎回makePublicしないようにする）
-    file.makePublic();
+  return await Promise.all(
+    collection.docs.map(async (doc) => {
+      const file = bucket.file(
+        `artists/${artistUid}/arts/${doc.id}/sumbnail.jpg`
+      );
 
-    return {
-      id: doc.id,
-      ...ArtDocumentDecoder.runWithException(doc.data()),
-      thumbnailUrl: file.publicUrl(),
-    };
-  });
+      // fileの中にはprivateなものも含まれるので、
+      // 制限付きのURLを取得する
+      const [thumbnailUrl] = await file.getSignedUrl({
+        action: "read",
+        expires: Date.now() + 1000 * 60 * 60, // 1 hour
+      });
+
+      return {
+        id: doc.id,
+        ...ArtDocumentDecoder.runWithException(doc.data()),
+        thumbnailUrl,
+      };
+    })
+  );
 };
 
 /*
