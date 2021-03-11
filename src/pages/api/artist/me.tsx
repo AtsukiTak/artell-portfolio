@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import * as D from "@mojotech/json-type-validation";
 import { verifySessionCookie } from "server-libs/sessionCookie";
-import { updateArtist } from "server-libs/queryArtists";
+import { updateArtist } from "server-libs/artistOps";
 
 /*
  * ============

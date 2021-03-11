@@ -20,8 +20,8 @@ import * as color from "components/color";
 // SSR
 import { GetServerSideProps } from "next";
 import { getFirebaseAdmin } from "server-libs/firebase";
-import { queryArtistById } from "server-libs/queryArtists";
-import { queryPublicArtsOfArtist } from "server-libs/queryArts";
+import { queryArtistById } from "server-libs/artistOps";
+import { queryPublicArtsOfArtist } from "server-libs/artOps";
 
 interface PageProps {
   artist: Artist;

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import * as D from "@mojotech/json-type-validation";
 import { getFirebaseAdmin } from "server-libs/firebase";
-import { queryPublicArtsOfArtist } from "server-libs/queryArts";
+import { queryPublicArtsOfArtist } from "server-libs/artOps";
 import Stripe from "stripe";
 
 const stripeSK = process.env.STRIPE_SK;
