@@ -12,7 +12,7 @@ import { request, Method } from "libs/http";
 import { GetServerSideProps } from "next";
 import { getFirebaseAdmin } from "server-libs/firebase";
 import { verifySessionCookie } from "server-libs/sessionCookie";
-import { queryArtistById } from "server-libs/artistOps";
+import { queryArtistById } from "server-libs/artist";
 
 type PageProps = {
   artist: Artist;

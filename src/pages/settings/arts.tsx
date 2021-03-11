@@ -5,7 +5,7 @@ import ArtsSettingTemplate from "components/templates/settings/arts";
 // for SSR
 import { GetServerSideProps } from "next";
 import { verifySessionCookie } from "server-libs/sessionCookie";
-import { queryAllArtsOfArtist } from "server-libs/artOps";
+import { queryAllArtsOfArtist } from "server-libs/art";
 
 type Props = {
   arts: Art[];

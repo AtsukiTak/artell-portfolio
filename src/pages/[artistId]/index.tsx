@@ -19,8 +19,8 @@ import Arts from "components/artist/Arts";
 // for SSR
 import { GetServerSideProps } from "next";
 import { getFirebaseAdmin } from "server-libs/firebase";
-import { queryArtistById } from "server-libs/artistOps";
-import { queryPublicArtsOfArtist } from "server-libs/artOps";
+import { queryArtistById } from "server-libs/artist";
+import { queryPublicArtsOfArtist } from "server-libs/art";
 
 interface PageProps {
   artist: Artist;
