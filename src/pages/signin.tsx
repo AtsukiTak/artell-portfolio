@@ -12,8 +12,6 @@ import { Paragraph, Text } from "components/atoms/Text";
 import TextField from "components/atoms/TextField";
 import Header from "components/organisms/Header";
 
-// ## TODO
-// redirectの処理
 const SigninPage: React.FC = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -42,8 +40,12 @@ const SigninPage: React.FC = () => {
     setIsSending(true);
     requestSignin(email, password)
       .then(() => {
-        const redirect = router.query.redirect || "/settings/profile";
-        router.push(redirect);
+        const redirect = router.query.redirect;
+        if (typeof redirect === "string") {
+          router.push(redirect);
+        } else {
+          router.push("/settings/profile");
+        }
       })
       .catch((e) => {
         console.log(e);

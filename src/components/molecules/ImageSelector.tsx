@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { readFromFile, DataURI } from "libs/image";
 import { pc } from "components/Responsive";
-import Thumbnail from "components/Thumbnail";
+import Thumbnail from "components/molecules/Thumbnail";
 
 type Props = {
   value: string | DataURI;
