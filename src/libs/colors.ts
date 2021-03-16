@@ -54,5 +54,6 @@ export const gray80 = Color.fromHex("#333333");
 export const gray90 = Color.fromHex("#212121");
 export const black = Color.fromHex("#000000");
 export const tomato = Color.fromHex("#f44336");
+export const limegreen = Color.fromHex("#32CD32");
 
 export default Color;

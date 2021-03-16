@@ -55,7 +55,7 @@ export const queryAllArtsOfArtist = async (
     .collection(`artists/${artistUid}/arts`)
     .get();
 
-  const bucket = admin.storage().bucket("artell-portfolio.appspot.com");
+  const bucket = admin.storage().bucket(BUCKET_NAME);
 
   return await Promise.all(
     collection.docs.map(async (doc) => {
@@ -77,6 +77,48 @@ export const queryAllArtsOfArtist = async (
       };
     })
   );
+};
+
+/*
+ * ===============
+ * queryPrivateArtById
+ * ===============
+ */
+export const queryPrivateArtById = async (
+  artistUid: string,
+  artId: string
+): Promise<Art | null> => {
+  const admin = getFirebaseAdmin();
+
+  // firestoreからデータを取得する
+  const doc = await admin
+    .firestore()
+    .doc(`artists/${artistUid}/arts/${artId}`)
+    .get();
+  const data = doc.data();
+  if (!data) {
+    return null;
+  }
+  const decoded = ArtDocumentDecoder.runWithException(data);
+
+  // storageから画像を取得する
+  const file = admin
+    .storage()
+    .bucket(BUCKET_NAME)
+    .file(`artists/${artistUid}/arts/${artId}/sumbnail.jpg`);
+
+  // fileはprivateである可能性もあるので、
+  // 制限付きのURLを取得する
+  const [thumbnailUrl] = await file.getSignedUrl({
+    action: "read",
+    expires: Date.now() + 1000 * 60 * 60, // 1 hour
+  });
+
+  return {
+    id: artId,
+    ...decoded,
+    thumbnailUrl,
+  };
 };
 
 /*
@@ -132,10 +174,20 @@ export const upsertArt = async (args: UpdateArtArgs): Promise<void> => {
         .file(`artists/${args.artistUid}/arts/${args.id}/sumbnail.jpg`)
         .save(args.thumbnailData, {
           contentType: "image/jpeg",
-          public: args.showPublic,
           resumable: false,
         })
     );
+  }
+
+  // サムネイルの可視性の更新
+  const file = admin
+    .storage()
+    .bucket(BUCKET_NAME)
+    .file(`artists/${args.artistUid}/arts/${args.id}/sumbnail.jpg`);
+  if (args.showPublic) {
+    promises.push(file.makePublic().then(() => undefined));
+  } else {
+    promises.push(file.makePrivate().then(() => undefined));
   }
 
   await Promise.all(promises);

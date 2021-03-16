@@ -9,7 +9,7 @@ import Button from "components/atoms/Button";
 import TextField from "components/atoms/TextField";
 import { Text, Paragraph } from "components/atoms/Text";
 import Header from "components/organisms/Header";
-import type { ResData } from "pages/api/send_password_reset_mail";
+import type { ReqData, ResData } from "pages/api/send_password_reset_mail";
 
 const SendPasswordResetPage: React.FC = () => {
   const [email, setEmail] = React.useState("");
@@ -26,7 +26,7 @@ const SendPasswordResetPage: React.FC = () => {
 
   const onSubmit = React.useCallback(() => {
     setIsSending(true);
-    requestSendPasswordResetMail(email)
+    requestSendPasswordResetMail({ email })
       .then(() => alert("指定されたメールアドレス宛にメールを送信しました。"))
       .catch((e) => {
         console.log(e);
@@ -75,13 +75,16 @@ const SendPasswordResetPage: React.FC = () => {
   );
 };
 
-const requestSendPasswordResetMail = async (email: string): Promise<ResData> =>
+/*
+ * =====================================
+ * send password reset mail API request
+ * =====================================
+ */
+const requestSendPasswordResetMail = async (body: ReqData): Promise<ResData> =>
   req({
     method: Method.POST,
     url: "/api/send_password_reset_mail",
-    body: {
-      email,
-    },
+    body,
     decoder: ResDataDecoder,
   });
 

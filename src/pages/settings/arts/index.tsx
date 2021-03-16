@@ -6,6 +6,7 @@ import ArtsSettingTemplate from "components/templates/settings/arts";
 import { GetServerSideProps } from "next";
 import { verifySessionCookie } from "server-libs/sessionCookie";
 import { queryAllArtsOfArtist } from "server-libs/art";
+import { redirectToSigninPage } from "pages/signin";
 
 type Props = {
   arts: Art[];
@@ -23,10 +24,11 @@ const ProfileSettingPage: React.FC<Props> = ({ arts }) => {
 export const getServerSideProps: GetServerSideProps<Props> = async ({
   req,
   res,
+  resolvedUrl,
 }) => {
   try {
     const userInfo = await verifySessionCookie(req);
-    if (!userInfo) return redirectToSigninPage;
+    if (!userInfo) return {redirect: redirectToSigninPage(resolvedUrl)};
 
     const uid = userInfo.uid;
 
@@ -41,15 +43,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     console.error(e);
     throw e;
   }
-};
-
-const thisPage = "/settings/arts";
-
-const redirectToSigninPage = {
-  redirect: {
-    destination: `/signin?redirect=${encodeURIComponent(thisPage)}`,
-    permanent: false,
-  },
 };
 
 export default ProfileSettingPage;

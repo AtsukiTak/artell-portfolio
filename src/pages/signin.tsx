@@ -12,6 +12,9 @@ import { Paragraph, Text } from "components/atoms/Text";
 import TextField from "components/atoms/TextField";
 import Header from "components/organisms/Header";
 
+import type { ReqData, ResData } from "pages/api/signin";
+import { Redirect } from "next";
+
 const SigninPage: React.FC = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -38,7 +41,7 @@ const SigninPage: React.FC = () => {
 
   const onSubmit = React.useCallback(() => {
     setIsSending(true);
-    requestSignin(email, password)
+    signinRequest({ email, password })
       .then(() => {
         const redirect = router.query.redirect;
         if (typeof redirect === "string") {
@@ -100,23 +103,34 @@ const SigninPage: React.FC = () => {
   );
 };
 
-const requestSignin = (email: string, password: string): Promise<ResData> =>
+/*
+ * ==================
+ * signin API request
+ * ==================
+ */
+const signinRequest = (body: ReqData): Promise<ResData> =>
   req({
     method: Method.POST,
     url: "/api/signin",
-    body: {
-      email,
-      password,
-    },
+    body,
     decoder: ResDataDecoder,
   });
 
-type ResData = {
-  msg: string;
-};
-
 const ResDataDecoder: D.Decoder<ResData> = D.object({
+  success: D.boolean(),
   msg: D.string(),
+});
+
+/*
+ * ==============================
+ * redirect to signin page object
+ * ==============================
+ *
+ * which is used `SSR` context.
+ */
+export const redirectToSigninPage = (dst: string): Redirect => ({
+  destination: `/signin?redirect=${encodeURIComponent(dst)}`,
+  permanent: false,
 });
 
 export default SigninPage;

@@ -13,6 +13,7 @@ import { GetServerSideProps } from "next";
 import { getFirebaseAdmin } from "server-libs/firebase";
 import { verifySessionCookie } from "server-libs/sessionCookie";
 import { queryArtistById } from "server-libs/artist";
+import { redirectToSigninPage } from "pages/signin";
 
 type PageProps = {
   artist: Artist;
@@ -52,11 +53,12 @@ const updateArtistInfoRequest = (data: ReqData): Promise<ResData> =>
 export const getServerSideProps: GetServerSideProps<PageProps> = async ({
   req,
   res,
+  resolvedUrl,
 }) => {
   try {
     // cookieからuidを取得
     const userInfo = await verifySessionCookie(req);
-    if (!userInfo) return redirectToSigninPage;
+    if (!userInfo) return { redirect: redirectToSigninPage(resolvedUrl) };
 
     const uid = userInfo.uid;
 
@@ -74,15 +76,6 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
     console.error(e);
     throw e;
   }
-};
-
-const thisPage = "/settings/profile";
-
-const redirectToSigninPage = {
-  redirect: {
-    destination: `/signin?redirect=${encodeURIComponent(thisPage)}`,
-    permanent: false,
-  },
 };
 
 export default ProfileSettingPage;

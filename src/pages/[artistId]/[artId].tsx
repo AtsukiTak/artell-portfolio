@@ -119,6 +119,8 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   }
 
   // artの取得
+  // TODO
+  // 対象の作品だけ取得する
   const arts = await queryPublicArtsOfArtist(artistId, admin);
   const art = arts.find((art) => art.id === artId);
   if (art === undefined) {

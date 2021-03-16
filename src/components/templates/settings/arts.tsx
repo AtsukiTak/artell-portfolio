@@ -47,7 +47,7 @@ const AddArtButtonLink = () => (
 
 const EditArtLink = ({ art }: { art: Art }) => (
   <div>
-    <Link href={`/settings/arts/edit/${art.id}`}>
+    <Link href={`/settings/arts/${art.id}/edit`}>
       <Thumbnail src={art.thumbnailUrl} />
       <Paragraph align="center">
         <Text size={12 / 16} color={color.gray80}>
