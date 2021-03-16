@@ -135,8 +135,8 @@ export type UpdateArtArgs = {
   description: string;
   materials: string;
   showPublic: boolean;
-  salesPriceYen?: number;
-  rentalPriceYen?: number;
+  salesPriceYen: number | null;
+  rentalPriceYen: number | null;
   thumbnailData: Buffer | null;
 };
 
@@ -158,8 +158,10 @@ export const upsertArt = async (args: UpdateArtArgs): Promise<void> => {
           description: args.description,
           materials: args.materials,
           showPublic: args.showPublic,
-          salesPriceYen: args.salesPriceYen,
-          rentalPriceYen: args.rentalPriceYen,
+          salesPriceYen:
+            args.salesPriceYen === null ? undefined : args.salesPriceYen,
+          rentalPriceYen:
+            args.rentalPriceYen === null ? undefined : args.rentalPriceYen,
         })
       )
       .then(() => undefined)
@@ -197,7 +199,7 @@ const formatUpdateData = (doc: ArtDocument): { [key: string]: unknown } => {
   const formatted: { [key: string]: unknown } = {};
 
   Object.entries(doc).forEach(([key, val]) => {
-    if (val === undefined) {
+    if (val === undefined || val === null) {
       formatted[key] = firestore.FieldValue.delete();
     } else {
       formatted[key] = val;
