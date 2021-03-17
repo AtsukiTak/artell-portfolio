@@ -272,6 +272,26 @@ const formatUpdateData = (doc: ArtDocument): { [key: string]: unknown } => {
 };
 
 /*
+ * ===========
+ * deleteArt
+ * ===========
+ */
+export const deleteArt = async (
+  artistUid: string,
+  artId: string
+): Promise<void> => {
+  const admin = getFirebaseAdmin();
+
+  await admin.firestore().doc(`artists/${artistUid}/arts/${artId}`).delete();
+
+  await admin
+    .storage()
+    .bucket(BUCKET_NAME)
+    .file(`artists/${artistUid}/arts/${artId}/sumbnail.jpg`)
+    .delete();
+};
+
+/*
  * ===================
  * Interface & Decoder
  * ===================
