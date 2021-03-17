@@ -123,6 +123,68 @@ export const queryPrivateArtById = async (
 
 /*
  * =============
+ * createArt
+ * =============
+ */
+export type CreateArtArgs = {
+  artistUid: string;
+  title: string;
+  widthMM: number;
+  heightMM: number;
+  description: string;
+  materials: string;
+  showPublic: boolean;
+  salesPriceYen: number | null;
+  rentalPriceYen: number | null;
+  thumbnailData: Buffer;
+};
+
+export const createArt = async (args: CreateArtArgs): Promise<string> => {
+  const admin = getFirebaseAdmin();
+
+  // firestoreにdocumentを追加
+  const doc = await admin
+    .firestore()
+    .collection(`artists/${args.artistUid}/arts`)
+    .add(
+      formatAddData({
+        title: args.title,
+        widthMM: args.widthMM,
+        heightMM: args.heightMM,
+        description: args.description,
+        materials: args.materials,
+        showPublic: args.showPublic,
+        salesPriceYen:
+          args.salesPriceYen === null ? undefined : args.salesPriceYen,
+        rentalPriceYen:
+          args.rentalPriceYen === null ? undefined : args.rentalPriceYen,
+      })
+    );
+
+  const artId = doc.id;
+
+  // storageにサムネイルを追加
+  await admin
+    .storage()
+    .bucket(BUCKET_NAME)
+    .file(`artists/${args.artistUid}/arts/${artId}/sumbnail.jpg`)
+    .save(args.thumbnailData, {
+      contentType: "image/jpeg",
+      resumable: false,
+      // https://googleapis.dev/nodejs/storage/latest/global.html#CreateWriteStreamOptions
+      predefinedAcl: args.showPublic ? "publicRead" : "private",
+    });
+
+  return artId;
+};
+
+// 型チェックを行うだけ
+const formatAddData = (doc: ArtDocument): ArtDocument => {
+  return doc;
+};
+
+/*
+ * =============
  * updateArt
  * =============
  */
@@ -140,7 +202,7 @@ export type UpdateArtArgs = {
   thumbnailData: Buffer | null;
 };
 
-export const upsertArt = async (args: UpdateArtArgs): Promise<void> => {
+export const updateArt = async (args: UpdateArtArgs): Promise<void> => {
   const admin = getFirebaseAdmin();
 
   let promises = [];
