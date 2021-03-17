@@ -47,7 +47,7 @@ const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<ResData>
 ): Promise<void> => {
-  if (req.method !== "PUT") return res.status(404).end();
+  if (req.method !== "POST") return res.status(404).end();
 
   try {
     // 認証情報の取得
