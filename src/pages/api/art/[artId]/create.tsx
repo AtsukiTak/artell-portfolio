@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import * as D from "@mojotech/json-type-validation";
 import { verifySessionCookie } from "server-libs/sessionCookie";
-import { updateArt } from "server-libs/art";
+import { createArt } from "server-libs/art";
 
 /*
  * ===========
@@ -18,7 +18,7 @@ export type ReqData = {
   salesPriceYen: number | null;
   rentalPriceYen: number | null;
   // base64 encoded thumbnail data
-  thumbnailBase64Data: string | null;
+  thumbnailBase64Data: string;
 };
 
 export type ResData = {
@@ -59,14 +59,11 @@ const handler = async (
     if (body === null) return res.status(400).end();
 
     // thumbnailの更新データ
-    const thumbnailData = body.thumbnailBase64Data
-      ? Buffer.from(body.thumbnailBase64Data, "base64")
-      : null;
+    const thumbnailData = Buffer.from(body.thumbnailBase64Data, "base64");
 
     // 更新
-    await updateArt({
+    await createArt({
       artistUid: userInfo.uid,
-      id: req.query.artId! as string,
       ...body,
       thumbnailData,
     });
@@ -87,7 +84,7 @@ const ReqDataDecoder: D.Decoder<ReqData> = D.object({
   showPublic: D.boolean(),
   salesPriceYen: D.union(D.number(), D.constant(null)),
   rentalPriceYen: D.union(D.number(), D.constant(null)),
-  thumbnailBase64Data: D.union(D.string(), D.constant(null)),
+  thumbnailBase64Data: D.string(),
 });
 
 export default handler;
