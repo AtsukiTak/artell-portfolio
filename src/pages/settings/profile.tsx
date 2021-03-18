@@ -1,122 +1,81 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import * as firebase from "firebase/app";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+// for client side
+import React from "react";
+import { Art } from "models/art";
+import { Artist } from "models/artist";
+import { DataURI } from "libs/image";
+import ProfileSettingPageTemplate from "components/templates/settings/profile";
+import type { ReqData, ResData } from "pages/api/artist/me";
+import * as D from "@mojotech/json-type-validation";
+import { request, Method } from "libs/http";
 
-import { Image, DownloadImage } from "models/image";
-import { Artist, ArtistAttributes, ArtistRepository } from "models/artist";
+// for server side
+import { GetServerSideProps } from "next";
+import { getFirebaseAdmin } from "server-libs/firebase";
+import { verifySessionCookie } from "server-libs/sessionCookie";
+import { queryArtistById } from "server-libs/artist";
+import { redirectToSigninPage } from "pages/signin";
 
-import { setUser } from "services/login";
-import { withUser, UserProps } from "components/with-user";
-import { pc } from "components/responsive";
-import Header from "components/header";
-import Footer from "components/footer";
-import SelectImageComponent from "components/select_image";
-
-import SettingTab from "./components/tab";
-import EditAttributesComponent from "./profile/components/edit_attributes";
-
-const ProfileSettingPage: React.FC<UserProps> = ({ user }) => {
-  const { artist, arts } = user;
-  const [attrs, setAttrs] = useState<ArtistAttributes>(artist.attrs);
-  const [thumbnail, setThumbnail] = useState<Image | null>(artist.thumbnail);
-  const [updating, setUpdating] = useState(false);
-  const dispatch = useDispatch();
-
-  // Updateボタンが押された時に実行される関数
-  const onSubmit = async () => {
-    setUpdating(true);
-
-    // 作家情報を更新
-    const newArtist = new Artist(artist.uid, attrs, thumbnail);
-    if (newArtist.attrs !== artist.attrs) {
-      await new ArtistRepository(firebase.app()).updateAttrs(newArtist);
-    }
-    if (newArtist.thumbnail !== artist.thumbnail) {
-      await new ArtistRepository(firebase.app()).updateThumbnail(newArtist);
-    }
-    dispatch(setUser(newArtist, arts));
-    alert("更新が完了しました");
-    setUpdating(false);
-  };
-
-  return (
-    <>
-      <Header />
-      <SettingTab selected="tab1" />
-      <Container>
-        <LinkToArtistPage to={`/${artist.uid}`}>
-          自分の作家ページをプレビューする →
-        </LinkToArtistPage>
-        <SelectImageComponent
-          image={thumbnail || ArtistDefaultThumbnail}
-          setImage={setThumbnail}
-        />
-        <EditAttributesComponent attrs={attrs} setAttrs={setAttrs} />
-        {updating ? (
-          <UpdateButton disabled>Updating...</UpdateButton>
-        ) : (
-          <UpdateButton onClick={onSubmit}>プロフィールを更新する</UpdateButton>
-        )}
-      </Container>
-      <Footer />
-    </>
-  );
+type PageProps = {
+  artist: Artist;
 };
 
-export default withUser(ProfileSettingPage);
+const ProfileSettingPage: React.FC<PageProps> = ({ artist }) => {
+  const updateArtist = React.useCallback((data) => {
+    console.log(data);
+    return updateArtistInfoRequest(data).then(() => undefined);
+  }, []);
 
-const ArtistDefaultThumbnail = DownloadImage.download(
-  "/img/artist-default-thumbnail.jpg"
-);
+  return <ProfileSettingPageTemplate artist={artist} onSave={updateArtist} />;
+};
 
-const Container = styled.div`
-  width: 100%;
-  margin: 0px auto;
-  padding: 50px 20px;
+/*
+ * ========================
+ * updateArtistInfoRequest
+ * ========================
+ */
+const ResDataDecoder: D.Decoder<ResData> = D.object({
+  msg: D.string(),
+});
 
-  ${pc(`
-    width: 86%;
-    margin-top: 90px;
-    padding: 50px 0px;
-  `)}
-`;
+const updateArtistInfoRequest = (data: ReqData): Promise<ResData> =>
+  request({
+    method: Method.PUT,
+    url: "/api/artist/me",
+    body: data,
+    decoder: ResDataDecoder,
+  });
 
-const LinkToArtistPage = styled(Link)`
-  display: block;
-  margin-bottom: 20px;
-  font-size: 12px;
-  line-height: 1.45;
-  letter-spacing: 0.46px;
-  text-decoration: underline;
-  text-align: right;
-  color: #333333;
+/*
+ * ==============
+ * SSR
+ * ==============
+ */
+export const getServerSideProps: GetServerSideProps<PageProps> = async ({
+  req,
+  res,
+  resolvedUrl,
+}) => {
+  try {
+    // cookieからuidを取得
+    const userInfo = await verifySessionCookie(req);
+    if (!userInfo) return { redirect: redirectToSigninPage(resolvedUrl) };
 
-  &:visited {
-    color: #586069;
+    const uid = userInfo.uid;
+
+    const admin = getFirebaseAdmin();
+
+    // firebaseからArtist情報を取得
+    const artist = (await queryArtistById(uid, admin))!;
+
+    return {
+      props: {
+        artist,
+      },
+    };
+  } catch (e) {
+    console.error(e);
+    throw e;
   }
+};
 
-  ${pc(`
-    font-size: 16px;
-    text-align: left;
-  `)}
-`;
-
-const UpdateButton = styled.button`
-  display: block;
-  width: 100%;
-  height: 51px;
-  margin: 30px auto 0 auto;
-  background: white;
-  border-radius: 2px;
-  border: solid 1px #333;
-  font-size: 13px;
-  letter-spacing: 1.18px;
-  color: #333333;
-  font-family: YuGothic, "Yu Gothic", "Hiragino Kaku Gothic ProN", Roboto,
-    sans-serif;
-  ${pc(`
-    font-size: 14px;
-  `)}
-`;
+export default ProfileSettingPage;
