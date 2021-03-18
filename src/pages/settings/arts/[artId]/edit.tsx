@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { Art } from "models/art";
 import EditArtTemplate from "components/templates/settings/arts/edit";
+import { updateArtRequest } from "libs/apis/art/update";
+import { deleteArtRequest } from "libs/apis/art/delete";
 
 // for ssr
 import { GetServerSideProps } from "next";
@@ -17,9 +19,15 @@ type Props = {
 const EditArtPage: React.FC<Props> = ({ artistUid, art }) => {
   const router = useRouter();
 
-  const onUpdate = async () => {};
+  const onUpdate = React.useCallback(
+    (data) => updateArtRequest(art.id, data).then(() => undefined),
+    [art.id]
+  );
 
-  const onDelete = async () => {};
+  const onDelete = React.useCallback(
+    () => deleteArtRequest(art.id).then(() => undefined),
+    [art.id]
+  );
 
   return (
     <EditArtTemplate

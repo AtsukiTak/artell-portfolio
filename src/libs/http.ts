@@ -3,6 +3,7 @@ import * as D from "@mojotech/json-type-validation";
 export enum Method {
   POST = "POST",
   PUT = "PUT",
+  DELETE = "DELETE",
 }
 
 export interface RequestArgs<T> {
@@ -23,7 +24,7 @@ export function request<T>(args: RequestArgs<T>): Promise<T> {
       Accept: "application/json",
     }),
   };
-  if (args.body != null) {
+  if (args.body) {
     option = Object.assign({ body: JSON.stringify(args.body) }, option);
     option.headers.set("Content-Type", "application/json");
   }

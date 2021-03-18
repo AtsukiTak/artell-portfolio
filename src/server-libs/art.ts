@@ -197,8 +197,8 @@ export type UpdateArtArgs = {
   description: string;
   materials: string;
   showPublic: boolean;
-  salesPriceYen: number | null;
-  rentalPriceYen: number | null;
+  salesPriceYen?: number;
+  rentalPriceYen?: number;
   thumbnailData: Buffer | null;
 };
 
@@ -220,10 +220,8 @@ export const updateArt = async (args: UpdateArtArgs): Promise<void> => {
           description: args.description,
           materials: args.materials,
           showPublic: args.showPublic,
-          salesPriceYen:
-            args.salesPriceYen === null ? undefined : args.salesPriceYen,
-          rentalPriceYen:
-            args.rentalPriceYen === null ? undefined : args.rentalPriceYen,
+          salesPriceYen: args.salesPriceYen,
+          rentalPriceYen: args.rentalPriceYen,
         })
       )
       .then(() => undefined)
