@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import * as D from "@mojotech/json-type-validation";
 import "firebase/auth";
-import { getFirebase, getFirebaseAdmin } from "server-libs/firebase";
+import { getFirebase } from "server-libs/firebase";
 import { generateSessionCookieHeaderValue } from "server-libs/sessionCookie";
 
 // 本当はClientコードもここに書きたかったんだけど、TreeShaking
@@ -47,7 +47,6 @@ const SigninHandler = async (
     const { email, password } = decoded;
 
     const firebase = getFirebase();
-    const firebaseAdmin = getFirebaseAdmin();
 
     // signin
     const user = await firebase
@@ -56,7 +55,7 @@ const SigninHandler = async (
       // firebase SDKの奇妙な振る舞いでerrorがinvalid-email
       // のときにアプリがcrashしてしまうのでcatchする必要がある
       .then((cred) => cred.user)
-      .catch((e) => null);
+      .catch(() => null);
 
     if (user === null) throw new Error("failed to signInWithEmailAndPassword");
 

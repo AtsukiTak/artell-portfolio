@@ -63,10 +63,13 @@ const handler = async (
       ? Buffer.from(body.thumbnailBase64Data, "base64")
       : null;
 
+    /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+    const artId = req.query.artId! as string;
+
     // 更新
     await updateArt({
       artistUid: userInfo.uid,
-      id: req.query.artId! as string,
+      id: artId,
       ...body,
       thumbnailData,
     });

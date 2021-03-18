@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import * as D from "@mojotech/json-type-validation";
 import { verifySessionCookie } from "server-libs/sessionCookie";
 import { deleteArt } from "server-libs/art";
 
@@ -28,6 +27,7 @@ const handler = async (
     const userInfo = await verifySessionCookie(req);
     if (!userInfo) return res.status(401).end();
 
+    /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
     const artId = req.query.artId! as string;
 
     // 削除の実行

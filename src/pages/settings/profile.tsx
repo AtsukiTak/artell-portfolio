@@ -1,8 +1,6 @@
 // for client side
 import React from "react";
-import { Art } from "models/art";
 import { Artist } from "models/artist";
-import { DataURI } from "libs/image";
 import ProfileSettingPageTemplate from "components/templates/settings/profile";
 import type { ReqData, ResData } from "pages/api/artist/me";
 import * as D from "@mojotech/json-type-validation";
@@ -52,7 +50,6 @@ const updateArtistInfoRequest = (data: ReqData): Promise<ResData> =>
  */
 export const getServerSideProps: GetServerSideProps<PageProps> = async ({
   req,
-  res,
   resolvedUrl,
 }) => {
   try {
@@ -65,7 +62,10 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
     const admin = getFirebaseAdmin();
 
     // firebaseからArtist情報を取得
-    const artist = (await queryArtistById(uid, admin))!;
+    const artist = await queryArtistById(uid, admin);
+    if (!artist) {
+      return { redirect: { destination: "/", permanent: false } };
+    }
 
     return {
       props: {

@@ -62,7 +62,7 @@ const Handler = async (
       : null;
 
     // 更新
-    const updatedArtist = await updateArtist({
+    await updateArtist({
       uid: userInfo.uid,
       thumbnailData,
       name: body.name,

@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useRouter } from "next/router";
+import React from "react";
 import { Art } from "models/art";
 import EditArtTemplate from "components/templates/settings/arts/edit";
 import { updateArtRequest } from "libs/apis/art/update";
@@ -17,8 +16,6 @@ type Props = {
 };
 
 const EditArtPage: React.FC<Props> = ({ artistUid, art }) => {
-  const router = useRouter();
-
   const onUpdate = React.useCallback(
     (data) => updateArtRequest(art.id, data).then(() => undefined),
     [art.id]
@@ -47,7 +44,6 @@ const EditArtPage: React.FC<Props> = ({ artistUid, art }) => {
 export const getServerSideProps: GetServerSideProps<Props> = async ({
   params,
   req,
-  res,
   resolvedUrl,
 }) => {
   try {
@@ -57,6 +53,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
 
     const uid = userInfo.uid;
 
+    /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
     const artId = params!.artId! as string;
     const art = await queryPrivateArtById(uid, artId);
     if (!art) return { notFound: true };

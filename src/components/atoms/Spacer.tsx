@@ -18,8 +18,10 @@ const Spacer: React.FC<Props> = ({ size, horizontal }) => {
     <span
       className={styles.spacer}
       style={{
+        /* eslint-disable @typescript-eslint/no-explicit-any */
         ["--spacer-width" as any]: width,
         ["--spacer-height" as any]: height,
+        /* eslint-enable @typescript-eslint/no-explicit-any */
       }}
     ></span>
   );

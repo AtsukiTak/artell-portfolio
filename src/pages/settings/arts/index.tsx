@@ -23,7 +23,6 @@ const ProfileSettingPage: React.FC<Props> = ({ arts }) => {
  */
 export const getServerSideProps: GetServerSideProps<Props> = async ({
   req,
-  res,
   resolvedUrl,
 }) => {
   try {

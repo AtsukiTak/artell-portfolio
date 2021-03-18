@@ -101,7 +101,7 @@ export const updateArtist = async ({
 }: UpdateArtistArgs): Promise<void> => {
   const admin = getFirebaseAdmin();
 
-  let promises = [];
+  const promises = [];
 
   // サムネイルの更新
   if (thumbnailData) {

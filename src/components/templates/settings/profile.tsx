@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
 
-import { Art } from "models/art";
 import { Artist } from "models/artist";
 import { pc } from "components/Responsive";
 import { DataURI } from "libs/image";

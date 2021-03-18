@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import * as D from "@mojotech/json-type-validation";
 import "firebase/auth";
-import { getFirebase, getFirebaseAdmin } from "server-libs/firebase";
+import { getFirebase } from "server-libs/firebase";
 
 export type ReqData = {
   email: string;

@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { Art } from "models/art";
 import * as colors from "libs/colors";
 import { DataURI } from "libs/image";
 import { pc } from "components/Responsive";
 import Spacer from "components/atoms/Spacer";
 import Button from "components/atoms/Button";
-import { Link } from "components/atoms/Link";
-import { Text, Paragraph } from "components/atoms/Text";
+import { Text } from "components/atoms/Text";
 import Header from "components/organisms/Header";
 import ImageSelector from "components/molecules/ImageSelector";
 import EditAttributes, {

@@ -210,7 +210,7 @@ export type UpdateArtArgs = {
 export const updateArt = async (args: UpdateArtArgs): Promise<void> => {
   const admin = getFirebaseAdmin();
 
-  let promises = [];
+  const promises = [];
 
   // firestoreの情報の更新
   promises.push(
