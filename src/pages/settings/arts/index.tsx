@@ -27,7 +27,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
 }) => {
   try {
     const userInfo = await verifySessionCookie(req);
-    if (!userInfo) return {redirect: redirectToSigninPage(resolvedUrl)};
+    if (!userInfo) return { redirect: redirectToSigninPage(resolvedUrl) };
 
     const uid = userInfo.uid;
 
