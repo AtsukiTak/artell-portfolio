@@ -11,7 +11,9 @@ import { Link } from "components/atoms/Link";
 import { Text, Paragraph } from "components/atoms/Text";
 import Header from "components/organisms/Header";
 import ImageSelector from "components/molecules/ImageSelector";
-import EditAttributes from "components/organisms/settings/arts/EditAttributes";
+import EditAttributes, {
+  ArtAttrs,
+} from "components/organisms/settings/arts/EditAttributes";
 
 type Props = {
   artistUid: string;
@@ -30,7 +32,6 @@ type UpdateData = {
   showPublic: boolean;
   salesPriceYen?: number;
   rentalPriceYen?: number;
-  thumbnailUrl: string;
 };
 
 const ArtEditPage: React.FC<Props> = ({
@@ -39,7 +40,7 @@ const ArtEditPage: React.FC<Props> = ({
   onUpdate,
   onDelete,
 }) => {
-  const [updatedArt, setUpdatedArt] = useState(art);
+  const [updatedArt, setUpdatedArt] = useState<ArtAttrs>(art);
   const [selectedImage, setSelectedImage] = useState<DataURI | null>(null);
   const [requesting, setRequesting] = useState(false);
 
@@ -104,17 +105,6 @@ const Container = styled.div`
   ${pc(`
     margin-top: 90px;
   `)}
-`;
-
-const LinkToArtPage = styled.a`
-  display: block;
-  margin-bottom: 20px;
-  text-decoration: underline;
-  color: #586069;
-
-  &:visited {
-    color: #586069;
-  }
 `;
 
 const Buttons = styled.div`

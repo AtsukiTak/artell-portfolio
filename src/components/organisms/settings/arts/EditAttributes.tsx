@@ -3,9 +3,11 @@ import styled from "styled-components";
 
 import { Art } from "models/art";
 
+export type ArtAttrs = Omit<Art, "id" | "thumbnailUrl">;
+
 interface Props {
-  art: Art;
-  setArt: (art: Art) => void;
+  art: ArtAttrs;
+  setArt: (art: ArtAttrs) => void;
 }
 
 const EditAttributes: React.FC<Props> = ({ art, setArt }) => {

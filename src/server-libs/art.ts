@@ -134,8 +134,8 @@ export type CreateArtArgs = {
   description: string;
   materials: string;
   showPublic: boolean;
-  salesPriceYen: number | null;
-  rentalPriceYen: number | null;
+  salesPriceYen?: number;
+  rentalPriceYen?: number;
   thumbnailData: Buffer;
 };
 
@@ -154,10 +154,8 @@ export const createArt = async (args: CreateArtArgs): Promise<string> => {
         description: args.description,
         materials: args.materials,
         showPublic: args.showPublic,
-        salesPriceYen:
-          args.salesPriceYen === null ? undefined : args.salesPriceYen,
-        rentalPriceYen:
-          args.rentalPriceYen === null ? undefined : args.rentalPriceYen,
+        salesPriceYen: args.salesPriceYen,
+        rentalPriceYen: args.rentalPriceYen,
       })
     );
 
@@ -178,8 +176,15 @@ export const createArt = async (args: CreateArtArgs): Promise<string> => {
   return artId;
 };
 
-// 型チェックを行うだけ
+// "undefined" な値を取り除く
 const formatAddData = (doc: ArtDocument): ArtDocument => {
+  let key: keyof ArtDocument;
+  for (key in doc) {
+    if (doc[key] === undefined) {
+      delete doc[key];
+    }
+  }
+
   return doc;
 };
 
