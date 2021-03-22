@@ -3,28 +3,28 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.5.0",
+    "@material-ui/core": "^4.11.3",
     "@mojotech/json-type-validation": "^3.1.0",
-    "@stripe/stripe-js": "^1.11.0",
+    "@stripe/stripe-js": "^1.13.1",
     "@svgr/webpack": "^5.5.0",
     "@types/cookie": "^0.4.0",
-    "@types/jest": "26.0.15",
-    "@types/react": "16.9.56",
-    "@types/react-dom": "16.9.9",
-    "@types/react-lazyload": "^3.0.0",
-    "@types/styled-components": "^5.1.0",
+    "@types/jest": "26.0.21",
+    "@types/react": "17.0.3",
+    "@types/react-dom": "17.0.2",
+    "@types/react-lazyload": "^3.1.0",
+    "@types/styled-components": "^5.1.9",
     "cookie": "^0.4.1",
-    "firebase": "^7.0.0",
-    "firebase-admin": "^9.4.2",
+    "firebase": "^8.3.1",
+    "firebase-admin": "^9.5.0",
     "jimp": "^0.16.1",
-    "next": "^10.0.7",
+    "next": "^10.0.9",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-lazyload": "^3.1.0",
+    "react-lazyload": "^3.2.0",
     "sass": "^1.32.8",
-    "stripe": "^8.129.0",
+    "stripe": "^8.138.0",
     "styled-components": "^5.2.1",
-    "typescript": "^4.0.5"
+    "typescript": "^4.2.3"
   },
   "scripts": {
     "dev": "next dev",
@@ -62,9 +62,9 @@
     ]
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.14.1",
-    "@typescript-eslint/parser": "^4.14.1",
-    "eslint": "^7.18.0",
-    "prettier": "^2.1.2"
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^4.18.0",
+    "eslint": "^7.22.0",
+    "prettier": "^2.2.1"
   }
 }
