@@ -1,7 +1,7 @@
 import { app, firestore } from "firebase-admin";
 import * as D from "@mojotech/json-type-validation";
 import { Art } from "models/art";
-import { getFirebaseAdmin } from "server-libs/firebase";
+import { getFirebaseAdmin, Firestore } from "server-libs/firebase";
 
 const BUCKET_NAME = "artell-portfolio.appspot.com";
 
@@ -15,15 +15,16 @@ export const queryPublicArtsOfArtist = async (
   admin: app.App
 ): Promise<Art[]> => {
   // firestoreからデータを取得する
-  const collection = await admin
-    .firestore()
-    .collection(`artists/${artistUid}/arts`)
-    .where("showPublic", "==", true)
-    .get();
+  const docs = await Firestore.shared.queryManyWhere(
+    `artists/${artistUid}/arts`,
+    "showPublic",
+    "==",
+    true
+  );
 
   const bucket = admin.storage().bucket("artell-portfolio.appspot.com");
 
-  return collection.docs.map((doc) => {
+  return docs.map((doc) => {
     const file = bucket.file(
       `artists/${artistUid}/arts/${doc.id}/sumbnail.jpg`
     );
@@ -50,15 +51,12 @@ export const queryAllArtsOfArtist = async (
   const admin = getFirebaseAdmin();
 
   // firestoreからデータを取得する
-  const collection = await admin
-    .firestore()
-    .collection(`artists/${artistUid}/arts`)
-    .get();
+  const docs = await Firestore.shared.queryMany(`artists/${artistUid}/arts`);
 
   const bucket = admin.storage().bucket(BUCKET_NAME);
 
   return await Promise.all(
-    collection.docs.map(async (doc) => {
+    docs.map(async (doc) => {
       const file = bucket.file(
         `artists/${artistUid}/arts/${doc.id}/sumbnail.jpg`
       );
@@ -91,15 +89,11 @@ export const queryPrivateArtById = async (
   const admin = getFirebaseAdmin();
 
   // firestoreからデータを取得する
-  const doc = await admin
-    .firestore()
-    .doc(`artists/${artistUid}/arts/${artId}`)
-    .get();
-  const data = doc.data();
-  if (!data) {
-    return null;
-  }
-  const decoded = ArtDocumentDecoder.runWithException(data);
+  const doc = await Firestore.shared.query(
+    `artists/${artistUid}/arts/${artId}`
+  );
+  if (!doc) return null;
+  const decoded = ArtDocumentDecoder.runWithException(doc.data());
 
   // storageから画像を取得する
   const file = admin
@@ -214,22 +208,16 @@ export const updateArt = async (args: UpdateArtArgs): Promise<void> => {
 
   // firestoreの情報の更新
   promises.push(
-    admin
-      .firestore()
-      .doc(`artists/${args.artistUid}/arts/${args.id}`)
-      .update(
-        formatUpdateData({
-          title: args.title,
-          widthMM: args.widthMM,
-          heightMM: args.heightMM,
-          description: args.description,
-          materials: args.materials,
-          showPublic: args.showPublic,
-          salesPriceYen: args.salesPriceYen,
-          rentalPriceYen: args.rentalPriceYen,
-        })
-      )
-      .then(() => undefined)
+    Firestore.shared.update(`artists/${args.artistUid}/arts/${args.id}`, {
+      title: args.title,
+      widthMM: args.widthMM,
+      heightMM: args.heightMM,
+      description: args.description,
+      materials: args.materials,
+      showPublic: args.showPublic,
+      salesPriceYen: args.salesPriceYen,
+      rentalPriceYen: args.rentalPriceYen,
+    })
   );
 
   // サムネイルの更新

@@ -1,7 +1,7 @@
 import { app } from "firebase-admin";
 import * as D from "@mojotech/json-type-validation";
 import { Artist } from "models/artist";
-import { getFirebaseAdmin } from "server-libs/firebase";
+import { getFirebaseAdmin, Firestore } from "server-libs/firebase";
 
 const BUCKET_NAME = "artell-portfolio.appspot.com";
 
@@ -17,13 +17,9 @@ export const queryArtistById = async (
   admin: app.App
 ): Promise<Artist | null> => {
   // firestoreからデータを取得する
-  const firestore = admin.firestore();
-  const doc = await firestore.doc(`artists/${uid}`).get();
-  const data = doc.data();
-  if (data === undefined) {
-    return null;
-  }
-  const decoded = ArtistDocumentDecoder.runWithException(data);
+  const doc = await Firestore.shared.query(`artists/${uid}`);
+  if (doc === null) return null;
+  const decoded = ArtistDocumentDecoder.runWithException(doc.data());
 
   // storageからデータを取得する
   const file = admin
@@ -120,18 +116,14 @@ export const updateArtist = async ({
 
   // firestoreの情報の更新
   promises.push(
-    admin
-      .firestore()
-      .doc(`artists/${uid}`)
-      .update({
-        name,
-        comment,
-        description,
-        twitter,
-        facebook,
-        instagram,
-      })
-      .then(() => undefined)
+    Firestore.shared.update(`artists/${uid}`, {
+      name,
+      comment,
+      description,
+      twitter,
+      facebook,
+      instagram,
+    })
   );
 
   await Promise.all(promises);
