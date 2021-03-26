@@ -105,19 +105,16 @@ export type CreateArtArgs = {
 
 export const createArt = async (args: CreateArtArgs): Promise<string> => {
   // firestoreにdocumentを追加
-  const artId = await Firestore.shared.add(
-    `artists/${args.artistUid}/arts`,
-    {
-      title: args.title,
-      widthMM: args.widthMM,
-      heightMM: args.heightMM,
-      description: args.description,
-      materials: args.materials,
-      showPublic: args.showPublic,
-      salesPriceYen: args.salesPriceYen,
-      rentalPriceYen: args.rentalPriceYen,
-    }
-  );
+  const artId = await Firestore.shared.add(`artists/${args.artistUid}/arts`, {
+    title: args.title,
+    widthMM: args.widthMM,
+    heightMM: args.heightMM,
+    description: args.description,
+    materials: args.materials,
+    showPublic: args.showPublic,
+    salesPriceYen: args.salesPriceYen,
+    rentalPriceYen: args.rentalPriceYen,
+  });
 
   // storageにサムネイルを追加
   await Storage.shared.save(
