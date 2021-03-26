@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import * as D from "@mojotech/json-type-validation";
-import { getFirebaseAdmin } from "server-libs/firebase";
 import { queryPublicArtsOfArtist } from "server-libs/art";
 import Stripe from "stripe";
 
@@ -43,8 +42,7 @@ export default async (
   const { artistUid, artId } = decoded;
 
   // art情報の取得
-  const fbApp = getFirebaseAdmin();
-  const arts = await queryPublicArtsOfArtist(artistUid, fbApp);
+  const arts = await queryPublicArtsOfArtist(artistUid);
   const art = arts.find((art) => art.id === artId);
   if (art === undefined) {
     res.status(400).json({ ok: false, msg: "Art not found" });

@@ -8,7 +8,6 @@ import { request, Method } from "libs/http";
 
 // for server side
 import { GetServerSideProps } from "next";
-import { getFirebaseAdmin } from "server-libs/firebase";
 import { verifySessionCookie } from "server-libs/sessionCookie";
 import { queryArtistById } from "server-libs/artist";
 import { redirectToSigninPage } from "pages/signin";
@@ -59,10 +58,8 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({
 
     const uid = userInfo.uid;
 
-    const admin = getFirebaseAdmin();
-
     // firebaseからArtist情報を取得
-    const artist = await queryArtistById(uid, admin);
+    const artist = await queryArtistById(uid);
     if (!artist) {
       return { redirect: { destination: "/", permanent: false } };
     }

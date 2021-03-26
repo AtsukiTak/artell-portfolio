@@ -19,7 +19,6 @@ import * as color from "components/color";
 
 // SSR
 import { GetServerSideProps } from "next";
-import { getFirebaseAdmin } from "server-libs/firebase";
 import { queryArtistById } from "server-libs/artist";
 import { queryPublicArtsOfArtist } from "server-libs/art";
 
@@ -108,10 +107,8 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   const artId = context.params!.artId as string;
   /* eslint-enable */
 
-  const admin = getFirebaseAdmin();
-
   // artistの取得
-  const artist = await queryArtistById(artistId, admin);
+  const artist = await queryArtistById(artistId);
   if (artist === null) {
     return {
       notFound: true,
@@ -121,7 +118,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   // artの取得
   // TODO
   // 対象の作品だけ取得する
-  const arts = await queryPublicArtsOfArtist(artistId, admin);
+  const arts = await queryPublicArtsOfArtist(artistId);
   const art = arts.find((art) => art.id === artId);
   if (art === undefined) {
     return {

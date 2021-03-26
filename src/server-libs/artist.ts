@@ -1,9 +1,6 @@
-import { app } from "firebase-admin";
 import * as D from "@mojotech/json-type-validation";
 import { Artist } from "models/artist";
-import { getFirebaseAdmin, Firestore } from "server-libs/firebase";
-
-const BUCKET_NAME = "artell-portfolio.appspot.com";
+import { Firestore, Storage } from "server-libs/firebase";
 
 /*
  * =================
@@ -14,7 +11,6 @@ const BUCKET_NAME = "artell-portfolio.appspot.com";
  */
 export const queryArtistById = async (
   uid: string,
-  admin: app.App
 ): Promise<Artist | null> => {
   // firestoreからデータを取得する
   const doc = await Firestore.shared.query(`artists/${uid}`);
@@ -22,20 +18,9 @@ export const queryArtistById = async (
   const decoded = ArtistDocumentDecoder.runWithException(doc.data());
 
   // storageからデータを取得する
-  const file = admin
-    .storage()
-    .bucket(BUCKET_NAME)
-    .file(`artists/${uid}/sumbnail.jpg`);
-
-  const exists = await file.exists().then(([res]) => res);
-
-  // TODO
-  // fileのupload時にmakePublicする
-  if (exists) {
-    await file.makePublic();
-  }
-
-  const thumbnailUrl = exists ? file.publicUrl() : null;
+  const file = `artists/${uid}/sumbnail.jpg`;
+  const exists = await Storage.shared.isExists(file);
+  const thumbnailUrl = exists ? Storage.shared.getPublicUrl(file) : null;
 
   return {
     ...decoded,
@@ -95,22 +80,15 @@ export const updateArtist = async ({
   facebook,
   instagram,
 }: UpdateArtistArgs): Promise<void> => {
-  const admin = getFirebaseAdmin();
-
   const promises = [];
 
   // サムネイルの更新
   if (thumbnailData) {
     promises.push(
-      admin
-        .storage()
-        .bucket(BUCKET_NAME)
-        .file(`artists/${uid}/sumbnail.jpg`)
-        .save(thumbnailData, {
-          contentType: "image/jpeg",
-          public: true,
-          resumable: false,
-        })
+      Storage.shared.save(`artists/${uid}/sumbnail.jpg`, thumbnailData, {
+        contentType: "image/jpeg",
+        accessControl: "publicRead",
+      })
     );
   }
 

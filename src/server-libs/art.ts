@@ -1,9 +1,6 @@
-import { app, firestore } from "firebase-admin";
 import * as D from "@mojotech/json-type-validation";
 import { Art } from "models/art";
-import { getFirebaseAdmin, Firestore } from "server-libs/firebase";
-
-const BUCKET_NAME = "artell-portfolio.appspot.com";
+import { Firestore, Storage } from "server-libs/firebase";
 
 /*
  * =======================
@@ -11,8 +8,7 @@ const BUCKET_NAME = "artell-portfolio.appspot.com";
  * =======================
  */
 export const queryPublicArtsOfArtist = async (
-  artistUid: string,
-  admin: app.App
+  artistUid: string
 ): Promise<Art[]> => {
   // firestoreからデータを取得する
   const docs = await Firestore.shared.queryManyWhere(
@@ -22,20 +18,15 @@ export const queryPublicArtsOfArtist = async (
     true
   );
 
-  const bucket = admin.storage().bucket("artell-portfolio.appspot.com");
-
   return docs.map((doc) => {
-    const file = bucket.file(
+    const thumbnailUrl = Storage.shared.getPublicUrl(
       `artists/${artistUid}/arts/${doc.id}/sumbnail.jpg`
     );
-    // TODO
-    // fileのupload時にshowPublicならmakePublicする
-    file.makePublic();
 
     return {
       id: doc.id,
       ...ArtDocumentDecoder.runWithException(doc.data()),
-      thumbnailUrl: file.publicUrl(),
+      thumbnailUrl,
     };
   });
 };
@@ -48,25 +39,14 @@ export const queryPublicArtsOfArtist = async (
 export const queryAllArtsOfArtist = async (
   artistUid: string
 ): Promise<Art[]> => {
-  const admin = getFirebaseAdmin();
-
   // firestoreからデータを取得する
   const docs = await Firestore.shared.queryMany(`artists/${artistUid}/arts`);
 
-  const bucket = admin.storage().bucket(BUCKET_NAME);
-
   return await Promise.all(
     docs.map(async (doc) => {
-      const file = bucket.file(
+      const thumbnailUrl = await Storage.shared.getSignedUrl(
         `artists/${artistUid}/arts/${doc.id}/sumbnail.jpg`
       );
-
-      // fileの中にはprivateなものも含まれるので、
-      // 制限付きのURLを取得する
-      const [thumbnailUrl] = await file.getSignedUrl({
-        action: "read",
-        expires: Date.now() + 1000 * 60 * 60, // 1 hour
-      });
 
       return {
         id: doc.id,
@@ -86,8 +66,6 @@ export const queryPrivateArtById = async (
   artistUid: string,
   artId: string
 ): Promise<Art | null> => {
-  const admin = getFirebaseAdmin();
-
   // firestoreからデータを取得する
   const doc = await Firestore.shared.query(
     `artists/${artistUid}/arts/${artId}`
@@ -96,17 +74,9 @@ export const queryPrivateArtById = async (
   const decoded = ArtDocumentDecoder.runWithException(doc.data());
 
   // storageから画像を取得する
-  const file = admin
-    .storage()
-    .bucket(BUCKET_NAME)
-    .file(`artists/${artistUid}/arts/${artId}/sumbnail.jpg`);
-
-  // fileはprivateである可能性もあるので、
-  // 制限付きのURLを取得する
-  const [thumbnailUrl] = await file.getSignedUrl({
-    action: "read",
-    expires: Date.now() + 1000 * 60 * 60, // 1 hour
-  });
+  const thumbnailUrl = await Storage.shared.getSignedUrl(
+    `artists/${artistUid}/arts/${artId}/sumbnail.jpg`
+  );
 
   return {
     id: artId,
@@ -134,8 +104,6 @@ export type CreateArtArgs = {
 };
 
 export const createArt = async (args: CreateArtArgs): Promise<string> => {
-  const admin = getFirebaseAdmin();
-
   // firestoreにdocumentを追加
   const artId = await Firestore.shared.create(
     `artists/${args.artistUid}/arts`,
@@ -152,16 +120,14 @@ export const createArt = async (args: CreateArtArgs): Promise<string> => {
   );
 
   // storageにサムネイルを追加
-  await admin
-    .storage()
-    .bucket(BUCKET_NAME)
-    .file(`artists/${args.artistUid}/arts/${artId}/sumbnail.jpg`)
-    .save(args.thumbnailData, {
+  await Storage.shared.save(
+    `artists/${args.artistUid}/arts/${artId}/sumbnail.jpg`,
+    args.thumbnailData,
+    {
       contentType: "image/jpeg",
-      resumable: false,
-      // https://googleapis.dev/nodejs/storage/latest/global.html#CreateWriteStreamOptions
-      predefinedAcl: args.showPublic ? "publicRead" : "private",
-    });
+      accessControl: args.showPublic ? "publicRead" : "private",
+    }
+  );
 
   return artId;
 };
@@ -186,8 +152,6 @@ export type UpdateArtArgs = {
 };
 
 export const updateArt = async (args: UpdateArtArgs): Promise<void> => {
-  const admin = getFirebaseAdmin();
-
   const promises = [];
 
   // firestoreの情報の更新
@@ -207,26 +171,23 @@ export const updateArt = async (args: UpdateArtArgs): Promise<void> => {
   // サムネイルの更新
   if (args.thumbnailData) {
     promises.push(
-      admin
-        .storage()
-        .bucket(BUCKET_NAME)
-        .file(`artists/${args.artistUid}/arts/${args.id}/sumbnail.jpg`)
-        .save(args.thumbnailData, {
+      Storage.shared.save(
+        `artists/${args.artistUid}/arts/${args.id}/sumbnail.jpg`,
+        args.thumbnailData,
+        {
           contentType: "image/jpeg",
-          resumable: false,
-        })
+          accessControl: "private",
+        }
+      )
     );
   }
 
   // サムネイルの可視性の更新
-  const file = admin
-    .storage()
-    .bucket(BUCKET_NAME)
-    .file(`artists/${args.artistUid}/arts/${args.id}/sumbnail.jpg`);
+  const file = `artists/${args.artistUid}/arts/${args.id}/sumbnail.jpg`;
   if (args.showPublic) {
-    promises.push(file.makePublic().then(() => undefined));
+    promises.push(Storage.shared.makePublic(file));
   } else {
-    promises.push(file.makePrivate().then(() => undefined));
+    promises.push(Storage.shared.makePrivate(file));
   }
 
   await Promise.all(promises);
@@ -241,15 +202,11 @@ export const deleteArt = async (
   artistUid: string,
   artId: string
 ): Promise<void> => {
-  const admin = getFirebaseAdmin();
+  await Firestore.shared.delete(`artists/${artistUid}/arts/${artId}`);
 
-  await admin.firestore().doc(`artists/${artistUid}/arts/${artId}`).delete();
-
-  await admin
-    .storage()
-    .bucket(BUCKET_NAME)
-    .file(`artists/${artistUid}/arts/${artId}/sumbnail.jpg`)
-    .delete();
+  await Storage.shared.delete(
+    `artists/${artistUid}/arts/${artId}/sumbnail.jpg`
+  );
 };
 
 /*

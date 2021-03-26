@@ -18,7 +18,6 @@ import Arts from "components/artist/Arts";
 
 // for SSR
 import { GetServerSideProps } from "next";
-import { getFirebaseAdmin } from "server-libs/firebase";
 import { queryArtistById } from "server-libs/artist";
 import { queryPublicArtsOfArtist } from "server-libs/art";
 
@@ -86,8 +85,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   // artistの取得
   /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
   const artistId = context.params!.artistId as string;
-  const fbApp = getFirebaseAdmin();
-  const artist = await queryArtistById(artistId, fbApp);
+  const artist = await queryArtistById(artistId);
 
   if (artist === null) {
     return {
@@ -96,7 +94,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   }
 
   // artsの取得
-  const arts = await queryPublicArtsOfArtist(artistId, fbApp);
+  const arts = await queryPublicArtsOfArtist(artistId);
 
   return {
     props: {
