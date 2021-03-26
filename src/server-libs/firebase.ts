@@ -25,11 +25,13 @@ export const getFirebaseAdmin = (): admin.app.App => {
   }
 };
 
-type FirestoreValue = boolean | number | string | undefined;
-type FirestoreRawDoc = Record<string, FirestoreValue>;
+type FirestorePrimitive = boolean | number | string;
+// TODO: undefinedをnullに変えてprimitiveとしたい
+type FirestoreRawDoc = Record<string, FirestorePrimitive | undefined>;
+type FirestoreAddDoc = Record<string, FirestorePrimitive>;
 type FirestoreUpdateDoc = Record<
   string,
-  boolean | number | string | firestore.FieldValue
+  FirestorePrimitive | firestore.FieldValue
 >;
 
 export class Firestore {
@@ -61,7 +63,7 @@ export class Firestore {
     path: string,
     field: string,
     op: "==",
-    value: FirestoreValue
+    value: FirestorePrimitive
   ): Promise<firestore.DocumentSnapshot[]> {
     const querySnap = await this.firestore()
       .collection(path)
@@ -70,11 +72,38 @@ export class Firestore {
     return querySnap.docs;
   }
 
-  async update<T extends FirestoreRawDoc>(path: string, doc: T): Promise<void> {
-    await this.firestore().doc(path).update(Firestore.formatUpdateData(doc));
+  async create<T extends FirestoreRawDoc>(
+    collectionPath: string,
+    data: T
+  ): Promise<string> {
+    const doc = await this.firestore()
+      .collection(collectionPath)
+      .add(Firestore.formatAddData(data));
+    return doc.id;
   }
 
-  static formatUpdateData<T extends FirestoreRawDoc>(
+  private static formatAddData<T extends FirestoreRawDoc>(
+    data: T
+  ): FirestoreAddDoc {
+    const formatted: FirestoreAddDoc = {};
+
+    Object.entries(data).forEach(([key, val]) => {
+      if (val !== undefined) {
+        formatted[key] = val;
+      }
+    });
+
+    return formatted;
+  }
+
+  async update<T extends FirestoreRawDoc>(
+    path: string,
+    data: T
+  ): Promise<void> {
+    await this.firestore().doc(path).update(Firestore.formatUpdateData(data));
+  }
+
+  private static formatUpdateData<T extends FirestoreRawDoc>(
     doc: T
   ): FirestoreUpdateDoc {
     const formatted: FirestoreUpdateDoc = {};

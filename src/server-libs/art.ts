@@ -137,23 +137,19 @@ export const createArt = async (args: CreateArtArgs): Promise<string> => {
   const admin = getFirebaseAdmin();
 
   // firestoreにdocumentを追加
-  const doc = await admin
-    .firestore()
-    .collection(`artists/${args.artistUid}/arts`)
-    .add(
-      formatAddData({
-        title: args.title,
-        widthMM: args.widthMM,
-        heightMM: args.heightMM,
-        description: args.description,
-        materials: args.materials,
-        showPublic: args.showPublic,
-        salesPriceYen: args.salesPriceYen,
-        rentalPriceYen: args.rentalPriceYen,
-      })
-    );
-
-  const artId = doc.id;
+  const artId = await Firestore.shared.create(
+    `artists/${args.artistUid}/arts`,
+    {
+      title: args.title,
+      widthMM: args.widthMM,
+      heightMM: args.heightMM,
+      description: args.description,
+      materials: args.materials,
+      showPublic: args.showPublic,
+      salesPriceYen: args.salesPriceYen,
+      rentalPriceYen: args.rentalPriceYen,
+    }
+  );
 
   // storageにサムネイルを追加
   await admin
@@ -168,18 +164,6 @@ export const createArt = async (args: CreateArtArgs): Promise<string> => {
     });
 
   return artId;
-};
-
-// "undefined" な値を取り除く
-const formatAddData = (doc: ArtDocument): ArtDocument => {
-  let key: keyof ArtDocument;
-  for (key in doc) {
-    if (doc[key] === undefined) {
-      delete doc[key];
-    }
-  }
-
-  return doc;
 };
 
 /*
@@ -246,20 +230,6 @@ export const updateArt = async (args: UpdateArtArgs): Promise<void> => {
   }
 
   await Promise.all(promises);
-};
-
-const formatUpdateData = (doc: ArtDocument): { [key: string]: unknown } => {
-  const formatted: { [key: string]: unknown } = {};
-
-  Object.entries(doc).forEach(([key, val]) => {
-    if (val === undefined || val === null) {
-      formatted[key] = firestore.FieldValue.delete();
-    } else {
-      formatted[key] = val;
-    }
-  });
-
-  return formatted;
 };
 
 /*
