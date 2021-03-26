@@ -9,9 +9,7 @@ import { Firestore, Storage } from "server-libs/firebase";
  *
  * idからArtistを検索する
  */
-export const queryArtistById = async (
-  uid: string,
-): Promise<Artist | null> => {
+export const queryArtistById = async (uid: string): Promise<Artist | null> => {
   // firestoreからデータを取得する
   const doc = await Firestore.shared.query(`artists/${uid}`);
   if (doc === null) return null;
