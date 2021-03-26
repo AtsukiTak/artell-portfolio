@@ -126,7 +126,7 @@ const ResDataDecoder: D.Decoder<ResData> = D.object({
  * redirect to signin page object
  * ==============================
  *
- * which is used `SSR` context.
+ * which is used under another page's `SSR` context.
  */
 export const redirectToSigninPage = (dst: string): Redirect => ({
   destination: `/signin?redirect=${encodeURIComponent(dst)}`,

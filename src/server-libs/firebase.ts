@@ -1,5 +1,7 @@
 import admin, { firestore } from "firebase-admin";
 import { Bucket } from "@google-cloud/storage";
+import client from "firebase/app";
+import { getFirebaseApp } from "../libs/firebase";
 
 const serviceAccountJson = process.env.SERVICE_ACCOUNT_JSON;
 if (!serviceAccountJson) {
@@ -7,7 +9,11 @@ if (!serviceAccountJson) {
 }
 const serviceAccount = JSON.parse(serviceAccountJson);
 
-const getFirebaseAdmin = (): admin.app.App => {
+export const getFirebase = (): client.app.App => {
+  return getFirebaseApp();
+};
+
+export const getFirebaseAdmin = (): admin.app.App => {
   if (admin.apps.length === 0) {
     return admin.initializeApp({
       credential: admin.credential.cert(<admin.ServiceAccount>serviceAccount),
