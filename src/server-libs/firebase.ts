@@ -73,7 +73,9 @@ export class Firestore {
     return querySnap.docs;
   }
 
-  async create<T extends FirestoreRawDoc>(
+  // collectionに新しいdocumentを追加する
+  // 作成したいdocumentのidが決まっている場合はcreateメソッドを使う
+  async add<T extends FirestoreRawDoc>(
     collectionPath: string,
     data: T
   ): Promise<string> {
@@ -81,6 +83,15 @@ export class Firestore {
       .collection(collectionPath)
       .add(Firestore.formatAddData(data));
     return doc.id;
+  }
+
+  // 新しいdocumentを作成する
+  // 作成したいdocumentのidが決まっていない場合はaddメソッドを使う
+  async create<T extends FirestoreRawDoc>(
+    docPath: string,
+    data: T
+  ): Promise<void> {
+    await this.firestore().doc(docPath).create(Firestore.formatAddData(data));
   }
 
   private static formatAddData<T extends FirestoreRawDoc>(

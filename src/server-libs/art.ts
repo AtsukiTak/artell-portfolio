@@ -105,7 +105,7 @@ export type CreateArtArgs = {
 
 export const createArt = async (args: CreateArtArgs): Promise<string> => {
   // firestoreにdocumentを追加
-  const artId = await Firestore.shared.create(
+  const artId = await Firestore.shared.add(
     `artists/${args.artistUid}/arts`,
     {
       title: args.title,

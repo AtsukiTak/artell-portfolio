@@ -50,6 +50,35 @@ const ArtistDocumentDecoder: D.Decoder<ArtistDocument> = D.object({
 
 /*
  * ================
+ * createArtist
+ * ================
+ *
+ * Artist情報を作成する
+ */
+export type CreateArtistArgs = {
+  uid: string;
+  name: string;
+  email: string;
+};
+
+export const createArtist = async ({
+  uid,
+  name,
+  email,
+}: CreateArtistArgs): Promise<void> => {
+  await Firestore.shared.create(`artists/${uid}`, {
+    name,
+    email,
+    comment: "",
+    description: "",
+    twitter: "",
+    facebook: "",
+    instagram: "",
+  });
+};
+
+/*
+ * ================
  * updateArtist
  * ================
  *
