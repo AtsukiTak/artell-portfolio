@@ -5,14 +5,16 @@ import styles from "./Text.module.css";
 interface ParagraphProps {
   align?: "left" | "center" | "right";
   nowrap?: boolean;
+  full?: boolean;
 }
 
 export const Paragraph: React.FC<ParagraphProps> = React.memo(
-  ({ align, nowrap, children }) => (
+  ({ align, nowrap, full, children }) => (
     <p
       style={{
         padding: 0,
         margin: 0,
+        width: full ? "100%" : "auto",
         textAlign: align || "center",
         whiteSpace: nowrap ? "nowrap" : "normal",
       }}

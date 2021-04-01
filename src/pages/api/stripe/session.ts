@@ -54,7 +54,7 @@ export default async (
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     billing_address_collection: "required",
-    success_url: "https://portfolio.artell.life/_thanks",
+    success_url: "https://portfolio.artell.life/thanks",
     cancel_url: `https://portfolio.artell.life/${artistUid}/${artId}`,
     line_items: [
       {
