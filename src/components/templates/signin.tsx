@@ -11,7 +11,6 @@ import { Paragraph, Text } from "components/atoms/Text";
 import TextField from "components/atoms/TextField";
 import Header from "components/organisms/Header";
 
-
 const SigninPageTemplate: React.FC = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
