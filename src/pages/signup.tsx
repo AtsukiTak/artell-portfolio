@@ -1,9 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
-import * as D from "@mojotech/json-type-validation";
 
-import { request as req, Method } from "libs/http";
 import * as colors from "libs/colors";
 import { signupRequest } from "libs/apis/signup";
 import Container from "components/atoms/Container";
