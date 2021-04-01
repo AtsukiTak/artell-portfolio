@@ -1,10 +1,18 @@
 import React from "react";
 import { Redirect } from "next";
+import Head from "next/head";
 
 import SigninPageTemplate from "components/templates/signin";
 
 const SigninPage: React.FC = () => {
-  return <SigninPageTemplate />;
+  return (
+    <>
+      <Head>
+        <title>signin</title>
+      </Head>
+      <SigninPageTemplate />
+    </>
+  );
 };
 
 /*
