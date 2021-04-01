@@ -1,10 +1,10 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import * as D from "@mojotech/json-type-validation";
+import { Redirect } from "next";
 
-import { request as req, Method } from "libs/http";
 import * as colors from "libs/colors";
+import { signinRequest } from "libs/apis/signin";
 import Container from "components/atoms/Container";
 import Spacer from "components/atoms/Spacer";
 import Button from "components/atoms/Button";
@@ -12,8 +12,6 @@ import { Paragraph, Text } from "components/atoms/Text";
 import TextField from "components/atoms/TextField";
 import Header from "components/organisms/Header";
 
-import type { ReqData, ResData } from "pages/api/signin";
-import { Redirect } from "next";
 
 const SigninPage: React.FC = () => {
   const [email, setEmail] = React.useState("");
@@ -102,24 +100,6 @@ const SigninPage: React.FC = () => {
     </>
   );
 };
-
-/*
- * ==================
- * signin API request
- * ==================
- */
-const signinRequest = (body: ReqData): Promise<ResData> =>
-  req({
-    method: Method.POST,
-    url: "/api/signin",
-    body,
-    decoder: ResDataDecoder,
-  });
-
-const ResDataDecoder: D.Decoder<ResData> = D.object({
-  success: D.boolean(),
-  msg: D.string(),
-});
 
 /*
  * ==============================
