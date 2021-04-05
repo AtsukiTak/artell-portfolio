@@ -26,4 +26,13 @@ module.exports = {
 
     return config;
   },
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/settings/profile",
+        permanent: true,
+      },
+    ];
+  },
 };
