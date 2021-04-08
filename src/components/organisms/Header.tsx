@@ -12,12 +12,6 @@ const Header: React.FC = () => {
         <Link href="/" passHref>
           <Title>PORTFOLIO</Title>
         </Link>
-        <SnsLink
-          href="https://www.instagram.com/artell_gallery/"
-          target="_blank"
-        >
-          <ArtellInstagramIcon />
-        </SnsLink>
       </FlexBox>
     </Container>
   );
@@ -36,7 +30,7 @@ const Container = styled.header`
 
 const FlexBox = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
 `;
 
 const Title = styled.a`
@@ -50,12 +44,5 @@ const Title = styled.a`
   @media (min-width: 700px) {
     left: 100px;
     font-size: 20px;
-  }
-`;
-
-const SnsLink = styled.a`
-  & svg {
-    width: 20px;
-    height: 20px;
   }
 `;
