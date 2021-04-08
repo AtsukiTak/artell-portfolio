@@ -3,15 +3,12 @@ import styled from "styled-components";
 import Link from "next/link";
 
 import * as color from "libs/colors";
-import ArtellInstagramIcon from "components/icons/ArtellInstagramIcon";
 
 const Header: React.FC = () => {
   return (
     <Container>
       <FlexBox>
-        <Link href="/" passHref>
-          <Title>PORTFOLIO</Title>
-        </Link>
+        <Title>PORTFOLIO</Title>
       </FlexBox>
     </Container>
   );
