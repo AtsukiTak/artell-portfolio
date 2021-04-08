@@ -15,7 +15,7 @@ import { useScrollToTop } from "libs/scrollToTop";
 import { useObjectURL } from "libs/image";
 import { buyArt } from "libs/buyArt";
 import { pc } from "components/Responsive";
-import * as color from "components/color";
+import * as color from "libs/colors";
 
 // SSR
 import { GetServerSideProps } from "next";
@@ -145,7 +145,7 @@ const PcCloseButton = styled.a`
   bottom: 12px;
   font-size: 12px;
   text-decoration: none;
-  color: ${color.LightGray.hex};
+  color: ${color.gray30.hex};
 `;
 
 const MobileCloseButton = styled.a`
@@ -154,7 +154,7 @@ const MobileCloseButton = styled.a`
   top: 24px;
   font-size: 12px;
   text-decoration: none;
-  color: ${color.LightGray.hex};
+  color: ${color.gray30.hex};
 `;
 
 const ArtContainer = styled("div")<{ src: string }>`
@@ -189,7 +189,7 @@ const Title = styled.div`
   padding-right: 24px;
   margin-bottom: 32px;
   font-size: 20px;
-  color: ${color.LightBlack.hex};
+  color: ${color.gray80.hex};
   line-height: 20px;
   letter-spacing: 2px;
 `;
@@ -198,7 +198,7 @@ const ArtistName = styled.div`
   padding-right: 24px;
   margin-bottom: 4px;
   font-size: 12px;
-  color: ${color.LightGray.hex};
+  color: ${color.gray30.hex};
   line-height: 12px;
   letter-spacing: 2px;
 `;
@@ -207,7 +207,7 @@ const Materials = styled.div`
   padding-right: 24px;
   margin-bottom: 4px;
   font-size: 12px;
-  color: ${color.LightGray.hex};
+  color: ${color.gray30.hex};
   margin-top: 8px;
   line-height: 12px;
 `;
@@ -216,7 +216,7 @@ const Size = styled.div`
   padding-right: 24px;
   margin-bottom: 16px;
   font-size: 12px;
-  color: ${color.LightGray.hex};
+  color: ${color.gray30.hex};
   margin-top: 8px;
   line-height: 12px;
   letter-spacing: 0.5px;
@@ -225,7 +225,7 @@ const Size = styled.div`
 const Description = styled.div`
   padding-right: 40px;
   font-size: 12px;
-  color: ${color.LightGray.hex};
+  color: ${color.gray30.hex};
   margin-top: 8px;
   line-height: 16px;
   letter-spacing: 0.8px;
@@ -238,11 +238,11 @@ const BuyButton = styled.button`
   margin: 0 auto;
   margin-top: 40px;
   border-radius: 2px;
-  border: 1px solid ${color.MidGray.hex};
+  border: 1px solid ${color.gray50.hex};
   background-color: white;
   font-size: 12px;
   letter-spacing: 1.57px;
-  color: ${color.MidGray.hex};
+  color: ${color.gray50.hex};
   text-align: center;
   line-height: 20px;
   cursor: pointer;

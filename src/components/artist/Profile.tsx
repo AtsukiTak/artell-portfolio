@@ -8,7 +8,7 @@ import TwitterIcon from "components/icons/TwitterIcon";
 import InstagramIcon from "components/icons/InstagramIcon";
 import { Thumbnail } from "components/molecules/Thumbnail";
 import { pc } from "components/Responsive";
-import * as color from "components/color";
+import * as color from "libs/colors";
 
 const Profile: FC<{ artist: Artist; downloadedThumbnail: string }> = ({
   artist,
@@ -108,7 +108,7 @@ const TextContent = styled.div`
 `;
 
 const Tag = styled.div`
-  color: ${color.LightGray.hex};
+  color: ${color.gray30.hex};
   text-align: left;
   font-size: 12px;
   letter-spacing: 2px;
@@ -118,7 +118,7 @@ const Name = styled.div`
   width: 100%;
   margin-top: 12px;
   margin-bottom: 32px;
-  color: ${color.LightBlack.hex};
+  color: ${color.gray80.hex};
   text-align: left;
   font-size: 14px;
   letter-spacing: 2px;
@@ -128,7 +128,7 @@ const Description = styled.div`
   width: 100%;
   margin-top: 12px;
   margin-bottom: 32px;
-  color: ${color.LightBlack.hex};
+  color: ${color.gray80.hex};
   font-size: 14px;
   line-height: 32px;
   word-break: break-all;

@@ -7,7 +7,7 @@ import { Art } from "models/art";
 import { Artist } from "models/artist";
 
 import { LazyThumbnail } from "components/LazyThumbnail";
-import * as color from "components/color";
+import * as color from "libs/colors";
 
 const ArtsComponent: FC<{ artist: Artist; arts: Art[] }> = ({
   artist,
@@ -55,7 +55,7 @@ const StyledLazyThumbnail = styled(LazyThumbnail)`
 const Title = styled.div`
   width: 100%;
   font-size: 12px;
-  color: ${color.LightBlack.hex};
+  color: ${color.gray80.hex};
   letter-spacing: 1.2px;
   text-align: center;
   margin-top: 64px;
