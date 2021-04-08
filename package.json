@@ -32,7 +32,7 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "lintcheck": "eslint --ext tsx,ts src",
+    "lintcheck": "eslint --ext tsx,ts --max-warnings 0 src",
     "formatcheck": "prettier -c src",
     "allcheck": "yarn typecheck && yarn lintcheck && yarn formatcheck",
     "format": "prettier src -w"
