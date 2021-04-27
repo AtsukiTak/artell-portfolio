@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "next";
 import Head from "next/head";
 
-import SigninPageTemplate from "components/templates/signin";
+import { SigninPageTemplate } from "templates/signin";
 
 const SigninPage: React.FC = () => {
   return (

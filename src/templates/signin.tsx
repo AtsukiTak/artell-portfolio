@@ -11,7 +11,7 @@ import { Paragraph, Text } from "components/atoms/Text";
 import TextField from "components/atoms/TextField";
 import Header from "components/organisms/Header";
 
-const SigninPageTemplate: React.FC = () => {
+export const SigninPageTemplate: React.FC = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isUnauthorized, setIsUnauthorized] = React.useState(false);
@@ -98,5 +98,3 @@ const SigninPageTemplate: React.FC = () => {
     </>
   );
 };
-
-export default SigninPageTemplate;
