@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { Artist } from "models/artist";
 import { pc } from "components/Responsive";
+import { updateArtistInfoRequest } from "libs/apis/artist/me/update";
 import { DataURI } from "libs/image";
 import * as color from "libs/colors";
 import Container from "components/atoms/Container";
@@ -18,20 +19,9 @@ import EditAttributes from "components/organisms/settings/profile/EditAttributes
 
 type Props = {
   artist: Artist;
-  onSave: (data: SaveData) => Promise<void>;
 };
 
-type SaveData = {
-  thumbnailBase64Data: string | null;
-  name: string;
-  comment: string;
-  description: string;
-  twitter: string;
-  facebook: string;
-  instagram: string;
-};
-
-const ProfileSettingPageTemplate: React.FC<Props> = ({ artist, onSave }) => {
+const ProfileSettingPageTemplate: React.FC<Props> = ({ artist }) => {
   // ユーザーが新しく選択したサムネイル画像
   const [
     selectedThumbnail,
@@ -51,11 +41,11 @@ const ProfileSettingPageTemplate: React.FC<Props> = ({ artist, onSave }) => {
   const [isSaving, setIsSaving] = React.useState(false);
   const onSaveClick = React.useCallback(() => {
     setIsSaving(true);
-    onSave({
+    updateArtistInfoRequest({
       ...updatedArtist,
       thumbnailBase64Data: selectedThumbnail?.getBase64() || null,
     }).then(() => setIsSaving(false));
-  }, [updatedArtist, selectedThumbnail, onSave]);
+  }, [updatedArtist, selectedThumbnail]);
 
   return (
     <>

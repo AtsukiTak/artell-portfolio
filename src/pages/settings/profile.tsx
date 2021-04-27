@@ -1,10 +1,9 @@
 // for client side
 import React from "react";
 import { Artist } from "models/artist";
-import ProfileSettingPageTemplate from "components/templates/settings/profile";
-import type { ReqData, ResData } from "pages/api/artist/me";
-import * as D from "@mojotech/json-type-validation";
-import { request, Method } from "libs/http";
+import Head from "next/head";
+
+import ProfileSettingPageTemplate from "templates/settings/profile";
 
 // for server side
 import { GetServerSideProps } from "next";
@@ -16,31 +15,14 @@ type PageProps = {
   artist: Artist;
 };
 
-const ProfileSettingPage: React.FC<PageProps> = ({ artist }) => {
-  const updateArtist = React.useCallback((data) => {
-    console.log(data);
-    return updateArtistInfoRequest(data).then(() => undefined);
-  }, []);
-
-  return <ProfileSettingPageTemplate artist={artist} onSave={updateArtist} />;
-};
-
-/*
- * ========================
- * updateArtistInfoRequest
- * ========================
- */
-const ResDataDecoder: D.Decoder<ResData> = D.object({
-  msg: D.string(),
-});
-
-const updateArtistInfoRequest = (data: ReqData): Promise<ResData> =>
-  request({
-    method: Method.PUT,
-    url: "/api/artist/me",
-    body: data,
-    decoder: ResDataDecoder,
-  });
+const ProfileSettingPage: React.FC<PageProps> = ({ artist }) => (
+  <>
+    <Head>
+      <title>profile settings</title>
+    </Head>
+    <ProfileSettingPageTemplate artist={artist} />
+  </>
+);
 
 /*
  * ==============
