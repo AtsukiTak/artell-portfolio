@@ -10,9 +10,5 @@ firebase_admin.initialize_app(cred)
 client = firestore.client()
 docs = client.collection_group('arts').stream()
 
-for doc in docs:
-    doc.reference.update({
-        'salesPriceYen': doc.get("priceYen"),
-        'rentalPriceYen': 4980,
-        'priceYen': firestore.DELETE_FIELD,
-    })
+for doc_snapshot in docs:
+    id = doc_snapshot.id
