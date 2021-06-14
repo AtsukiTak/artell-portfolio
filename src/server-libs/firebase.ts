@@ -148,7 +148,7 @@ export class Storage {
     "artell-portfolio.appspot.com"
   );
 
-  private bucket(): Bucket {
+  bucket(): Bucket {
     return this.admin.storage().bucket(this.bucketName);
   }
 

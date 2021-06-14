@@ -17,17 +17,14 @@ const makePublicArtImagePublic = async (artistId: string): Promise<void> => {
   );
 };
 
-const fetchAllArtistIds = async (): Promise<string[]> => {
+const fetchAllArtistsId = async (): Promise<string[]> => {
   const docs = await Firestore.shared.queryMany("artists");
   return docs.map((doc) => doc.id);
 };
 
-
-
 (async () => {
-  const artistIds = await fetchAllArtistIds();
+  const artistIds = await fetchAllArtistsId();
   artistIds.forEach(async (artistId) => {
-    console.log(artistId);
     const thumbnailFile = `artists/${artistId}/sumbnail.jpg`;
     await Storage.shared.makePublic(thumbnailFile);
     await makePublicArtImagePublic(artistId);
