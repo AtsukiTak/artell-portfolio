@@ -17,7 +17,7 @@ const handler = async (
 
     const url = Storage.shared
       .bucket()
-      .file(`artist/${artistId}/arts/${artId}/sumbnail.jpg`)
+      .file(`artists/${artistId}/arts/${artId}/sumbnail.jpg`)
       .publicUrl();
 
     return res.status(200).json({ url });
