@@ -59,6 +59,32 @@ export const queryAllArtsOfArtist = async (
 
 /*
  * ===============
+ * queryArtById
+ * ===============
+ */
+export const queryArtById = async (
+  artistUid: string,
+  artId: string
+): Promise<Art | null> => {
+  const doc = await Firestore.shared.query(
+    `artists/${artistUid}/arts/${artId}`
+  );
+  if (!doc) return null;
+  const decoded = ArtDocumentDecoder.runWithException(doc.data());
+
+  const thumbnailUrl = await Storage.shared.getPublicUrl(
+    `artists/${artistUid}/arts/${artId}/sumbnail.jpg`
+  );
+
+  return {
+    id: doc.id,
+    ...decoded,
+    thumbnailUrl,
+  };
+};
+
+/*
+ * ===============
  * queryPrivateArtById
  * ===============
  */
