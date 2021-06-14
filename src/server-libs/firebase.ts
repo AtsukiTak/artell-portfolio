@@ -40,7 +40,7 @@ export class Firestore {
 
   static shared: Firestore = new Firestore(getFirebaseAdmin());
 
-  private firestore(): admin.firestore.Firestore {
+  firestore(): admin.firestore.Firestore {
     return this.admin.firestore();
   }
 

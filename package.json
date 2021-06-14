@@ -58,6 +58,7 @@
     ],
     "rules": {
       "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/no-non-null-assertion": "off",
       "react/prop-types": "off",
       "react/react-in-jsx-scope": "off"
     }
