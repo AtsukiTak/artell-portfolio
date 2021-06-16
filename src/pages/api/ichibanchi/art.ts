@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import Cors from "cors";
 import { Firestore } from "server-libs/firebase";
 import { queryArtById } from "server-libs/art";
 import { queryArtistById } from "server-libs/artist";
@@ -12,10 +13,21 @@ export type ResData = {
   portfolioLink: string;
 };
 
+const cors = Cors({
+  origin: "*",
+  methods: ["GET"],
+});
+
 const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<ResData>
 ): Promise<void> => {
+  cors(req, res, (err) => {
+    if (err) {
+      throw new err();
+    }
+  });
+
   if (req.method !== "GET") return res.status(404).end();
 
   try {
