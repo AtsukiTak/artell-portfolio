@@ -1,8 +1,5 @@
 const path = `${process.cwd()}/.env.local`;
-const res = require("dotenv").config({ path });
-// なぜか↑を実行しただけだと値がちゃんと設定されていないので
-// 手動で設定する
-process.env.SERVICE_ACCOUNT_JSON = res.parsed.SERVICE_ACCOUNT_JSON;
+require("dotenv").config({ path });
 
 import { queryPublicArtsOfArtist } from "server-libs/art";
 import { Firestore, Storage } from "server-libs/firebase";
