@@ -16,7 +16,9 @@ const Profile: FC<{ artist: Artist; downloadedThumbnail: string }> = ({
 }) => {
   return (
     <Container>
-      <StyledSumbnail src={downloadedThumbnail} />
+      <ThumbnailContainer>
+        <Thumbnail src={downloadedThumbnail} />
+      </ThumbnailContainer>
       <TextContent>
         {!!artist.name && (
           <>
@@ -80,7 +82,7 @@ const Container = styled.div`
   `)}
 `;
 
-const StyledSumbnail = styled(Thumbnail)`
+const ThumbnailContainer = styled.div`
   display: block;
   width: 100%;
   max-width: 400px;
