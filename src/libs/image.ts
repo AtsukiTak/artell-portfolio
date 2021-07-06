@@ -28,6 +28,7 @@ export const readFromFile = async (file: File): Promise<DataURI> => {
   const base64Data = await jimp
     .background(0xffffffff)
     .contain(MaxWidth, MaxHeight)
+    .quality(90)
     .getBase64Async(Jimp.MIME_JPEG);
   window.URL.revokeObjectURL(url);
   return new DataURI(base64Data);
