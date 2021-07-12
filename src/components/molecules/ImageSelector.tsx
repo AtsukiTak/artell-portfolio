@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
 
-import { readFromFile, DataURI } from "libs/image";
+import { toWebpBlob, blobToDataURI, DataURI } from "libs/image";
 import { pc } from "components/Responsive";
 import Thumbnail from "components/molecules/Thumbnail";
 
@@ -16,8 +16,13 @@ const ImageSelector: React.FC<Props> = React.memo(
       async (e) => {
         if (e.target.files && e.target.files.length > 0) {
           const file = e.target.files[0];
-          const image = await readFromFile(file);
-          onSelect(image);
+          if (file.size > 1024 * 1024 * 5) {
+            alert("ファイルサイズを5MB以下にしてください");
+            return;
+          }
+          const webpBlob = await toWebpBlob(file);
+          const uri = await blobToDataURI(webpBlob);
+          onSelect(uri);
         }
       },
       [onSelect]

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Jimp from "jimp";
 
 // Imageをダウンロードし、ObjectURLを発行する
 // ClientSideでしか動かないので注意
@@ -20,22 +19,37 @@ export const useObjectURL = (url: string): string | null => {
   return downloaded;
 };
 
-// Fileから画像データを読み込み、加工したのち、base64エンコード
-// した画像データのURIを返す
-export const readFromFile = async (file: File): Promise<DataURI> => {
-  const url = window.URL.createObjectURL(file);
-  const jimp = await Jimp.read(url);
-  const base64Data = await jimp
-    .background(0xffffffff)
-    .contain(MaxWidth, MaxHeight)
-    .quality(90)
-    .getBase64Async(Jimp.MIME_JPEG);
-  window.URL.revokeObjectURL(url);
-  return new DataURI(base64Data);
+// NOTE: FileはBlobを継承しているのでFileを
+// この関数に渡すことができる
+export const toWebpBlob = (blob: Blob): Promise<Blob> => {
+  return createImageBitmap(blob).then((image) => {
+    return new Promise((resolve) => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d")!;
+
+      canvas.width = image.width;
+      canvas.height = image.height;
+
+      ctx.drawImage(image, 0, 0);
+
+      canvas.toBlob((blob) => resolve(blob!), "image/webp");
+    });
+  });
 };
 
-const MaxWidth = 2048;
-const MaxHeight = 2048;
+export const blobToDataURI = (blob: Blob): Promise<DataURI> => {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      // readAsDataURL の結果は、base64 encodedな
+      // DataURI になる
+      resolve(new DataURI(reader.result as string));
+    };
+
+    reader.readAsDataURL(blob);
+  });
+};
 
 export class DataURI {
   constructor(readonly uri: string) {}
