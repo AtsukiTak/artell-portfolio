@@ -55,7 +55,6 @@ const ArtEditPage: React.FC<Props> = ({ onSubmit }) => {
       thumbnailBase64Data: selectedImage.getBase64(),
       ...art,
     }).then(() => {
-      alert("作品が登録されました！");
       setRequesting(false);
     });
   }, [art, selectedImage, onSubmit]);
