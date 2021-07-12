@@ -23,10 +23,8 @@ type Props = {
 
 const ProfileSettingPageTemplate: React.FC<Props> = ({ artist }) => {
   // ユーザーが新しく選択したサムネイル画像
-  const [
-    selectedThumbnail,
-    setSelectedThumbnail,
-  ] = React.useState<DataURI | null>(null);
+  const [selectedThumbnail, setSelectedThumbnail] =
+    React.useState<DataURI | null>(null);
 
   // 現在の画面に表示するサムネイル画像
   const displayThumbnail =
