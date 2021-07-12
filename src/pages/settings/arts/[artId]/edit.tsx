@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import { Art } from "models/art";
 import EditArtTemplate from "components/templates/settings/arts/edit";
 import { updateArtRequest } from "libs/apis/art/update";
@@ -16,14 +17,23 @@ type Props = {
 };
 
 const EditArtPage: React.FC<Props> = ({ artistUid, art }) => {
+  const router = useRouter();
+
   const onUpdate = React.useCallback(
-    (data) => updateArtRequest(art.id, data).then(() => undefined),
+    (data) =>
+      updateArtRequest(art.id, data).then(() => {
+        alert("作品の情報が更新されました！");
+      }),
     [art.id]
   );
 
   const onDelete = React.useCallback(
-    () => deleteArtRequest(art.id).then(() => undefined),
-    [art.id]
+    () =>
+      deleteArtRequest(art.id).then(() => {
+        alert("作品の情報が削除されました");
+        router.push("/settings/arts");
+      }),
+    [art.id, router]
   );
 
   return (
