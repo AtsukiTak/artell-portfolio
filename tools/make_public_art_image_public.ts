@@ -23,7 +23,9 @@ const fetchAllArtistsId = async (): Promise<string[]> => {
   const artistIds = await fetchAllArtistsId();
   artistIds.forEach(async (artistId) => {
     const thumbnailFile = `artists/${artistId}/sumbnail.jpg`;
-    await Storage.shared.makePublic(thumbnailFile);
+    if (await Storage.shared.isExists(thumbnailFile)) {
+      await Storage.shared.makePublic(thumbnailFile);
+    }
     await makePublicArtImagePublic(artistId);
   });
 })();
