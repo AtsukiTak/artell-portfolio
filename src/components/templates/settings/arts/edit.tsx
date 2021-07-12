@@ -6,9 +6,11 @@ import * as colors from "libs/colors";
 import { DataURI } from "libs/image";
 import { pc } from "components/Responsive";
 import Spacer from "components/atoms/Spacer";
+import Divider from "components/atoms/Divider";
 import Button from "components/atoms/Button";
 import { Link } from "components/atoms/Link";
 import { Text, Paragraph } from "components/atoms/Text";
+import Box from "components/molecules/Box";
 import Header from "components/organisms/Header";
 import ImageSelector from "components/molecules/ImageSelector";
 import EditAttributes, {
@@ -71,27 +73,37 @@ const ArtEditPage: React.FC<Props> = ({
           value={selectedImage || art.thumbnailUrl}
           onSelect={setSelectedImage}
         />
+        <Spacer size="30px" />
         <EditAttributes art={updatedArt} setArt={setUpdatedArt} />
-        <Buttons>
-          <Button
-            bg={colors.limegreen}
-            onClick={onClickUpdate}
-            disabled={requesting}
-          >
-            <Text color={colors.white} size={1}>
-              Update
-            </Text>
-          </Button>
-          <Button
-            bg={colors.tomato}
-            onClick={onClickDelete}
-            disabled={requesting}
-          >
-            <Text color={colors.white} size={1}>
-              Delete
-            </Text>
-          </Button>
-        </Buttons>
+        <Spacer size="60px" />
+        <Button
+          bg={colors.white}
+          border={colors.gray60}
+          radius={0}
+          onClick={onClickUpdate}
+          disabled={requesting}
+        >
+          <Text color={colors.gray60} size={0.75}>
+            作品情報を更新する
+          </Text>
+        </Button>
+        <Spacer size="40px" />
+        <Box align="center">
+          <Divider color={colors.gray20} length="50px" />
+        </Box>
+        <Spacer size="40px" />
+        <Button
+          bg={colors.white}
+          border={colors.gray30}
+          radius={0}
+          onClick={onClickDelete}
+          disabled={requesting}
+        >
+          <Text color={colors.gray30} size={0.75}>
+            作品情報を削除する
+          </Text>
+        </Button>
+        <Spacer size="40px" />
       </Container>
     </>
   );
@@ -105,12 +117,6 @@ const Container = styled.div`
   ${pc(`
     margin-top: 90px;
   `)}
-`;
-
-const Buttons = styled.div`
-  display: flex;
-  justify-content: space-around;
-  margin-top: 30px;
 `;
 
 export default ArtEditPage;

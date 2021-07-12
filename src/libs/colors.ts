@@ -50,6 +50,7 @@ export const gray10 = Color.fromHex("#FAFAFA");
 export const gray20 = Color.fromHex("#E0E0E0");
 export const gray30 = Color.fromHex("#BDBDBD");
 export const gray50 = Color.fromHex("#757575");
+export const gray60 = Color.fromHex("#757575");
 export const gray80 = Color.fromHex("#333333");
 export const gray90 = Color.fromHex("#212121");
 export const black = Color.fromHex("#000000");

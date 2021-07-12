@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
+import Spacer from "components/atoms/Spacer";
 import { Art } from "models/art";
 
 export type ArtAttrs = Omit<Art, "id" | "thumbnailUrl">;
@@ -12,8 +13,8 @@ interface Props {
 
 const EditAttributes: React.FC<Props> = ({ art, setArt }) => {
   return (
-    <Container>
-      <EditAttributeElement>
+    <div>
+      <div>
         <AttributeName>作品タイトル / Title</AttributeName>
         <InputField
           type="text"
@@ -21,8 +22,9 @@ const EditAttributes: React.FC<Props> = ({ art, setArt }) => {
           placeholder="作品のタイトルを入力してください。"
           onChange={(e) => setArt({ ...art, title: e.target.value })}
         />
-      </EditAttributeElement>
-      <EditAttributeElement>
+      </div>
+      <Spacer size="40px" />
+      <div>
         <AttributeName>幅 / Width(mm)</AttributeName>
         <InputField
           type="tel"
@@ -32,8 +34,9 @@ const EditAttributes: React.FC<Props> = ({ art, setArt }) => {
             setArt({ ...art, widthMM: validateNum(e.target.value) })
           }
         />
-      </EditAttributeElement>
-      <EditAttributeElement>
+      </div>
+      <Spacer size="40px" />
+      <div>
         <AttributeName>高さ / Height(mm)</AttributeName>
         <InputField
           type="tel"
@@ -43,16 +46,18 @@ const EditAttributes: React.FC<Props> = ({ art, setArt }) => {
             setArt({ ...art, heightMM: validateNum(e.target.value) })
           }
         />
-      </EditAttributeElement>
-      <EditAttributeElement>
+      </div>
+      <Spacer size="40px" />
+      <div>
         <AttributeName>ステートメント / Statement</AttributeName>
         <TextField
           value={art.description}
           placeholder="制作の中で考えたことや制作動機を記入ください"
           onChange={(e) => setArt({ ...art, description: e.target.value })}
         />
-      </EditAttributeElement>
-      <EditAttributeElement>
+      </div>
+      <Spacer size="40px" />
+      <div>
         <AttributeName>素材 / Materials</AttributeName>
         <InputField
           type="text"
@@ -60,8 +65,9 @@ const EditAttributes: React.FC<Props> = ({ art, setArt }) => {
           value={art.materials}
           onChange={(e) => setArt({ ...art, materials: e.target.value })}
         />
-      </EditAttributeElement>
-      <EditAttributeElement>
+      </div>
+      <Spacer size="40px" />
+      <div>
         <AttributeName>作品を販売する/Sale this piece</AttributeName>
         <InputCheckbox
           type="checkbox"
@@ -74,7 +80,7 @@ const EditAttributes: React.FC<Props> = ({ art, setArt }) => {
           }
         />
         <Desc>作品を販売しない場合は、チェックを外してください。</Desc>
-      </EditAttributeElement>
+      </div>
       {art.salesPriceYen !== undefined ? (
         <SubEditAttributeElement>
           <AttributeName>販売価格(円) / Price to sell(JPY)</AttributeName>
@@ -87,7 +93,8 @@ const EditAttributes: React.FC<Props> = ({ art, setArt }) => {
           />
         </SubEditAttributeElement>
       ) : null}
-      <EditAttributeElement>
+      <Spacer size="40px" />
+      <div>
         <AttributeName>作品の展示可否 / Exhibition Availability</AttributeName>
         <InputCheckbox
           type="checkbox"
@@ -100,8 +107,9 @@ const EditAttributes: React.FC<Props> = ({ art, setArt }) => {
           }
         />
         <Desc>作品の展示依頼を拒否する場合は、チェックを外してください。</Desc>
-      </EditAttributeElement>
-      <EditAttributeElement>
+      </div>
+      <Spacer size="40px" />
+      <div>
         <AttributeName>公開設定 / Publishing Settings</AttributeName>
         <InputCheckbox
           type="checkbox"
@@ -113,8 +121,8 @@ const EditAttributes: React.FC<Props> = ({ art, setArt }) => {
             ? "チェックを外すと作品を登録しても、作品は公開されません。"
             : "チェックをすると作品を登録したとき、作品が公開されます。"}
         </Desc>
-      </EditAttributeElement>
-    </Container>
+      </div>
+    </div>
   );
 };
 
@@ -128,22 +136,7 @@ function validateNum(s: string): number {
   }
 }
 
-const Container = styled.div`
-  width: 100%;
-  padding: 30px 0;
-`;
-
-const EditAttributeElement = styled.div`
-  width: 100%;
-  margin-top: 35px;
-
-  &:first-of-type {
-    margin-top: 0px;
-  }
-`;
-
 const SubEditAttributeElement = styled.div`
-  width: 100%;
   margin-top: 15px;
   padding-left: 25px;
 `;
