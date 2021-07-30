@@ -6,7 +6,7 @@ import Container from "components/atoms/Container";
 import Spacer from "components/atoms/Spacer";
 import { Text, Paragraph } from "components/atoms/Text";
 import { Link, ButtonLink } from "components/atoms/Link";
-import Thumbnail from "components/molecules/Thumbnail";
+import { Thumbnail } from "components/organisms/Thumbnail";
 import Header from "components/organisms/Header";
 import Footer from "components/organisms/Footer";
 import SettingTab from "components/organisms/settings/SettingTab";
@@ -49,6 +49,7 @@ const EditArtLink = ({ art }: { art: Art }) => (
   <div>
     <Link href={`/settings/arts/${art.id}/edit`}>
       <Thumbnail src={art.thumbnailUrl} />
+      <Spacer size="10px" />
       <Paragraph align="center">
         <Text size={12 / 16} color={color.gray80}>
           {art.title}
