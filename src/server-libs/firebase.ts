@@ -183,7 +183,7 @@ export class Storage {
     file: string,
     data: Buffer,
     options: {
-      contentType: "image/jpeg";
+      contentType: "image/jpeg" | "image/webp";
       accessControl: "publicRead" | "private";
     }
   ): Promise<void> {
