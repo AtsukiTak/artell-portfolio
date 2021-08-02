@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import * as D from "@mojotech/json-type-validation";
+import sharp from "sharp";
 import { verifySessionCookie } from "server-libs/sessionCookie";
 import { updateArt } from "server-libs/art";
 
@@ -59,9 +60,13 @@ const handler = async (
     if (body === null) return res.status(400).end();
 
     // thumbnailの更新データ
-    const thumbnailData = body.thumbnailBase64Data
-      ? Buffer.from(body.thumbnailBase64Data, "base64")
-      : null;
+    let thumbnailData = null;
+    if (body.thumbnailBase64Data) {
+      const rawThumbnailData = Buffer.from(body.thumbnailBase64Data, "base64");
+      thumbnailData = await sharp(rawThumbnailData)
+        .webp({ quality: 75 })
+        .toBuffer();
+    }
 
     /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
     const artId = req.query.artId! as string;

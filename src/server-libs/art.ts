@@ -20,7 +20,7 @@ export const queryPublicArtsOfArtist = async (
 
   return docs.map((doc) => {
     const thumbnailUrl = Storage.shared.getPublicUrl(
-      `artists/${artistUid}/arts/${doc.id}/sumbnail.jpg`
+      `artists/${artistUid}/arts/${doc.id}/original.webp`
     );
 
     return {
@@ -45,7 +45,7 @@ export const queryAllArtsOfArtist = async (
   return await Promise.all(
     docs.map(async (doc) => {
       const thumbnailUrl = await Storage.shared.getSignedUrl(
-        `artists/${artistUid}/arts/${doc.id}/sumbnail.jpg`
+        `artists/${artistUid}/arts/${doc.id}/original.webp`
       );
 
       return {
@@ -73,7 +73,7 @@ export const queryArtById = async (
   const decoded = ArtDocumentDecoder.runWithException(doc.data());
 
   const thumbnailUrl = await Storage.shared.getPublicUrl(
-    `artists/${artistUid}/arts/${artId}/sumbnail.jpg`
+    `artists/${artistUid}/arts/${artId}/original.webp`
   );
 
   return {
@@ -101,7 +101,7 @@ export const queryPrivateArtById = async (
 
   // storageから画像を取得する
   const thumbnailUrl = await Storage.shared.getSignedUrl(
-    `artists/${artistUid}/arts/${artId}/sumbnail.jpg`
+    `artists/${artistUid}/arts/${artId}/original.webp`
   );
 
   return {
@@ -144,10 +144,10 @@ export const createArt = async (args: CreateArtArgs): Promise<string> => {
 
   // storageにサムネイルを追加
   await Storage.shared.save(
-    `artists/${args.artistUid}/arts/${artId}/sumbnail.jpg`,
+    `artists/${args.artistUid}/arts/${artId}/original.webp`,
     args.thumbnailData,
     {
-      contentType: "image/jpeg",
+      contentType: "image/webp",
       accessControl: args.showPublic ? "publicRead" : "private",
     }
   );
@@ -195,10 +195,10 @@ export const updateArt = async (args: UpdateArtArgs): Promise<void> => {
   if (args.thumbnailData) {
     promises.push(
       Storage.shared.save(
-        `artists/${args.artistUid}/arts/${args.id}/sumbnail.jpg`,
+        `artists/${args.artistUid}/arts/${args.id}/original.webp`,
         args.thumbnailData,
         {
-          contentType: "image/jpeg",
+          contentType: "image/webp",
           accessControl: "private",
         }
       )
@@ -206,7 +206,7 @@ export const updateArt = async (args: UpdateArtArgs): Promise<void> => {
   }
 
   // サムネイルの可視性の更新
-  const file = `artists/${args.artistUid}/arts/${args.id}/sumbnail.jpg`;
+  const file = `artists/${args.artistUid}/arts/${args.id}/original.webp`;
   if (args.showPublic) {
     promises.push(Storage.shared.makePublic(file));
   } else {
@@ -228,7 +228,7 @@ export const deleteArt = async (
   await Firestore.shared.delete(`artists/${artistUid}/arts/${artId}`);
 
   await Storage.shared.delete(
-    `artists/${artistUid}/arts/${artId}/sumbnail.jpg`
+    `artists/${artistUid}/arts/${artId}/original.webp`
   );
 };
 

@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import * as D from "@mojotech/json-type-validation";
+import sharp from "sharp";
 import { verifySessionCookie } from "server-libs/sessionCookie";
 import { createArt } from "server-libs/art";
 
@@ -59,7 +60,10 @@ const handler = async (
     if (body === null) return res.status(400).end();
 
     // thumbnailの更新データ
-    const thumbnailData = Buffer.from(body.thumbnailBase64Data, "base64");
+    const rawThumbnailData = Buffer.from(body.thumbnailBase64Data, "base64");
+    const thumbnailData = await sharp(rawThumbnailData)
+      .webp({ quality: 75 })
+      .toBuffer();
 
     // 更新
     await createArt({
