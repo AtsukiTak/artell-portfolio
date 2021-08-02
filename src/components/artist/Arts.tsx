@@ -6,7 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import { Art } from "models/art";
 import { Artist } from "models/artist";
 
-import { LazyThumbnail } from "components/molecules/LazyThumbnail";
+import { LazyThumbnail } from "components/organisms/Thumbnail";
 import * as color from "libs/colors";
 
 const ArtsComponent: FC<{ artist: Artist; arts: Art[] }> = ({

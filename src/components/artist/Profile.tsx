@@ -6,7 +6,7 @@ import { Artist } from "models/artist";
 import FacebookIcon from "components/icons/FacebookIcon";
 import TwitterIcon from "components/icons/TwitterIcon";
 import InstagramIcon from "components/icons/InstagramIcon";
-import { Thumbnail } from "components/molecules/Thumbnail";
+import { SquareThumbnail } from "components/organisms/Thumbnail";
 import { pc } from "components/Responsive";
 import * as color from "libs/colors";
 
@@ -17,7 +17,7 @@ const Profile: FC<{ artist: Artist; downloadedThumbnail: string }> = ({
   return (
     <Container>
       <ThumbnailContainer>
-        <Thumbnail src={downloadedThumbnail} />
+        <SquareThumbnail src={downloadedThumbnail} />
       </ThumbnailContainer>
       <TextContent>
         {!!artist.name && (

@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { toWebpBlob, blobToDataURI, DataURI } from "libs/image";
 import { pc } from "components/Responsive";
-import Thumbnail from "components/molecules/Thumbnail";
+import { Thumbnail } from "components/organisms/Thumbnail";
 
 type Props = {
   value: string | DataURI;
