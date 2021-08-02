@@ -121,8 +121,7 @@ const ArtContainer = styled("div")<{ src: string }>`
 
   ${pc(`
     height: 94vh;
-    margin: 0;
-    margin-top: 3vh;
+    margin: 3vh auto 0;
   `)}
 `;
 
