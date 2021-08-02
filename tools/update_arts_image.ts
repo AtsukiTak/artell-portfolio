@@ -10,13 +10,13 @@ import { Storage, Firestore } from "server-libs/firebase";
   artists.forEach(async (artist) => {
     const arts = await queryAllArtsOfArtist(artist.id);
     arts.forEach(async (art) => {
-      const localFile = `./arts/${artist.id}-${art.id}.jpg`;
+      const localFile = `./arts-webp/${artist.id}-${art.id}.webp`;
       const data = fs.readFileSync(localFile);
-      const remoteFile = `artists/${artist.id}/arts/${art.id}/sumbnail.jpg`;
+      const remoteFile = `artists/${artist.id}/arts/${art.id}/original.webp`;
 
       // 画像の更新
       await Storage.shared.save(remoteFile, data, {
-        contentType: "image/jpeg",
+        contentType: "image/webp",
         accessControl: "private",
       });
 
