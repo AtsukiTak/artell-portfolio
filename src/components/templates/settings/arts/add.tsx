@@ -8,7 +8,7 @@ import Spacer from "components/atoms/Spacer";
 import Button from "components/atoms/Button";
 import { Text } from "components/atoms/Text";
 import Header from "components/organisms/Header";
-import ImageSelector from "components/molecules/ImageSelector";
+import { ImageSelector } from "components/molecules/ImageSelector";
 import EditAttributes, {
   ArtAttrs,
 } from "components/organisms/settings/arts/EditAttributes";
@@ -65,9 +65,10 @@ const ArtEditPage: React.FC<Props> = ({ onSubmit }) => {
       <Container>
         <Spacer size="20px" />
         <ImageSelector
-          value={selectedImage || "/img/add-art-thumbnail.png"}
           onSelect={setSelectedImage}
+          defaultImage="/img/add-art-thumbnail.png"
         />
+        <Spacer size="30px" />
         <EditAttributes art={art} setArt={setArt} />
         <Button
           bg={requesting ? colors.gray50 : colors.black}

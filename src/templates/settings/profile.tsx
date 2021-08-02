@@ -11,7 +11,7 @@ import Container from "components/atoms/Container";
 import Spacer from "components/atoms/Spacer";
 import Button from "components/atoms/Button";
 import { Text } from "components/atoms/Text";
-import ImageSelector from "components/molecules/ImageSelector";
+import { ImageSelector } from "components/molecules/ImageSelector";
 import Header from "components/organisms/Header";
 import Footer from "components/organisms/Footer";
 import SettingTab from "components/organisms/settings/SettingTab";
@@ -25,12 +25,6 @@ const ProfileSettingPageTemplate: React.FC<Props> = ({ artist }) => {
   // ユーザーが新しく選択したサムネイル画像
   const [selectedThumbnail, setSelectedThumbnail] =
     React.useState<DataURI | null>(null);
-
-  // 現在の画面に表示するサムネイル画像
-  const displayThumbnail =
-    selectedThumbnail ||
-    artist.thumbnailUrl ||
-    "/img/artist-default-thumbnail.jpg";
 
   // 現在入力中のアーティスト情報
   const [updatedArtist, setUpdatedArtist] = React.useState(artist);
@@ -55,7 +49,9 @@ const ProfileSettingPageTemplate: React.FC<Props> = ({ artist }) => {
           <LinkToArtistPage>自分の作家ページを見る →</LinkToArtistPage>
         </Link>
         <ImageSelector
-          value={displayThumbnail}
+          defaultImage={
+            artist.thumbnailUrl || "/img/artist-default-thumbnail.jpg"
+          }
           onSelect={setSelectedThumbnail}
         />
         <EditAttributes attrs={updatedArtist} onUpdate={setUpdatedArtist} />

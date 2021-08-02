@@ -1,49 +1,42 @@
-import React, { useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 
 import { blobToDataURI, DataURI } from "libs/image";
 import { pc } from "components/Responsive";
 import { Thumbnail } from "components/organisms/Thumbnail";
+import { FileSelector } from "components/molecules/FileSelector";
 
 type Props = {
-  value: string | DataURI;
   onSelect: (image: DataURI) => void;
+  defaultImage: string;
 };
 
-const ImageSelector: React.FC<Props> = React.memo(
-  ({ value, onSelect }: Props) => {
+export const ImageSelector: React.FC<Props> = React.memo(
+  ({ onSelect, defaultImage }) => {
+    const [previewImage, setPreviewImage] = useState(defaultImage);
+
     const onImageSelected = useCallback(
-      async (e) => {
-        if (e.target.files && e.target.files.length > 0) {
-          const file = e.target.files[0];
-          if (file.size > 1024 * 1024 * 5) {
-            alert("ファイルサイズを5MB以下にしてください");
-            return;
-          }
-          const uri = await blobToDataURI(file);
-          onSelect(uri);
-        }
+      async (file: File) => {
+        const uri = await blobToDataURI(file);
+        onSelect(uri);
+        setPreviewImage(uri.uri);
       },
       [onSelect]
     );
 
-    const src = value instanceof DataURI ? value.uri : value;
-
     return (
-      <Container>
-        <Thumbnail src={src} />
-        <SelectImageRect>画像を選択する</SelectImageRect>
-        <HiddenFileInput
-          type="file"
-          accept="image/jpeg,image/png,image/webp,image/svg+xml"
-          onChange={onImageSelected}
-        />
-      </Container>
+      <StyledFileSelector
+        onSelect={onImageSelected}
+        accept="image/jpeg,image/png,image/webp,image/svg+xml"
+        maxSizeInMB={5}
+      >
+        <Thumbnail src={previewImage} />
+      </StyledFileSelector>
     );
   }
 );
 
-const Container = styled.label`
+const StyledFileSelector = styled(FileSelector)`
   display: block;
   position: relative;
   width: 100%;
@@ -55,19 +48,4 @@ const Container = styled.label`
   `)}
 `;
 
-const SelectImageRect = styled.div`
-  width: 100%;
-  margin-top: 4px;
-  color: #acacac;
-  text-align: left;
-  font-size: 12px;
-  letter-spacing: 0.46px;
-`;
-
-const HiddenFileInput = styled.input`
-  display: none;
-`;
-
 ImageSelector.displayName = "ImageSelector";
-
-export default ImageSelector;

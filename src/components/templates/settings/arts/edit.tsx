@@ -11,8 +11,8 @@ import Button from "components/atoms/Button";
 import { Link } from "components/atoms/Link";
 import { Text, Paragraph } from "components/atoms/Text";
 import Box from "components/molecules/Box";
+import { ImageSelector } from "components/molecules/ImageSelector";
 import Header from "components/organisms/Header";
-import ImageSelector from "components/molecules/ImageSelector";
 import EditAttributes, {
   ArtAttrs,
 } from "components/organisms/settings/arts/EditAttributes";
@@ -70,8 +70,8 @@ const ArtEditPage: React.FC<Props> = ({
         </Link>
         <Spacer size="20px" />
         <ImageSelector
-          value={selectedImage || art.thumbnailUrl}
           onSelect={setSelectedImage}
+          defaultImage={art.thumbnailUrl}
         />
         <Spacer size="30px" />
         <EditAttributes art={updatedArt} setArt={setUpdatedArt} />
