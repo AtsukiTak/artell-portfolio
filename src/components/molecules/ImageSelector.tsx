@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
 
-import { toWebpBlob, blobToDataURI, DataURI } from "libs/image";
+import { blobToDataURI, DataURI } from "libs/image";
 import { pc } from "components/Responsive";
 import { Thumbnail } from "components/organisms/Thumbnail";
 
@@ -20,8 +20,7 @@ const ImageSelector: React.FC<Props> = React.memo(
             alert("ファイルサイズを5MB以下にしてください");
             return;
           }
-          const webpBlob = await toWebpBlob(file);
-          const uri = await blobToDataURI(webpBlob);
+          const uri = await blobToDataURI(file);
           onSelect(uri);
         }
       },
@@ -36,7 +35,7 @@ const ImageSelector: React.FC<Props> = React.memo(
         <SelectImageRect>画像を選択する</SelectImageRect>
         <HiddenFileInput
           type="file"
-          accept="image/*"
+          accept="image/jpeg,image/png,image/webp,image/svg+xml"
           onChange={onImageSelected}
         />
       </Container>

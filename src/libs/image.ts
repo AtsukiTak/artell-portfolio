@@ -19,24 +19,6 @@ export const useObjectURL = (url: string): string | null => {
   return downloaded;
 };
 
-// NOTE: FileはBlobを継承しているのでFileを
-// この関数に渡すことができる
-export const toWebpBlob = (blob: Blob): Promise<Blob> => {
-  return createImageBitmap(blob).then((image) => {
-    return new Promise((resolve) => {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d")!;
-
-      canvas.width = image.width;
-      canvas.height = image.height;
-
-      ctx.drawImage(image, 0, 0);
-
-      canvas.toBlob((blob) => resolve(blob!), "image/webp");
-    });
-  });
-};
-
 export const blobToDataURI = (blob: Blob): Promise<DataURI> => {
   return new Promise((resolve) => {
     const reader = new FileReader();
