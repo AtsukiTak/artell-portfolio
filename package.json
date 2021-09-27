@@ -29,7 +29,7 @@
     "typecheck": "tsc --noEmit",
     "lintcheck": "eslint --ext tsx,ts --max-warnings 0 src",
     "formatcheck": "prettier -c src",
-    "allcheck": "yarn typecheck && yarn lintcheck && yarn formatcheck",
+    "allcheck": "npm run typecheck && npm run lintcheck && npm run formatcheck",
     "format": "prettier src -w",
     "ts-run": "ts-node -O '{\"module\": \"CommonJS\"}' -r tsconfig-paths/register"
   },
