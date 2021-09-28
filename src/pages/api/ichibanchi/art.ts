@@ -48,7 +48,7 @@ const handler = async (
     // CDNで1時間キャッシュを使用する。
     // SwRを設定しているので、キャッシュが無効になった次のリクエストでも
     // 引き続きキャッシュを利用する。ただし、裏でキャッシュの更新を行う。
-    res.setHeader("Cache-Control", "s-maxage=3600");
+    res.setHeader("Cache-Control", "s-maxage=3600, stale-while-revalidate");
 
     return res.status(200).json({
       artTitle: art.title,
