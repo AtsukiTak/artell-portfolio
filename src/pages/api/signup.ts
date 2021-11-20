@@ -89,7 +89,7 @@ const SignupHandler = async (
     res.status(200).json({ success: true, msg: "Success" });
   } catch (e) {
     console.log(e);
-    res.status(401).json({ success: false, msg: e.message });
+    res.status(401).json({ success: false, msg: "signup error" });
   }
 };
 
