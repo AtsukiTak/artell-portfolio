@@ -98,7 +98,7 @@ const EditAttributes: React.FC<Props> = ({ art, setArt }) => {
         <AttributeName>作品の展示可否 / Exhibition Availability</AttributeName>
         <InputCheckbox
           type="checkbox"
-          checked={art.rentalPriceYen !== undefined}
+          checked={art.rentalPriceYen !== null}
           onChange={(e) =>
             setArt({
               ...art,
