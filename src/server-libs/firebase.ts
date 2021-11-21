@@ -24,7 +24,7 @@ export const getFirebaseAdmin = (): admin.app.App => {
   }
 };
 
-type FirestorePrimitive = boolean | number | string;
+type FirestorePrimitive = boolean | number | string | null;
 // TODO: undefinedをnullに変えてprimitiveとしたい
 type FirestoreRawDoc = Record<string, FirestorePrimitive | undefined>;
 type FirestoreAddDoc = Record<string, FirestorePrimitive>;

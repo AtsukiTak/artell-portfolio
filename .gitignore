@@ -30,3 +30,6 @@ serviceAccountKey.json
 
 # next
 .next/
+
+# typescript
+tsconfig.tsbuildinfo

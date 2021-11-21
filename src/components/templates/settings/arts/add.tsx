@@ -25,8 +25,8 @@ type SubmitData = {
   description: string;
   materials: string;
   showPublic: boolean;
-  salesPriceYen?: number;
-  rentalPriceYen?: number;
+  salesPriceYen: number | null;
+  rentalPriceYen: number | null;
 };
 
 const initialData = {
@@ -36,8 +36,8 @@ const initialData = {
   description: "",
   materials: "",
   showPublic: true,
-  salesPriceYen: undefined,
-  rentalPriceYen: undefined,
+  salesPriceYen: null,
+  rentalPriceYen: null,
 };
 
 const ArtEditPage: React.FC<Props> = ({ onSubmit }) => {
