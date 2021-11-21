@@ -32,8 +32,8 @@ type UpdateData = {
   description: string;
   materials: string;
   showPublic: boolean;
-  salesPriceYen?: number;
-  rentalPriceYen?: number;
+  salesPriceYen: number | null;
+  rentalPriceYen: number | null;
 };
 
 const ArtEditPage: React.FC<Props> = ({

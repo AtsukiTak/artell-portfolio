@@ -16,8 +16,8 @@ export type ReqData = {
   description: string;
   materials: string;
   showPublic: boolean;
-  salesPriceYen?: number;
-  rentalPriceYen?: number;
+  salesPriceYen: number | null;
+  rentalPriceYen: number | null;
   // base64 encoded thumbnail data
   thumbnailBase64Data: string | null;
 };
@@ -93,8 +93,8 @@ const ReqDataDecoder: D.Decoder<ReqData> = D.object({
   description: D.string(),
   materials: D.string(),
   showPublic: D.boolean(),
-  salesPriceYen: D.optional(D.number()),
-  rentalPriceYen: D.optional(D.number()),
+  salesPriceYen: D.union(D.number(), D.constant(null)),
+  rentalPriceYen: D.union(D.number(), D.constant(null)),
   thumbnailBase64Data: D.union(D.string(), D.constant(null)),
 });
 

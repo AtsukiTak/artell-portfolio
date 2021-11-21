@@ -6,7 +6,7 @@ export interface Art {
   description: string;
   materials: string;
   showPublic: boolean;
-  salesPriceYen?: number;
-  rentalPriceYen?: number;
+  salesPriceYen: number | null;
+  rentalPriceYen: number | null;
   thumbnailUrl: string;
 }

@@ -71,17 +71,17 @@ const EditAttributes: React.FC<Props> = ({ art, setArt }) => {
         <AttributeName>作品を販売する/Sale this piece</AttributeName>
         <InputCheckbox
           type="checkbox"
-          checked={art.salesPriceYen !== undefined}
+          checked={art.salesPriceYen !== null}
           onChange={(e) =>
             setArt({
               ...art,
-              salesPriceYen: e.target.checked ? 29800 : undefined,
+              salesPriceYen: e.target.checked ? 29800 : null,
             })
           }
         />
         <Desc>作品を販売しない場合は、チェックを外してください。</Desc>
       </div>
-      {art.salesPriceYen !== undefined ? (
+      {art.salesPriceYen ? (
         <SubEditAttributeElement>
           <AttributeName>販売価格(円) / Price to sell(JPY)</AttributeName>
           <InputField
@@ -98,11 +98,11 @@ const EditAttributes: React.FC<Props> = ({ art, setArt }) => {
         <AttributeName>作品の展示可否 / Exhibition Availability</AttributeName>
         <InputCheckbox
           type="checkbox"
-          checked={art.rentalPriceYen !== undefined}
+          checked={art.rentalPriceYen !== null}
           onChange={(e) =>
             setArt({
               ...art,
-              rentalPriceYen: e.target.checked ? 4900 : undefined,
+              rentalPriceYen: e.target.checked ? 4900 : null,
             })
           }
         />

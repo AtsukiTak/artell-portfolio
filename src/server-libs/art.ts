@@ -25,7 +25,7 @@ export const queryPublicArtsOfArtist = async (
 
     return {
       id: doc.id,
-      ...ArtDocumentDecoder.runWithException(doc.data()),
+      ...toNewArtDoc(ArtDocumentDecoder.runWithException(doc.data())),
       thumbnailUrl,
     };
   });
@@ -50,7 +50,7 @@ export const queryAllArtsOfArtist = async (
 
       return {
         id: doc.id,
-        ...ArtDocumentDecoder.runWithException(doc.data()),
+        ...toNewArtDoc(ArtDocumentDecoder.runWithException(doc.data())),
         thumbnailUrl,
       };
     })
@@ -70,7 +70,7 @@ export const queryArtById = async (
     `artists/${artistUid}/arts/${artId}`
   );
   if (!doc) return null;
-  const decoded = ArtDocumentDecoder.runWithException(doc.data());
+  const decoded = toNewArtDoc(ArtDocumentDecoder.runWithException(doc.data()));
 
   const thumbnailUrl = await Storage.shared.getPublicUrl(
     `artists/${artistUid}/arts/${artId}/original.webp`
@@ -97,7 +97,7 @@ export const queryPrivateArtById = async (
     `artists/${artistUid}/arts/${artId}`
   );
   if (!doc) return null;
-  const decoded = ArtDocumentDecoder.runWithException(doc.data());
+  const decoded = toNewArtDoc(ArtDocumentDecoder.runWithException(doc.data()));
 
   // storageから画像を取得する
   const thumbnailUrl = await Storage.shared.getSignedUrl(
@@ -124,8 +124,8 @@ export type CreateArtArgs = {
   description: string;
   materials: string;
   showPublic: boolean;
-  salesPriceYen?: number;
-  rentalPriceYen?: number;
+  salesPriceYen: number | null;
+  rentalPriceYen: number | null;
   thumbnailData: Buffer;
 };
 
@@ -169,8 +169,8 @@ export type UpdateArtArgs = {
   description: string;
   materials: string;
   showPublic: boolean;
-  salesPriceYen?: number;
-  rentalPriceYen?: number;
+  salesPriceYen: number | null;
+  rentalPriceYen: number | null;
   thumbnailData: Buffer | null;
 };
 
@@ -244,8 +244,8 @@ interface ArtDocument {
   description: string;
   materials: string;
   showPublic: boolean;
-  salesPriceYen?: number;
-  rentalPriceYen?: number;
+  salesPriceYen?: number | null;
+  rentalPriceYen?: number | null;
 }
 
 const ArtDocumentDecoder: D.Decoder<ArtDocument> = D.object({
@@ -255,6 +255,28 @@ const ArtDocumentDecoder: D.Decoder<ArtDocument> = D.object({
   description: D.string(),
   materials: D.string(),
   showPublic: D.boolean(),
-  salesPriceYen: D.optional(D.number()),
-  rentalPriceYen: D.optional(D.number()),
+  salesPriceYen: D.optional(D.union(D.number(), D.constant(null))),
+  rentalPriceYen: D.optional(D.union(D.number(), D.constant(null))),
+});
+
+type NewArtDocument = {
+  title: string;
+  widthMM: number;
+  heightMM: number;
+  description: string;
+  materials: string;
+  showPublic: boolean;
+  salesPriceYen: number | null;
+  rentalPriceYen: number | null;
+};
+
+const toNewArtDoc = (old: ArtDocument): NewArtDocument => ({
+  title: old.title,
+  widthMM: old.widthMM,
+  heightMM: old.heightMM,
+  description: old.description,
+  materials: old.materials,
+  showPublic: old.showPublic,
+  salesPriceYen: old.salesPriceYen ?? null,
+  rentalPriceYen: old.rentalPriceYen ?? null,
 });

@@ -49,6 +49,10 @@ export default async (
     return;
   }
 
+  if (!art.salesPriceYen) {
+    return res.status(400).json({ ok: false, msg: "This ART is NOT FOR SALE" });
+  }
+
   // stripe sessionの作成
   const stripe = new Stripe(stripeSK, { apiVersion: "2020-08-27" });
   const session = await stripe.checkout.sessions.create({
