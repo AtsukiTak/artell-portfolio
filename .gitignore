@@ -33,3 +33,6 @@ serviceAccountKey.json
 
 # typescript
 tsconfig.tsbuildinfo
+
+# vercel
+.vercel
