@@ -19,29 +19,25 @@ type Props = {
 const EditArtPage: React.FC<Props> = ({ artistUid, art }) => {
   const router = useRouter();
 
-  const onUpdate = React.useCallback(
-    (data) =>
-      updateArtRequest(art.id, data).then(() => {
-        alert("作品の情報が更新されました！");
-      }),
-    [art.id]
-  );
-
-  const onDelete = React.useCallback(
-    () =>
-      deleteArtRequest(art.id).then(() => {
-        alert("作品の情報が削除されました");
-        router.push("/settings/arts");
-      }),
-    [art.id, router]
-  );
-
   return (
     <EditArtTemplate
       artistUid={artistUid}
       art={art}
-      onUpdate={onUpdate}
-      onDelete={onDelete}
+      onUpdate={React.useCallback(
+        (data) =>
+          updateArtRequest(art.id, data).then(() => {
+            alert("作品の情報が更新されました！");
+          }),
+        [art.id]
+      )}
+      onDelete={React.useCallback(
+        () =>
+          deleteArtRequest(art.id).then(() => {
+            alert("作品の情報が削除されました");
+            router.push("/settings/arts");
+          }),
+        [art.id, router]
+      )}
     />
   );
 };

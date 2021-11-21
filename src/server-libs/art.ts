@@ -124,8 +124,8 @@ export type CreateArtArgs = {
   description: string;
   materials: string;
   showPublic: boolean;
-  salesPriceYen?: number;
-  rentalPriceYen?: number;
+  salesPriceYen: number | null;
+  rentalPriceYen: number | null;
   thumbnailData: Buffer;
 };
 
@@ -169,8 +169,8 @@ export type UpdateArtArgs = {
   description: string;
   materials: string;
   showPublic: boolean;
-  salesPriceYen?: number;
-  rentalPriceYen?: number;
+  salesPriceYen: number | null;
+  rentalPriceYen: number | null;
   thumbnailData: Buffer | null;
 };
 
