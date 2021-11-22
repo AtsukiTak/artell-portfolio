@@ -1,5 +1,4 @@
-const path = `${process.cwd()}/.env.local`;
-require("dotenv").config({ path });
+require("dotenv").config();
 
 import fs from "fs";
 import { queryAllArtsOfArtist } from "server-libs/art";

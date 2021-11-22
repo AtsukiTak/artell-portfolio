@@ -1,5 +1,4 @@
-const path = `${process.cwd()}/.env.local`;
-require("dotenv").config({ path });
+require("dotenv").config();
 
 import { queryPublicArtsOfArtist } from "server-libs/art";
 import { Firestore, Storage } from "server-libs/firebase";
