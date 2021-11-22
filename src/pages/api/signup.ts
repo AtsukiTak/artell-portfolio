@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import * as D from "@mojotech/json-type-validation";
-import "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirebase } from "server-libs/firebase";
 import { createArtist } from "server-libs/artist";
 import { generateSessionCookieHeaderValue } from "server-libs/sessionCookie";
@@ -49,12 +49,12 @@ const SignupHandler = async (
     }
     const { name, email, password } = decoded;
 
-    const firebase = getFirebase();
-
     // signup
-    const user = await firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
+    const user = await createUserWithEmailAndPassword(
+      getAuth(getFirebase()),
+      email,
+      password
+    )
       .then((cred) => {
         if (cred.user) {
           return cred.user;

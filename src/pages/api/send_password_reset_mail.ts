@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import * as D from "@mojotech/json-type-validation";
-import "firebase/auth";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { getFirebase } from "server-libs/firebase";
 
 export type ReqData = {
@@ -34,12 +34,9 @@ const SendPasswordResetMailHandler = async (
 
     const { email } = decoded;
 
-    const firebase = getFirebase();
-
-    const config = {
+    await sendPasswordResetEmail(getAuth(getFirebase()), email, {
       url: "https://portfolio.artell.life/signin",
-    };
-    await firebase.auth().sendPasswordResetEmail(email, config);
+    });
 
     res.status(200).json({ success: true, msg: "Success" });
   } catch (e) {
