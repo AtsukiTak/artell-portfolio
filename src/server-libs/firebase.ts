@@ -1,7 +1,7 @@
 import admin, { firestore } from "firebase-admin";
 import { Bucket } from "@google-cloud/storage";
 import client from "firebase/app";
-import { getFirebaseApp } from "../libs/firebase";
+import { getFirebaseApp, firebaseConfig } from "../libs/firebase";
 
 export const getFirebase = (): client.app.App => {
   return getFirebaseApp();
@@ -157,7 +157,7 @@ export class Storage {
 
   static shared: Storage = new Storage(
     getFirebaseAdmin(),
-    "artell-portfolio.appspot.com"
+    firebaseConfig.storageBucket
   );
 
   bucket(): Bucket {
