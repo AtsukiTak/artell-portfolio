@@ -1,14 +1,14 @@
-import firebase from "firebase/app";
+import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
 
 // Clientでfirebaseを使う場合はこの関数経由でfirebase.app.App
 // を取得する。
 // Appは使用する前に初期化する必要があるため、この関数を経由
 // する必要がある。
-export const getFirebaseApp = (): firebase.app.App => {
-  if (firebase.apps.length === 0) {
-    firebase.initializeApp(firebaseConfig);
+export const getFirebaseApp = (): FirebaseApp => {
+  if (getApps().length === 0) {
+    initializeApp(firebaseConfig);
   }
-  return firebase.app();
+  return getApp();
 };
 
 export type FIREBASE_ENV_TYPE = "staging" | "production";

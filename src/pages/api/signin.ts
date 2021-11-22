@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import * as D from "@mojotech/json-type-validation";
-import "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { getFirebase } from "server-libs/firebase";
 import { generateSessionCookieHeaderValue } from "server-libs/sessionCookie";
 
@@ -46,12 +46,12 @@ const SigninHandler = async (
     }
     const { email, password } = decoded;
 
-    const firebase = getFirebase();
-
     // signin
-    const user = await firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
+    const user = await signInWithEmailAndPassword(
+      getAuth(getFirebase()),
+      email,
+      password
+    )
       // firebase SDKの奇妙な振る舞いでerrorがinvalid-email
       // のときにアプリがcrashしてしまうのでcatchする必要がある
       .then((cred) => cred.user)

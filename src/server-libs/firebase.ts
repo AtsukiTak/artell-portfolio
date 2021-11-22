@@ -1,9 +1,9 @@
 import admin, { firestore } from "firebase-admin";
 import { Bucket } from "@google-cloud/storage";
-import client from "firebase/app";
+import { FirebaseApp } from "firebase/app";
 import { getFirebaseApp, firebaseConfig } from "../libs/firebase";
 
-export const getFirebase = (): client.app.App => {
+export const getFirebase = (): FirebaseApp => {
   return getFirebaseApp();
 };
 
