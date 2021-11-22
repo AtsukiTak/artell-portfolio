@@ -1,13 +1,7 @@
 import admin, { firestore } from "firebase-admin";
 import { Bucket } from "@google-cloud/storage";
 import client from "firebase/app";
-import { getFirebaseApp } from "../libs/firebase";
-
-const serviceAccountJson = process.env.SERVICE_ACCOUNT_JSON;
-if (!serviceAccountJson) {
-  throw new Error("SERVICE_ACCOUNT_JSON is not set!!!");
-}
-const serviceAccount = JSON.parse(serviceAccountJson);
+import { getFirebaseApp, firebaseConfig } from "../libs/firebase";
 
 export const getFirebase = (): client.app.App => {
   return getFirebaseApp();
@@ -16,12 +10,30 @@ export const getFirebase = (): client.app.App => {
 export const getFirebaseAdmin = (): admin.app.App => {
   if (admin.apps.length === 0) {
     return admin.initializeApp({
-      credential: admin.credential.cert(<admin.ServiceAccount>serviceAccount),
-      databaseURL: "https://artell-portfolio.firebaseio.com",
+      credential: admin.credential.cert(getServiceAccount()),
     });
   } else {
     return admin.app();
   }
+};
+
+const getEnv = (env: string): string => {
+  const val = process.env[env];
+  if (!val) {
+    throw new Error(`error: ${env} is not set!!!`);
+  }
+  return val;
+};
+
+const getServiceAccount = (): admin.ServiceAccount => {
+  const projectId = getEnv("FIREBASE_PROJECT_ID");
+  const clientEmail = getEnv("FIREBASE_CLIENT_EMAIL");
+  const privateKey = getEnv("FIREBASE_PRIVATE_KEY");
+  return {
+    projectId,
+    clientEmail,
+    privateKey,
+  };
 };
 
 type FirestorePrimitive = boolean | number | string | null;
@@ -145,7 +157,7 @@ export class Storage {
 
   static shared: Storage = new Storage(
     getFirebaseAdmin(),
-    "artell-portfolio.appspot.com"
+    firebaseConfig.storageBucket
   );
 
   bucket(): Bucket {
