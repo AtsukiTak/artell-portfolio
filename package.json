@@ -86,6 +86,6 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "prettier": "^2.2.1",
     "tsconfig-paths": "^3.9.0",
-    "vercel": "^23.1.2"
+    "vercel": "^28.15.3"
   }
 }
